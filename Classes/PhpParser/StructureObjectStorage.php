@@ -30,7 +30,7 @@ class StructureObjectStorage extends \SplObjectStorage
 
         ksort($stmts);
 
-        // Because of array_push, we need increment array keys
+        // Because of array_push, we need to increment array keys
         return array_values($stmts);
     }
 
