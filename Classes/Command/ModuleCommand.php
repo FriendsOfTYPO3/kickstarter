@@ -79,25 +79,25 @@ class ModuleCommand extends Command
         );
 
         return new ModuleInformation(
-            $extensionInformation,
-            (string)$io->ask('Define an module identifier', $parentModule . '_' . $extensionName),
-            $parentModule,
-            (string)$io->choice(
+            extensionInformation: $extensionInformation,
+            identifier: (string)$io->ask('Define an module identifier', $parentModule . '_' . $extensionName),
+            parent: $parentModule,
+            position: (string)$io->choice(
                 'The module position. Allowed values are "top" and "bottom"',
                 ['bottom', 'top'],
                 'bottom',
             ),
-            (string)$io->choice(
+            access: (string)$io->choice(
                 'Define access. Can be "user" (editor permissions), "admin", or "systemMaintainer"',
                 ['user', 'admin', 'systemMaintainer'],
                 'user'
             ),
-            (string)$io->choice(
+            workspaces: (string)$io->choice(
                 'Define workspaces',
                 ['*', 'live', 'offline'],
                 '*'
             ),
-            (string)$io->ask(
+            path: (string)$io->ask(
                 'Define the path to the default endpoint',
                 sprintf(
                     '/module/%s/%s',
@@ -105,14 +105,14 @@ class ModuleCommand extends Command
                     strtolower($extensionName),
                 )
             ),
-            (string)$io->ask('Define module title', ''),
-            (string)$io->ask('Define module description', ''),
-            (string)$io->ask('Define module short description', ''),
-            (string)$io->ask('The module icon identifier', ''),
-            $io->confirm('Do you prefer to reference extbase controller actions or native routes'),
-            $extensionName,
-            $this->askForReferencedControllerActions($io, $extensionInformation->getExtbaseControllerClassnames(), $extensionInformation),
-            $this->askForNativeRoutes($io, $extensionInformation->getControllerClassnames(), $extensionInformation),
+            title: (string)$io->ask('Define module title', ''),
+            description: (string)$io->ask('Define module description', ''),
+            shortDescription: (string)$io->ask('Define module short description', ''),
+            iconIdentifier: (string)$io->ask('The module icon identifier', ''),
+            isExtbaseModule: $io->confirm('Do you prefer to reference extbase controller actions or native routes'),
+            extensionName: $extensionName,
+            referencedControllerActions: $this->askForReferencedControllerActions($io, $extensionInformation->getExtbaseControllerClassnames(), $extensionInformation),
+            referencedRoutes: $this->askForNativeRoutes($io, $extensionInformation->getControllerClassnames(), $extensionInformation),
         );
     }
 
