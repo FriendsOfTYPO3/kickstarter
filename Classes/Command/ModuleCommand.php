@@ -3,25 +3,30 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the package stefanfroemken/ext-kickstarter.
+ * This file is part of the package friendsoftypo3/kickstarter.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
  */
 
-namespace StefanFroemken\ExtKickstarter\Command;
+namespace FriendsOfTYPO3\Kickstarter\Command;
 
-use StefanFroemken\ExtKickstarter\Information\ExtensionInformation;
-use StefanFroemken\ExtKickstarter\Information\ModuleInformation;
-use StefanFroemken\ExtKickstarter\Service\Creator\ModuleCreatorService;
-use StefanFroemken\ExtKickstarter\Traits\AskForExtensionKeyTrait;
-use StefanFroemken\ExtKickstarter\Traits\ExtensionInformationTrait;
-use StefanFroemken\ExtKickstarter\Traits\TryToCorrectClassNameTrait;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\ChooseExtensionKeyQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\ModuleIdentifierQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\ModuleParentQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
+use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
+use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
+use FriendsOfTYPO3\Kickstarter\Information\ModuleInformation;
+use FriendsOfTYPO3\Kickstarter\Service\Creator\ModuleCreatorService;
+use FriendsOfTYPO3\Kickstarter\Traits\AskForExtensionKeyTrait;
+use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
+use FriendsOfTYPO3\Kickstarter\Traits\TryToCorrectClassNameTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ModuleCommand extends Command
 {
@@ -31,6 +36,7 @@ class ModuleCommand extends Command
 
     public function __construct(
         private readonly ModuleCreatorService $moduleCreatorService,
+        private readonly QuestionCollection $questionCollection,
     ) {
         parent::__construct();
     }
@@ -46,7 +52,8 @@ class ModuleCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $commandContext = new CommandContext($input, $output);
+        $io = $commandContext->getIo();
         $io->title('Welcome to the TYPO3 Extension Builder');
 
         $io->text([
@@ -55,32 +62,45 @@ class ModuleCommand extends Command
             'Please take your time to answer them.',
         ]);
 
-        $this->moduleCreatorService->create($this->askForModuleInformation($io, $input));
+        $this->moduleCreatorService->create($this->askForModuleInformation($commandContext));
 
         return Command::SUCCESS;
     }
 
-    private function askForModuleInformation(SymfonyStyle $io, InputInterface $input): ModuleInformation
+    private function askForModuleInformation(CommandContext $commandContext): ModuleInformation
     {
+        $io = $commandContext->getIo();
         $extensionInformation = $this->getExtensionInformation(
-            $this->askForExtensionKey($io, $input->getArgument('extension_key')),
-            $io
+            (string)$this->questionCollection->askQuestion(
+                ChooseExtensionKeyQuestion::ARGUMENT_NAME,
+                $commandContext,
+            ),
+            $commandContext
         );
 
-        $parentModule = (string)$io->choice(
-            'If the module should be a submodule, the parent identifier, for example "web" has to be set here',
-            ['web', 'site', 'file', 'tools', 'system'],
-            'web',
+        $moduleType = $io->confirm('Do you prefer to reference Extbase controller actions or native routes');
+        $extbaseControllers = $extensionInformation->getExtbaseControllerClassnames();
+        if ($moduleType && $extbaseControllers === []) {
+            $io->error('To create an Extbase backend module, create an Extbase Controller first, using command make:controller.');
+            die();
+        }
+
+        $parentModule = (string)$this->questionCollection->askQuestion(
+            ModuleParentQuestion::ARGUMENT_NAME,
+            $commandContext
         );
 
-        $extensionName = (string)$io->ask(
-            'The extension name in UpperCamelCase for which the module is registered',
-            $extensionInformation->getExtensionName(),
+        $extensionName = GeneralUtility::underscoredToUpperCamelCase($extensionInformation->getExtensionKey());
+
+        $identifier  = (string)$this->questionCollection->askQuestion(
+            ModuleIdentifierQuestion::ARGUMENT_NAME,
+            $commandContext,
+            $parentModule . '_' . $extensionName
         );
 
         return new ModuleInformation(
             extensionInformation: $extensionInformation,
-            identifier: (string)$io->ask('Define an module identifier', $parentModule . '_' . $extensionName),
+            identifier: $identifier,
             parent: $parentModule,
             position: (string)$io->choice(
                 'The module position. Allowed values are "top" and "bottom"',
@@ -105,22 +125,23 @@ class ModuleCommand extends Command
                     strtolower($extensionName),
                 )
             ),
-            title: (string)$io->ask('Define module title', ''),
+            title: (string)$io->ask('Define module title', $extensionName),
             description: (string)$io->ask('Define module description', ''),
             shortDescription: (string)$io->ask('Define module short description', ''),
             iconIdentifier: (string)$io->ask('The module icon identifier', ''),
-            isExtbaseModule: $io->confirm('Do you prefer to reference extbase controller actions or native routes'),
+            isExtbaseModule: $moduleType,
             extensionName: $extensionName,
-            referencedControllerActions: $this->askForReferencedControllerActions($io, $extensionInformation->getExtbaseControllerClassnames(), $extensionInformation),
-            referencedRoutes: $this->askForNativeRoutes($io, $extensionInformation->getControllerClassnames(), $extensionInformation),
+            referencedControllerActions: $this->askForReferencedControllerActions($commandContext, $extbaseControllers, $extensionInformation),
+            referencedRoutes: $this->askForNativeRoutes($commandContext, $extensionInformation->getControllerClassnames(), $extensionInformation),
         );
     }
 
     private function askForReferencedControllerActions(
-        SymfonyStyle $io,
+        CommandContext $commandContext,
         array $extbaseControllerClassnames,
         ExtensionInformation $extensionInformation,
     ): array {
+        $io = $commandContext->getIo();
         $skipAction = 'no choice (skip)';
         $referencedControllerActions = [];
 
@@ -150,7 +171,7 @@ class ModuleCommand extends Command
     }
 
     private function askForNativeRoutes(
-        SymfonyStyle $io,
+        CommandContext $commandContext,
         array $controllerClassnames,
         ExtensionInformation $extensionInformation,
     ): array {

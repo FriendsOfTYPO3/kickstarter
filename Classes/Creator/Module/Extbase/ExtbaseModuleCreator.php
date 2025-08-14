@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the package stefanfroemken/ext-kickstarter.
+ * This file is part of the package friendsoftypo3/kickstarter.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
  */
 
-namespace StefanFroemken\ExtKickstarter\Creator\Module\Extbase;
+namespace FriendsOfTYPO3\Kickstarter\Creator\Module\Extbase;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
@@ -19,12 +19,12 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
-use StefanFroemken\ExtKickstarter\Information\ModuleInformation;
-use StefanFroemken\ExtKickstarter\PhpParser\NodeFactory;
-use StefanFroemken\ExtKickstarter\PhpParser\Structure\FileStructure;
-use StefanFroemken\ExtKickstarter\PhpParser\Structure\ReturnStructure;
-use StefanFroemken\ExtKickstarter\PhpParser\Structure\UseStructure;
-use StefanFroemken\ExtKickstarter\Traits\FileStructureBuilderTrait;
+use FriendsOfTYPO3\Kickstarter\Information\ModuleInformation;
+use FriendsOfTYPO3\Kickstarter\PhpParser\NodeFactory;
+use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\FileStructure;
+use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\ReturnStructure;
+use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\UseStructure;
+use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ExtbaseModuleCreator implements ExtbaseModuleCreatorInterface
