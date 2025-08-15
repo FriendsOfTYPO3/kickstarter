@@ -31,7 +31,13 @@ readonly class ModuleInformation
         private string $extensionName,
         private array $referencedControllerActions,
         private array $referencedRoutes,
+        private CreatorInformation $creatorInformation = new CreatorInformation(),
     ) {}
+
+    public function getCreatorInformation(): CreatorInformation
+    {
+        return $this->creatorInformation;
+    }
 
     public function getExtensionInformation(): ExtensionInformation
     {

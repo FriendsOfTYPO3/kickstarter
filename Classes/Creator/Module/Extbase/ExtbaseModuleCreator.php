@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace FriendsOfTYPO3\Kickstarter\Creator\Module\Extbase;
 
+use FriendsOfTYPO3\Kickstarter\Creator\FileManager;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
@@ -33,12 +34,12 @@ class ExtbaseModuleCreator implements ExtbaseModuleCreatorInterface
 
     private BuilderFactory $builderFactory;
 
-    private NodeFactory $nodeFactory;
-
-    public function __construct(NodeFactory $nodeFactory)
+    public function __construct(
+        private readonly NodeFactory $nodeFactory,
+        private readonly FileManager $fileManager,
+    )
     {
         $this->builderFactory = new BuilderFactory();
-        $this->nodeFactory = $nodeFactory;
     }
 
     public function create(ModuleInformation $moduleInformation): void
@@ -66,7 +67,7 @@ class ExtbaseModuleCreator implements ExtbaseModuleCreatorInterface
             }
         }
 
-        file_put_contents($targetFile, $fileStructure->getFileContents());
+        $this->fileManager->createOrModifyFile($targetFile, $fileStructure->getFileContents(), $moduleInformation->getCreatorInformation());
     }
 
     private function getNewModule(Array_ $existingModules, ModuleInformation $moduleInformation): Array_

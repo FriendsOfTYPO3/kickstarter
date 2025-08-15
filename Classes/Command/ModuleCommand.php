@@ -78,9 +78,13 @@ class ModuleCommand extends Command
             $commandContext
         );
 
-        $moduleType = $io->confirm('Do you prefer to reference Extbase controller actions or native routes');
+        $isExtbase = $io->confirm('Do you prefer to reference Extbase controller actions or native routes');
         $extbaseControllers = $extensionInformation->getExtbaseControllerClassnames();
-        if ($moduleType && $extbaseControllers === []) {
+        if (!$isExtbase) {
+            $io->error('Non Extbase modules are not yet supported.');
+            die();
+        }
+        if ($extbaseControllers === []) {
             $io->error('To create an Extbase backend module, create an Extbase Controller first, using command make:controller.');
             die();
         }
@@ -129,7 +133,7 @@ class ModuleCommand extends Command
             description: (string)$io->ask('Define module description', ''),
             shortDescription: (string)$io->ask('Define module short description', ''),
             iconIdentifier: (string)$io->ask('The module icon identifier', ''),
-            isExtbaseModule: $moduleType,
+            isExtbaseModule: $isExtbase,
             extensionName: $extensionName,
             referencedControllerActions: $this->askForReferencedControllerActions($commandContext, $extbaseControllers, $extensionInformation),
             referencedRoutes: $this->askForNativeRoutes($commandContext, $extensionInformation->getControllerClassnames(), $extensionInformation),
