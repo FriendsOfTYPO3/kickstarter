@@ -21,9 +21,7 @@ readonly class SitePackageCreatorService
      */
     public function __construct(
         private iterable $sitePackageCreators,
-    )
-    {
-    }
+    ) {}
 
     public function create(SitePackageInformation $sitePackageInformation): void
     {

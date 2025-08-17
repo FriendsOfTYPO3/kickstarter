@@ -2,7 +2,6 @@
 
 namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question;
 
-use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
@@ -41,6 +40,6 @@ readonly class ModuleParentQuestion extends AbstractQuestion
 
         $options =  ['web', 'site', 'file', 'tools', 'system'];
 
-        return $this->askQuestion($this->createSymfonyChoiceQuestion([], $options, $default??$options[0]), $commandContext);
+        return $this->askQuestion($this->createSymfonyChoiceQuestion([], $options, $default ?? $options[0]), $commandContext);
     }
 }

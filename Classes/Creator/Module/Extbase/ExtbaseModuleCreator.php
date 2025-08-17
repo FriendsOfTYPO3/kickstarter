@@ -12,6 +12,12 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Module\Extbase;
 
 use FriendsOfTYPO3\Kickstarter\Creator\FileManager;
+use FriendsOfTYPO3\Kickstarter\Information\ModuleInformation;
+use FriendsOfTYPO3\Kickstarter\PhpParser\NodeFactory;
+use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\FileStructure;
+use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\ReturnStructure;
+use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\UseStructure;
+use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
@@ -20,12 +26,6 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
-use FriendsOfTYPO3\Kickstarter\Information\ModuleInformation;
-use FriendsOfTYPO3\Kickstarter\PhpParser\NodeFactory;
-use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\FileStructure;
-use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\ReturnStructure;
-use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\UseStructure;
-use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ExtbaseModuleCreator implements ExtbaseModuleCreatorInterface
@@ -37,8 +37,7 @@ class ExtbaseModuleCreator implements ExtbaseModuleCreatorInterface
     public function __construct(
         private readonly NodeFactory $nodeFactory,
         private readonly FileManager $fileManager,
-    )
-    {
+    ) {
         $this->builderFactory = new BuilderFactory();
     }
 

@@ -2,11 +2,11 @@
 
 namespace FriendsOfTYPO3\Kickstarter\Tests\Functional\Integration;
 
+use FriendsOfTYPO3\Kickstarter\Enums\FileModificationType;
 use FriendsOfTYPO3\Kickstarter\Information\ModuleInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\ModuleCreatorService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use FriendsOfTYPO3\Kickstarter\Enums\FileModificationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ModuleCreatorServiceTest extends AbstractServiceCreatorTestCase
@@ -14,11 +14,11 @@ class ModuleCreatorServiceTest extends AbstractServiceCreatorTestCase
     #[Test]
     #[DataProvider('moduleExtbaseCreationProvider')]
     public function testItCreatesModuleExtbase(
-        string  $extensionKey,
-        string  $composerPackageName,
-        string  $expectedDir,
-        string  $inputPath,
-        array   $createdFileModifications,
+        string $extensionKey,
+        string $composerPackageName,
+        string $expectedDir,
+        string $inputPath,
+        array $createdFileModifications,
         string $path,
         string $shortDescription,
         string $description,
@@ -58,7 +58,7 @@ class ModuleCreatorServiceTest extends AbstractServiceCreatorTestCase
             isExtbaseModule: $extbase,
             parent: $parent,
             position: $position,
-            referencedControllerActions:$referencedControllerActions,
+            referencedControllerActions: $referencedControllerActions,
             referencedRoutes: $referencedRoutes,
         );
         if ($inputPath !== '') {
@@ -106,5 +106,4 @@ class ModuleCreatorServiceTest extends AbstractServiceCreatorTestCase
             ],
         ];
     }
-
 }

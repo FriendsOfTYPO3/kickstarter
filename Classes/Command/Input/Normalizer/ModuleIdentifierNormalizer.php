@@ -18,7 +18,7 @@ class ModuleIdentifierNormalizer implements NormalizerInterface
 {
     public function __invoke(?string $userInput): string
     {
-        $corrected = strtolower($userInput??'');
+        $corrected = strtolower($userInput ?? '');
         $corrected = preg_replace('#[^a-zAZ0-9_]+#', '', $corrected);
         return trim($corrected, '-');
     }

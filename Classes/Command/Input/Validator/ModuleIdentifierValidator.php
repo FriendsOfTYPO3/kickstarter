@@ -19,7 +19,7 @@ class ModuleIdentifierValidator implements ValidatorInterface
     public function __invoke(mixed $answer): string
     {
         // Simple check for empty input
-        if (($answer??'') === '') {
+        if (($answer ?? '') === '') {
             throw new \RuntimeException('Module identifier cannot be empty.', 5943380797);
         }
 
