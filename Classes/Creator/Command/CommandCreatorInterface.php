@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Command;
 
 use FriendsOfTYPO3\Kickstarter\Information\CommandInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.command')]
 interface CommandCreatorInterface
 {
     public function create(CommandInformation $commandInformation): void;

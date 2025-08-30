@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question;
 
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.input.question')]
 interface QuestionInterface
 {
     public function getArgumentName(): string;

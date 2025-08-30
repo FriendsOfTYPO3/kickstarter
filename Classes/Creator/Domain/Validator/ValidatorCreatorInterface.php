@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Domain\Validator;
 
 use FriendsOfTYPO3\Kickstarter\Information\ValidatorInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.domain.validator')]
 interface ValidatorCreatorInterface
 {
     public function create(ValidatorInformation $validatorInformation): void;

@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Controller\Native;
 
 use FriendsOfTYPO3\Kickstarter\Information\ControllerInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.controller.native')]
 interface NativeControllerCreatorInterface
 {
     public function create(ControllerInformation $controllerInformation): void;

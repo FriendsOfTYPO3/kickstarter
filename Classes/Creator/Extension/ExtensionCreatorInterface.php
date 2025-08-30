@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Extension;
 
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.extension')]
 interface ExtensionCreatorInterface
 {
     public function create(ExtensionInformation $extensionInformation): void;

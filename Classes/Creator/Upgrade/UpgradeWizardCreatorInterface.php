@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Upgrade;
 
 use FriendsOfTYPO3\Kickstarter\Information\UpgradeWizardInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.upgrade-wizard')]
 interface UpgradeWizardCreatorInterface
 {
     public function create(UpgradeWizardInformation $upgradeWizardInformation): void;

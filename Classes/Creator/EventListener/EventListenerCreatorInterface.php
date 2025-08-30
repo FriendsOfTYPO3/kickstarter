@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\EventListener;
 
 use FriendsOfTYPO3\Kickstarter\Information\EventListenerInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.event-listener')]
 interface EventListenerCreatorInterface
 {
     public function create(EventListenerInformation $eventListenerInformation): void;

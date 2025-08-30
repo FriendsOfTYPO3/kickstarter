@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\SitePackage;
 
 use FriendsOfTYPO3\Kickstarter\Information\SitePackageInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.property.site-package')]
 interface SitePackageCreatorInterface
 {
     public function create(SitePackageInformation $sitePackageInformation): void;

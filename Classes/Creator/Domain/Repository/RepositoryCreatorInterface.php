@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Domain\Repository;
 
 use FriendsOfTYPO3\Kickstarter\Information\RepositoryInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.domain.repository')]
 interface RepositoryCreatorInterface
 {
     public function create(RepositoryInformation $repositoryInformation): void;
