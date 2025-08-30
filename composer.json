@@ -37,6 +37,8 @@
 	},
 	"require": {
 		"ext-curl": "*",
+		"ext-dom": "*",
+		"ext-libxml": "*",
 		"ext-pdo": "*",
 		"ext-zip": "*",
 		"typo3/cms-core": "^13.4.3",
