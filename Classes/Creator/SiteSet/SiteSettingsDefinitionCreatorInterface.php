@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\SiteSet;
 
 use FriendsOfTYPO3\Kickstarter\Information\SiteSettingsDefinitionInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.site-settings-definition')]
 interface SiteSettingsDefinitionCreatorInterface
 {
     public function create(SiteSettingsDefinitionInformation $siteSettingsDefinitionInformation): void;

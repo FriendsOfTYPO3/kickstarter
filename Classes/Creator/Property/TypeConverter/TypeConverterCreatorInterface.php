@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Property\TypeConverter;
 
 use FriendsOfTYPO3\Kickstarter\Information\TypeConverterInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.property.type-converter')]
 interface TypeConverterCreatorInterface
 {
     public function create(TypeConverterInformation $typeConverterInformation): void;

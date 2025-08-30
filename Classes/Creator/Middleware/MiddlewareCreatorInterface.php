@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Middleware;
 
 use FriendsOfTYPO3\Kickstarter\Information\MiddleWareInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.middleware')]
 interface MiddlewareCreatorInterface
 {
     public function create(MiddlewareInformation $middlewareInformation): void;

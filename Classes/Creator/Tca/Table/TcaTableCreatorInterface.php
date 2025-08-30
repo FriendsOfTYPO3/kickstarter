@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Tca\Table;
 
 use FriendsOfTYPO3\Kickstarter\Information\TableInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.tca.table')]
 interface TcaTableCreatorInterface
 {
     public function create(TableInformation $tableInformation): void;

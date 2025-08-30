@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Test\Environment;
 
 use FriendsOfTYPO3\Kickstarter\Information\TestEnvInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.test.env')]
 interface TestEnvCreatorInterface
 {
     public function create(TestEnvInformation $testEnvInformation): void;

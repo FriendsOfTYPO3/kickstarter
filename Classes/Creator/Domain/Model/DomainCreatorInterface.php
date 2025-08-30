@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Domain\Model;
 
 use FriendsOfTYPO3\Kickstarter\Information\ModelInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.domain.model')]
 interface DomainCreatorInterface
 {
     public function create(ModelInformation $modelInformation): void;
