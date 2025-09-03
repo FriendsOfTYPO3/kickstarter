@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Locallang;
 
 use FriendsOfTYPO3\Kickstarter\Information\LocallangInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.locallang')]
 interface LocallangCreatorInterface
 {
     public function create(LocallangInformation $locallangInformation): void;
