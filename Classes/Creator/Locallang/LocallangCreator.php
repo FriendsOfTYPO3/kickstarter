@@ -8,10 +8,10 @@ use FriendsOfTYPO3\Kickstarter\Creator\FileManager;
 use FriendsOfTYPO3\Kickstarter\Information\LocallangInformation;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-final class LocallangCreator implements LocallangCreatorInterface
+final readonly class LocallangCreator implements LocallangCreatorInterface
 {
     public function __construct(
-        private readonly FileManager $fileManager,
+        private FileManager $fileManager,
     ) {}
 
     public function create(LocallangInformation $locallangInformation): void

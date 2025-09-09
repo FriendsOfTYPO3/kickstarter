@@ -7,6 +7,7 @@ use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
+use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\ValueObject\PhpVersion;
 use Ssch\TYPO3Rector\CodeQuality\General\ExtEmConfRector;
 use Ssch\TYPO3Rector\Configuration\Typo3Option;
@@ -20,7 +21,7 @@ return RectorConfig::configure()
         __DIR__ . '/../../Tests',
         __DIR__ . '/../../ext_emconf.php',
     ])
-    //->withPhpSets(php82: true)
+    ->withPhpSets(php82: true)
     ->withPhpVersion(PhpVersion::PHP_82)
     ->withSets([
         Typo3SetList::CODE_QUALITY,
@@ -43,6 +44,7 @@ return RectorConfig::configure()
     ->withSkip([
         RemoveUnusedPrivateMethodParameterRector::class,
         CompleteDynamicPropertiesRector::class,
+        NullToStrictStringFuncCallArgRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class => [
             __DIR__ . '/../../Classes/PhpParser/Printer/PrettyTypo3Printer.php',
         ],
