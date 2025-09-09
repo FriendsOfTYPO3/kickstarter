@@ -30,11 +30,6 @@ class LocallangFileNameNormalizer implements NormalizerInterface
         // Remove leading and trailing "_"
         $cleanedUserInput = trim($cleanedUserInput, '_');
 
-        // Ensure it starts with "locallang_"
-        if (!str_starts_with($cleanedUserInput, 'locallang_')) {
-            $cleanedUserInput = 'locallang_' . $cleanedUserInput;
-        }
-
         // Ensure it ends with ".xlf"
         if (!str_ends_with($cleanedUserInput, '.xlf')) {
             $cleanedUserInput .= '.xlf';
