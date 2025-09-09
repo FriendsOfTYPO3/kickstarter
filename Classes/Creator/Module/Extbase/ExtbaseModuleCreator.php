@@ -86,11 +86,9 @@ class ExtbaseModuleCreator implements ExtbaseModuleCreatorInterface
         );
 
         $nodeFinder = new NodeFinder();
-        $controllerActionsPlaceholder = $nodeFinder->findFirst($newModuleArrayItem, static function (Node $node): bool {
-            return $node instanceof ArrayItem
-                && $node->key instanceof String_
-                && $node->key->value === 'controllerActions';
-        });
+        $controllerActionsPlaceholder = $nodeFinder->findFirst($newModuleArrayItem, static fn(Node $node): bool => $node instanceof ArrayItem
+            && $node->key instanceof String_
+            && $node->key->value === 'controllerActions');
 
         if ($newModuleArrayItem->value instanceof Array_ && $controllerActionsPlaceholder instanceof ArrayItem) {
             $this->addControllerAndActions($controllerActionsPlaceholder, $this->getReferencedControllerActions($moduleInformation));
@@ -138,9 +136,7 @@ class ExtbaseModuleCreator implements ExtbaseModuleCreatorInterface
     private function getReturnNode(FileStructure $fileStructure): ?Return_
     {
         $nodeFinder = new NodeFinder();
-        $returnNode = $nodeFinder->findFirst($fileStructure->getReturnStructures()->getStmts(), static function (Node $node): bool {
-            return $node instanceof Return_;
-        });
+        $returnNode = $nodeFinder->findFirst($fileStructure->getReturnStructures()->getStmts(), static fn(Node $node): bool => $node instanceof Return_);
 
         return $returnNode instanceof Return_ ? $returnNode : null;
     }
@@ -148,11 +144,9 @@ class ExtbaseModuleCreator implements ExtbaseModuleCreatorInterface
     private function hasArrayItemWithModuleIdentifier(FileStructure $fileStructure, ModuleInformation $moduleInformation): bool
     {
         $nodeFinder = new NodeFinder();
-        $moduleIdentifierNode = $nodeFinder->findFirst($fileStructure->getReturnStructures()->getStmts(), static function (Node $node) use ($moduleInformation): bool {
-            return $node instanceof ArrayItem
-                && $node->key instanceof String_
-                && $node->key->value === $moduleInformation->getIdentifier();
-        });
+        $moduleIdentifierNode = $nodeFinder->findFirst($fileStructure->getReturnStructures()->getStmts(), static fn(Node $node): bool => $node instanceof ArrayItem
+            && $node->key instanceof String_
+            && $node->key->value === $moduleInformation->getIdentifier());
 
         return $moduleIdentifierNode instanceof ArrayItem;
     }

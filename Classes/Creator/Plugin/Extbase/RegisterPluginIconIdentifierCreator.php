@@ -83,9 +83,7 @@ class RegisterPluginIconIdentifierCreator implements ExtbasePluginCreatorInterfa
     private function getReturnNode(FileStructure $fileStructure): ?Return_
     {
         $nodeFinder = new NodeFinder();
-        $returnNode = $nodeFinder->findFirst($fileStructure->getReturnStructures()->getStmts(), static function (Node $node): bool {
-            return $node instanceof Return_;
-        });
+        $returnNode = $nodeFinder->findFirst($fileStructure->getReturnStructures()->getStmts(), static fn(Node $node): bool => $node instanceof Return_);
 
         return $returnNode instanceof Return_ ? $returnNode : null;
     }
@@ -93,11 +91,9 @@ class RegisterPluginIconIdentifierCreator implements ExtbasePluginCreatorInterfa
     private function hasArrayItemWithPluginIcon(FileStructure $fileStructure, PluginInformation $pluginInformation): bool
     {
         $nodeFinder = new NodeFinder();
-        $iconIdentifierNode = $nodeFinder->findFirst($fileStructure->getReturnStructures()->getStmts(), static function (Node $node) use ($pluginInformation): bool {
-            return $node instanceof ArrayItem
-                && $node->key instanceof String_
-                && $node->key->value === $pluginInformation->getPluginIconIdentifier();
-        });
+        $iconIdentifierNode = $nodeFinder->findFirst($fileStructure->getReturnStructures()->getStmts(), static fn(Node $node): bool => $node instanceof ArrayItem
+            && $node->key instanceof String_
+            && $node->key->value === $pluginInformation->getPluginIconIdentifier());
 
         return $iconIdentifierNode instanceof ArrayItem;
     }

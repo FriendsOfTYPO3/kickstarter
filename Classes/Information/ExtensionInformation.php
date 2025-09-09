@@ -241,11 +241,9 @@ class ExtensionInformation
         $extbaseControllerClassnames = [];
         foreach ($this->getControllerClassnames() as $controllerClassname) {
             $stmts = $parser->parse(file_get_contents($this->getFilePathForController($controllerClassname)));
-            $classNode = $nodeFinder->findFirst($stmts, static function (Node $node): bool {
-                return $node instanceof Class_
-                    && $node->extends instanceof Name
-                    && $node->extends->toString() === 'ActionController';
-            });
+            $classNode = $nodeFinder->findFirst($stmts, static fn(Node $node): bool => $node instanceof Class_
+                && $node->extends instanceof Name
+                && $node->extends->toString() === 'ActionController');
 
             if ($classNode instanceof Class_) {
                 $extbaseControllerClassnames[] = $classNode->name->name;
@@ -265,11 +263,9 @@ class ExtensionInformation
         $extbaseModelClassnames = [];
         foreach ($this->getModelClassnames() as $modelClassname) {
             $stmts = $parser->parse(file_get_contents($this->getFilePathForModel($modelClassname)));
-            $classNode = $nodeFinder->findFirst($stmts, static function (Node $node): bool {
-                return $node instanceof Class_
-                    && $node->extends instanceof Name
-                    && $node->extends->toString() === 'AbstractEntity';
-            });
+            $classNode = $nodeFinder->findFirst($stmts, static fn(Node $node): bool => $node instanceof Class_
+                && $node->extends instanceof Name
+                && $node->extends->toString() === 'AbstractEntity');
 
             if ($classNode instanceof Class_) {
                 $extbaseModelClassnames[] = $classNode->name->name;
@@ -289,11 +285,9 @@ class ExtensionInformation
         $extbaseControllerActionNames = [];
 
         $stmts = $parser->parse(file_get_contents($this->getFilePathForController($extbaseControllerClassname)));
-        $classMethodNodes = $nodeFinder->find($stmts, static function (Node $node): bool {
-            return $node instanceof ClassMethod
-                && $node->isPublic()
-                && str_ends_with($node->name->name, 'Action');
-        });
+        $classMethodNodes = $nodeFinder->find($stmts, static fn(Node $node): bool => $node instanceof ClassMethod
+            && $node->isPublic()
+            && str_ends_with($node->name->name, 'Action'));
 
         foreach ($classMethodNodes as $classMethodNode) {
             if ($classMethodNode instanceof ClassMethod) {

@@ -101,9 +101,7 @@ class RequestMiddlewaresCreator implements MiddlewareCreatorInterface
 
     private function sortArrayItemsByKey(Array_ $arrayNode): void
     {
-        usort($arrayNode->items, function (ArrayItem $a, ArrayItem $b): int {
-            return strcmp($a->key?->value ?? '', $b->key?->value ?? '');
-        });
+        usort($arrayNode->items, static fn(ArrayItem $a, ArrayItem $b): int => strcmp($a->key?->value ?? '', $b->key?->value ?? ''));
     }
 
     private function hasIdentifier(Array_ $stackArray, string $identifier): bool
