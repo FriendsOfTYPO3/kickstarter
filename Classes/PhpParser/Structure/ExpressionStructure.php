@@ -18,7 +18,9 @@ use PhpParser\Node\Stmt\Expression;
  */
 class ExpressionStructure extends AbstractStructure
 {
-    public function __construct(private readonly Expression $node) {}
+    public function __construct(
+        private readonly Expression $node
+    ) {}
 
     public function getNode(): Expression
     {

@@ -18,7 +18,9 @@ use PhpParser\Node\Stmt\Property;
  */
 class PropertyStructure extends AbstractStructure
 {
-    public function __construct(private readonly Property $node) {}
+    public function __construct(
+        private readonly Property $node
+    ) {}
 
     public function getNode(): Property
     {

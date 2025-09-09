@@ -18,7 +18,9 @@ use PhpParser\Node\Stmt\Namespace_;
  */
 class NamespaceStructure extends AbstractStructure
 {
-    public function __construct(private readonly Namespace_ $node) {}
+    public function __construct(
+        private readonly Namespace_ $node
+    ) {}
 
     public function getNode(): Namespace_
     {

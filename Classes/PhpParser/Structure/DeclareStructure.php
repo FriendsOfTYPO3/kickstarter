@@ -18,7 +18,9 @@ use PhpParser\Node\Stmt\Declare_;
  */
 class DeclareStructure extends AbstractStructure
 {
-    public function __construct(private readonly Declare_ $node) {}
+    public function __construct(
+        private readonly Declare_ $node
+    ) {}
 
     public function getNode(): Declare_
     {
