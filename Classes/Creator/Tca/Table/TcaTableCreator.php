@@ -152,7 +152,7 @@ class TcaTableCreator implements TcaTableCreatorInterface
         $inserted = false;
         $counter = count($tabs);
         for ($i = 0; $i < $counter; $i++) {
-            if (!$inserted && str_starts_with(trim($tabs[$i]), '--div--')   && isset($tabs[$i + 1])) {
+            if (!$inserted && isset($tabs[$i + 1]) && str_starts_with(trim($tabs[$i]), '--div--')) {
                 $existingFields = GeneralUtility::trimExplode(',', $tabs[$i + 1], true);
 
                 // Add only new fields
