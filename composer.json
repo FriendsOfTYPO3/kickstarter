@@ -30,10 +30,10 @@
 	],
 	"homepage": "https://extensions.typo3.org/extension/kickstarter",
 	"support": {
-		"docs": "https://docs.typo3.org/p/friendsoftypo3/kickstarter/main/en-us/Index.html",
 		"email": "friendsof@typo3.org",
 		"issues": "https://github.com/FriendsOfTYPO3/kickstarter/issues",
-		"source": "https://github.com/FriendsOfTYPO3/kickstarter"
+		"source": "https://github.com/FriendsOfTYPO3/kickstarter",
+		"docs": "https://docs.typo3.org/p/friendsoftypo3/kickstarter/main/en-us/Index.html"
 	},
 	"require": {
 		"ext-curl": "*",
@@ -41,9 +41,9 @@
 		"ext-libxml": "*",
 		"ext-pdo": "*",
 		"ext-zip": "*",
+		"friendsofphp/php-cs-fixer": "^3.49",
 		"typo3/cms-core": "^13.4.3",
-		"typo3/cms-install": "^13.4.3",
-		"friendsofphp/php-cs-fixer": "^3.49"
+		"typo3/cms-install": "^13.4.3"
 	},
 	"require-dev": {
 		"ergebnis/composer-normalize": "^2.44",
