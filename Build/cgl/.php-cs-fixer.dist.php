@@ -39,6 +39,7 @@ return (new \PhpCsFixer\Config())
         'concat_space' => ['spacing' => 'one'],
         'declare_equal_normalize' => ['space' => 'none'],
         'declare_parentheses' => true,
+        'declare_strict_types' => true,
         'dir_constant' => true,
         // @todo: Can be dropped once we enable @PER-CS2.0
         'function_declaration' => [

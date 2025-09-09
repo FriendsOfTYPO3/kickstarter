@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FriendsOfTYPO3\Kickstarter\Templates;
 
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;

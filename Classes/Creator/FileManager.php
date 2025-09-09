@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FriendsOfTYPO3\Kickstarter\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Information\CreatorInformation;
 
 class FileManager
 {
-    public function createFile(string $targetFile, string $content, CreatorInformation $creatorInformation): bool
+    public function createFile(string $targetFile, string $content, CreatorInformation $creatorInformation): int
     {
         if (is_file($targetFile)) {
             throw new \Exception('File ' . $targetFile . ' cannot be created, it already exists', 8835975026);
