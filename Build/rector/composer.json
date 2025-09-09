@@ -1,6 +1,6 @@
 {
 	"name": "froemken/kickstarter-rector",
-	"description": "Rector in its own package to avoid compability issues.",
+	"description": "Rector in its own package to avoid compatibility issues.",
 	"license": "GPL-2.0-or-later",
 	"authors": [
 		{
