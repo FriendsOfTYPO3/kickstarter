@@ -23,6 +23,10 @@ use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\UseStructure;
 use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CommandCreator implements CommandCreatorInterface
@@ -65,16 +69,16 @@ class CommandCreator implements CommandCreatorInterface
             new DeclareStructure($this->nodeFactory->createDeclareStrictTypes())
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('Symfony\Component\Console\Attribute\AsCommand'))
+            new UseStructure($this->nodeFactory->createUseImport(AsCommand::class))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('Symfony\Component\Console\Command\Command'))
+            new UseStructure($this->nodeFactory->createUseImport(Command::class))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('Symfony\Component\Console\Input\InputInterface'))
+            new UseStructure($this->nodeFactory->createUseImport(InputInterface::class))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('Symfony\Component\Console\Output\OutputInterface'))
+            new UseStructure($this->nodeFactory->createUseImport(OutputInterface::class))
         );
         $fileStructure->addNamespaceStructure(
             new NamespaceStructure($this->nodeFactory->createNamespace(
