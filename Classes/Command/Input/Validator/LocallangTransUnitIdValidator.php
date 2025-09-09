@@ -25,8 +25,7 @@ class LocallangTransUnitIdValidator implements ValidatorInterface
             );
         }
 
-        $length = mb_strlen($answer);
-        if ($length < 1 || $length > 100) {
+        if (mb_strlen($answer) > 100) {
             throw new \RuntimeException(
                 'Identifier length must be between 1 and 100 characters',
                 1753823962,
