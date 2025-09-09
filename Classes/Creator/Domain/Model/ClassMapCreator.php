@@ -129,7 +129,9 @@ class ClassMapCreator implements DomainCreatorInterface
         );
 
         $arrayNode->items[] = new ArrayItem(
-            $this->builderFactory->val(['tableName' => $modelInformation->getMappedTableName()]),
+            $this->builderFactory->val([
+                'tableName' => $modelInformation->getMappedTableName(),
+            ]),
             $this->builderFactory->classConstFetch($modelInformation->getModelClassName(), 'class'),
         );
         $this->fileManager->createOrModifyFile($classesFilePath, $fileStructure->getFileContents(), $modelInformation->getCreatorInformation());

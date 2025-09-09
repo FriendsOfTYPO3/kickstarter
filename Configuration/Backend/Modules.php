@@ -21,7 +21,9 @@ if ($extConf->isActivateModule()) {
     return [
         'system_kickstarter' => [
             'parent' => 'system',
-            'position' => ['after' => '*'],
+            'position' => [
+                'after' => '*',
+            ],
             'access' => 'admin',
             'path' => '/module/kickstarter/overview',
             'icon' => 'EXT:kickstarter/Resources/Public/Icons/Extension.svg',
