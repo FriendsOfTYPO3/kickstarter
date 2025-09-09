@@ -78,19 +78,17 @@ class ExtbaseRegisterPluginCreator implements ExtbasePluginCreatorInterface
         PluginInformation $pluginInformation
     ): ?StaticCall {
         $nodeFinder = new NodeFinder();
-        $matchedNode = $nodeFinder->findFirst($fileStructure->getExpressionStructures()->getStmts(), static function (Node $node) use ($pluginInformation): bool {
-            return $node instanceof StaticCall
-                && $node->class->toString() === 'ExtensionUtility'
-                && $node->name->toString() === 'registerPlugin'
-                && isset($node->args[0], $node->args[1])
-                && $node->args[0] instanceof Arg
-                && (($extensionNameNode = $node->args[0]) instanceof Arg)
-                && $extensionNameNode->value instanceof String_
-                && $extensionNameNode->value->value === $pluginInformation->getExtensionInformation()->getExtensionName()
-                && ($pluginNameNode = $node->args[1])
-                && $pluginNameNode->value instanceof String_
-                && $pluginNameNode->value->value === $pluginInformation->getPluginName();
-        });
+        $matchedNode = $nodeFinder->findFirst($fileStructure->getExpressionStructures()->getStmts(), static fn(Node $node): bool => $node instanceof StaticCall
+            && $node->class->toString() === 'ExtensionUtility'
+            && $node->name->toString() === 'registerPlugin'
+            && isset($node->args[0], $node->args[1])
+            && $node->args[0] instanceof Arg
+            && (($extensionNameNode = $node->args[0]) instanceof Arg)
+            && $extensionNameNode->value instanceof String_
+            && $extensionNameNode->value->value === $pluginInformation->getExtensionInformation()->getExtensionName()
+            && ($pluginNameNode = $node->args[1])
+            && $pluginNameNode->value instanceof String_
+            && $pluginNameNode->value->value === $pluginInformation->getPluginName());
 
         return $matchedNode instanceof StaticCall ? $matchedNode : null;
     }
