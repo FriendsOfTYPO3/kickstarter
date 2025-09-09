@@ -36,6 +36,7 @@
 		"docs": "https://docs.typo3.org/p/friendsoftypo3/kickstarter/main/en-us/Index.html"
 	},
 	"require": {
+		"php": "^8.2",
 		"ext-curl": "*",
 		"ext-dom": "*",
 		"ext-libxml": "*",
