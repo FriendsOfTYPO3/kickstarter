@@ -172,7 +172,7 @@ class ExtensionCommand extends Command
         ]);
         $title = (string)$io->ask(
             'Please provide the title of your extension',
-            ucwords(preg_replace('/_/', ' ', $extensionKey))
+            ucwords(str_replace('_', ' ', $extensionKey))
         );
 
         $io->text([
