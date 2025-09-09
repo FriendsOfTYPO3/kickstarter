@@ -80,7 +80,7 @@ class ModelCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function askForModelInformation(CommandContext $commandContext): ?ModelInformation
+    private function askForModelInformation(CommandContext $commandContext): ModelInformation
     {
         $io = $commandContext->getIo();
         $extensionInformation = $this->getExtensionInformation(

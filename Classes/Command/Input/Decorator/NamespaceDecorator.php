@@ -25,7 +25,7 @@ class NamespaceDecorator implements DecoratorInterface
         return implode(
             '\\',
             array_map(
-                fn($part): string|array => str_replace(
+                fn($part): string => str_replace(
                     [
                         '-',
                         '_',
