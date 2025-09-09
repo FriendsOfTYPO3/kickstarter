@@ -4,7 +4,6 @@ namespace FriendsOfTYPO3\Kickstarter\Tests\Functional\Integration;
 
 use FriendsOfTYPO3\Kickstarter\Enums\FileModificationType;
 use FriendsOfTYPO3\Kickstarter\Information\LocallangInformation;
-use FriendsOfTYPO3\Kickstarter\Information\SiteSetInformation;
 use FriendsOfTYPO3\Kickstarter\Information\TransUnitInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\LocallangCreatorService;
 use PHPUnit\Framework\Attributes\DataProvider;
