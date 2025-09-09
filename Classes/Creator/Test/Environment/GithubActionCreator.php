@@ -15,10 +15,10 @@ use FriendsOfTYPO3\Kickstarter\Creator\FileManager;
 use FriendsOfTYPO3\Kickstarter\Information\TestEnvInformation;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class GithubActionCreator implements TestEnvCreatorInterface
+readonly class GithubActionCreator implements TestEnvCreatorInterface
 {
     public function __construct(
-        private readonly FileManager $fileManager,
+        private FileManager $fileManager,
     ) {}
 
     public function create(TestEnvInformation $testEnvInformation): void
@@ -78,10 +78,10 @@ jobs:
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerNormalize -n
 
       - name: 'CGL'
-        run: Build/Scripts/runTests.sh -n -p ${{ matrix.php }} -s cgl
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s cgl -n
 
       - name: 'phpstan'
-        run: Build/Scripts/runTests.sh -n -p ${{ matrix.php }} -s phpstan
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s phpstan
 
       - name: 'Execute unit tests'
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s unit
