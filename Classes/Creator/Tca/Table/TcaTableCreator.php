@@ -217,6 +217,9 @@ class TcaTableCreator implements TcaTableCreatorInterface
                 'starttime' => 'starttime',
                 'endtime' => 'endtime',
             ],
+            'typeicon_classes' => [
+                'default' => 'actions-brand-typo3',
+            ],
         ]);
     }
 
