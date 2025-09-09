@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Module\Extbase;
 
 use FriendsOfTYPO3\Kickstarter\Information\ModuleInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.module.extbase')]
 interface ExtbaseModuleCreatorInterface
 {
     public function create(ModuleInformation $moduleInformation): void;

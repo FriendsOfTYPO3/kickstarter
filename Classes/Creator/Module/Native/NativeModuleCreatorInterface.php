@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Module\Native;
 
 use FriendsOfTYPO3\Kickstarter\Information\ModuleInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('ext-kickstarter.creator.module.native')]
 interface NativeModuleCreatorInterface
 {
     public function create(ModuleInformation $moduleInformation): void;
