@@ -18,7 +18,9 @@ use PhpParser\Node\Stmt\ClassMethod;
  */
 class MethodStructure extends AbstractStructure
 {
-    public function __construct(private readonly ClassMethod $node) {}
+    public function __construct(
+        private readonly ClassMethod $node
+    ) {}
 
     public function getNode(): ClassMethod
     {

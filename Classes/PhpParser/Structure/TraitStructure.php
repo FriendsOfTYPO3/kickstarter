@@ -18,7 +18,9 @@ use PhpParser\Node\Stmt\TraitUse;
  */
 class TraitStructure extends AbstractStructure
 {
-    public function __construct(private readonly TraitUse $node) {}
+    public function __construct(
+        private readonly TraitUse $node
+    ) {}
 
     public function getNode(): TraitUse
     {
