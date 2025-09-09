@@ -61,6 +61,15 @@ services:
     arguments:
       $questionCollection: '@questions.extension'
 
+  FriendsOfTYPO3\Kickstarter\Command\LocallangCommand:
+    tags:
+      - name: console.command
+        command: 'make:locallang'
+        description: 'Create a locallang_something.xlf file to handle translations.'
+        schedulable: false
+    arguments:
+      $questionCollection: '@questions.extension'
+
   FriendsOfTYPO3\Kickstarter\Command\MiddlewareCommand:
     tags:
       - name: console.command
@@ -210,6 +219,9 @@ services:
   FriendsOfTYPO3\Kickstarter\Service\Creator\ExtensionCreatorService:
     arguments:
       $extensionCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.extension' }
+  FriendsOfTYPO3\Kickstarter\Service\Creator\LocallangCreatorService:
+    arguments:
+      $locallangCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.locallang' }
   FriendsOfTYPO3\Kickstarter\Service\Creator\PluginCreatorService:
     arguments:
       $extbasePluginCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.plugin.extbase' }
@@ -278,6 +290,12 @@ services:
   FriendsOfTYPO3\Kickstarter\Command\Input\Question\ExtensionKeyQuestion:
     arguments:
       $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.extension_key' }
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\LocallangFileNameQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.locallang_file_name' }
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\LocallangTransUnitIdQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.locallang_trans_unit_id' }
   FriendsOfTYPO3\Kickstarter\Command\Input\Question\MiddlewareClassNameQuestion:
     arguments:
       $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.middleware-class' }
