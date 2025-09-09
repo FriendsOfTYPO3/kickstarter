@@ -20,7 +20,7 @@ trait FileStructureBuilderTrait
 {
     private function buildFileStructure(string $filePath): FileStructure
     {
-        // Early return, if file does not exist
+        // Early return if the file does not exist
         if (is_file($filePath) === false) {
             return new FileStructure();
         }

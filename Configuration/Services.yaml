@@ -88,6 +88,15 @@ services:
     arguments:
       $questionCollection: '@questions.extension'
 
+  FriendsOfTYPO3\Kickstarter\Command\ModuleCommand:
+    tags:
+      - name: console.command
+        command: 'make:module'
+        description: 'Add an extbase or native backend module to your TYPO3 extension.'
+        schedulable: false
+    arguments:
+      $questionCollection: '@questions.extension'
+
   FriendsOfTYPO3\Kickstarter\Command\PluginCommand:
     tags:
       - name: console.command
@@ -226,12 +235,16 @@ services:
     arguments:
       $extbasePluginCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.plugin.extbase' }
       $nativePluginCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.plugin.native' }
-  FriendsOfTYPO3\Kickstarter\Service\Creator\SitePackageCreatorService:
+  FriendsOfTYPO3\Kickstarter\Service\Creator\ModuleCreatorService:
     arguments:
-      $sitePackageCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.property.site-package'}
+      $extbaseModuleCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.module.extbase' }
+      $nativeModuleCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.module.native' }
   FriendsOfTYPO3\Kickstarter\Service\Creator\TypeConverterCreatorService:
     arguments:
       $typeConverterCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.property.type-converter' }
+  FriendsOfTYPO3\Kickstarter\Service\Creator\SitePackageCreatorService:
+    arguments:
+      $sitePackageCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.property.site-package' }
   FriendsOfTYPO3\Kickstarter\Service\Creator\SiteSetCreatorService:
     arguments:
       $siteSetCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.site-set' }
@@ -305,6 +318,9 @@ services:
   FriendsOfTYPO3\Kickstarter\Command\Input\Question\ModelClassNameQuestion:
     arguments:
       $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.model-class' }
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\ModuleIdentifierQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.module-identifier' }
   FriendsOfTYPO3\Kickstarter\Command\Input\Question\NamespaceQuestion:
     arguments:
       $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.namespace' }

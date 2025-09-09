@@ -11,10 +11,14 @@ declare(strict_types=1);
 
 namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
+use FriendsOfTYPO3\Kickstarter\Creator\SitePackage\SitePackageCreatorInterface;
 use FriendsOfTYPO3\Kickstarter\Information\SitePackageInformation;
 
 readonly class SitePackageCreatorService
 {
+    /**
+     * @param iterable<SitePackageCreatorInterface> $sitePackageCreators
+     */
     public function __construct(
         private iterable $sitePackageCreators,
     ) {}
