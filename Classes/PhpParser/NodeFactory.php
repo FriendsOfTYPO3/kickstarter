@@ -326,7 +326,9 @@ EOT;
                     is_int($k) ? null : new String_($k)
                 );
             }
-            return new Array_($items, ['kind' => Array_::KIND_SHORT]);
+            return new Array_($items, [
+                'kind' => Array_::KIND_SHORT,
+            ]);
         }
 
         throw new \InvalidArgumentException('Unsupported default value type: ' . gettype($value), 2697872207);
