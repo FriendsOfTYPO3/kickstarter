@@ -18,12 +18,7 @@ use PhpParser\Node\Stmt\ClassConst;
  */
 class ClassConstStructure extends AbstractStructure
 {
-    private ClassConst $node;
-
-    public function __construct(ClassConst $node)
-    {
-        $this->node = $node;
-    }
+    public function __construct(private readonly ClassConst $node) {}
 
     public function getNode(): ClassConst
     {

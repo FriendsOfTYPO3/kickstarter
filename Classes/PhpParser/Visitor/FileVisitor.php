@@ -44,7 +44,7 @@ use PhpParser\NodeVisitorAbstract;
  */
 final class FileVisitor extends NodeVisitorAbstract
 {
-    private FileStructure $fileStructure;
+    private readonly FileStructure $fileStructure;
 
     public function __construct()
     {

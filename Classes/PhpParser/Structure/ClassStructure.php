@@ -18,12 +18,7 @@ use PhpParser\Node\Stmt\Class_;
  */
 class ClassStructure extends AbstractStructure
 {
-    private Class_ $node;
-
-    public function __construct(Class_ $node)
-    {
-        $this->node = $node;
-    }
+    public function __construct(private readonly Class_ $node) {}
 
     public function getNode(): Class_
     {

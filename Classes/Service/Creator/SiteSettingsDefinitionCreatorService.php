@@ -14,7 +14,7 @@ namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 use FriendsOfTYPO3\Kickstarter\Creator\SiteSet\SiteSettingsDefinitionCreatorInterface;
 use FriendsOfTYPO3\Kickstarter\Information\SiteSettingsDefinitionInformation;
 
-class SiteSettingsDefinitionCreatorService
+readonly class SiteSettingsDefinitionCreatorService
 {
     /**
      * @param iterable<SiteSettingsDefinitionCreatorInterface> $siteSettingDefinitionCreators

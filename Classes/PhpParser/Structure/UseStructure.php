@@ -18,12 +18,7 @@ use PhpParser\Node\Stmt\Use_;
  */
 class UseStructure extends AbstractStructure
 {
-    private Use_ $node;
-
-    public function __construct(Use_ $node)
-    {
-        $this->node = $node;
-    }
+    public function __construct(private readonly Use_ $node) {}
 
     public function getNode(): Use_
     {

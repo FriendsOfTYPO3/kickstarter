@@ -36,7 +36,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 
-class NodeFactory
+readonly class NodeFactory
 {
     private BuilderFactory $factory;
 

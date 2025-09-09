@@ -27,14 +27,10 @@ class ExtbaseControllerCreator implements ExtbaseControllerCreatorInterface
 {
     use FileStructureBuilderTrait;
 
-    private NodeFactory $nodeFactory;
-
     public function __construct(
-        NodeFactory $nodeFactory,
-        private readonly FileManager $fileManager,
-    ) {
-        $this->nodeFactory = $nodeFactory;
-    }
+        private readonly NodeFactory $nodeFactory,
+        private readonly FileManager $fileManager
+    ) {}
 
     public function create(ControllerInformation $controllerInformation): void
     {

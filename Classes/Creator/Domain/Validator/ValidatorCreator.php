@@ -37,15 +37,12 @@ class ValidatorCreator implements ValidatorCreatorInterface
 {
     use FileStructureBuilderTrait;
 
-    private NodeFactory $nodeFactory;
-
     private BuilderFactory $builderFactory;
 
     public function __construct(
-        NodeFactory $nodeFactory,
+        private readonly NodeFactory $nodeFactory,
         private readonly FileManager $fileManager,
     ) {
-        $this->nodeFactory = $nodeFactory;
         $this->builderFactory = new BuilderFactory();
     }
 
