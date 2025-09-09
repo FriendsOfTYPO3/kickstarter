@@ -21,12 +21,7 @@ use PhpParser\Node\Stmt\Return_;
  */
 class ReturnStructure extends AbstractStructure
 {
-    private Return_ $node;
-
-    public function __construct(Return_ $node)
-    {
-        $this->node = $node;
-    }
+    public function __construct(private readonly Return_ $node) {}
 
     public function getNode(): Return_
     {

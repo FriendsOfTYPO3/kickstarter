@@ -15,7 +15,7 @@ use FriendsOfTYPO3\Kickstarter\Command\Input\Normalizer\MiddlewareClassNameNorma
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('ext-kickstarter.inputHandler.middleware-class')]
-class MiddlewareClassNameDecorator implements DecoratorInterface
+readonly class MiddlewareClassNameDecorator implements DecoratorInterface
 {
     public function __construct(
         private MiddlewareClassNameNormalizer $middlewareClassNameNormalizer

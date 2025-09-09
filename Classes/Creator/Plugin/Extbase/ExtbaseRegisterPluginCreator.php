@@ -37,14 +37,11 @@ class ExtbaseRegisterPluginCreator implements ExtbasePluginCreatorInterface
 
     private BuilderFactory $builderFactory;
 
-    private NodeFactory $nodeFactory;
-
     public function __construct(
-        NodeFactory $nodeFactory,
+        private readonly NodeFactory $nodeFactory,
         private readonly FileManager $fileManager,
     ) {
         $this->builderFactory = new BuilderFactory();
-        $this->nodeFactory = $nodeFactory;
     }
 
     public function create(PluginInformation $pluginInformation): void

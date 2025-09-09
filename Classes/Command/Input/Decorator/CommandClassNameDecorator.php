@@ -15,7 +15,7 @@ use FriendsOfTYPO3\Kickstarter\Command\Input\Normalizer\CommandClassNameNormaliz
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('ext-kickstarter.inputHandler.command-class')]
-class CommandClassNameDecorator implements DecoratorInterface
+readonly class CommandClassNameDecorator implements DecoratorInterface
 {
     public function __construct(
         private CommandClassNameNormalizer $commandClassNameNormalizer

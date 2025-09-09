@@ -17,14 +17,10 @@ use FriendsOfTYPO3\Kickstarter\Service\TcaSchemaService;
 
 class ExtTablesSqlCreator implements TcaTableCreatorInterface
 {
-    private TcaSchemaService $tcaSchemaService;
-
     public function __construct(
-        TcaSchemaService $tcaSchemaService,
-        private readonly FileManager $fileManager,
-    ) {
-        $this->tcaSchemaService = $tcaSchemaService;
-    }
+        private readonly TcaSchemaService $tcaSchemaService,
+        private readonly FileManager $fileManager
+    ) {}
 
     public function create(TableInformation $tableInformation): void
     {

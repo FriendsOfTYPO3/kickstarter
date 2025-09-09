@@ -18,12 +18,7 @@ use PhpParser\Node\Stmt\Function_;
  */
 class FunctionStructure extends AbstractStructure
 {
-    private Function_ $node;
-
-    public function __construct(Function_ $node)
-    {
-        $this->node = $node;
-    }
+    public function __construct(private readonly Function_ $node) {}
 
     public function getNode(): Function_
     {

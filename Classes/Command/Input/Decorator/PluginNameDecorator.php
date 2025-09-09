@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 #[AutoconfigureTag('ext-kickstarter.inputHandler.plugin-name')]
-class PluginNameDecorator implements DecoratorInterface
+readonly class PluginNameDecorator implements DecoratorInterface
 {
     public function __construct(
         private PluginNameNormalizer $pluginNameNormalizer

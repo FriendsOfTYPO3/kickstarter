@@ -45,17 +45,17 @@ class ExtensionInformation
     public function __construct(
         private string $extensionKey,
         private string $composerPackageName,
-        private string $title,
-        private string $description,
-        private string $version,
-        private string $category,
-        private string $state,
-        private string $author,
-        private string $authorEmail,
-        private string $authorCompany,
-        private string $namespaceForAutoload,
+        private readonly string $title,
+        private readonly string $description,
+        private readonly string $version,
+        private readonly string $category,
+        private readonly string $state,
+        private readonly string $author,
+        private readonly string $authorEmail,
+        private readonly string $authorCompany,
+        private readonly string $namespaceForAutoload,
         private string $extensionPath,
-        private CreatorInformation $creatorInformation = new CreatorInformation()
+        private readonly CreatorInformation $creatorInformation = new CreatorInformation()
     ) {}
 
     public function getExtensionKey(): string

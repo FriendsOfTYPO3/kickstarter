@@ -18,7 +18,7 @@ use FriendsOfTYPO3\Kickstarter\PhpParser\StructureObjectStorage;
  * Contains the AST of any kind of PHP file grouped by nodes.
  * Use the add*Methods to add further nodes to the AST.
  */
-class FileStructure
+readonly class FileStructure
 {
     private PrettyTypo3Printer $printer;
 
