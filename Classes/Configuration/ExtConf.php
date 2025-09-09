@@ -21,7 +21,7 @@ use TYPO3\CMS\Core\Core\Environment;
  * This class will streamline the values from extension manager configuration
  */
 #[Autoconfigure(constructor: 'create')]
-final class ExtConf
+final readonly class ExtConf
 {
     public const EXT_KEY = 'kickstarter';
 
@@ -35,8 +35,8 @@ final class ExtConf
 
     public function __construct(
         // general
-        private readonly string $exportDirectory = self::DEFAULT_SETTINGS['exportDirectory'],
-        private readonly bool $activateModule = self::DEFAULT_SETTINGS['activateModule'],
+        private string $exportDirectory = self::DEFAULT_SETTINGS['exportDirectory'],
+        private bool $activateModule = self::DEFAULT_SETTINGS['activateModule'],
     ) {}
 
     public static function create(ExtensionConfiguration $extensionConfiguration): self
