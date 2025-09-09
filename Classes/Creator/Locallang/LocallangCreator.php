@@ -23,7 +23,7 @@ final class LocallangCreator implements LocallangCreatorInterface
         if (\is_file($path)) {
             $xml = GeneralUtility::getUrl($path);
             if ($xml === false) {
-                throw new \RuntimeException(sprintf('Could not read XLIFF: %s', $path));
+                throw new \RuntimeException(sprintf('Could not read XLIFF: %s', $path), 3548142420);
             }
             $xml = (string)\preg_replace('/^\xEF\xBB\xBF/', '', $xml);
         } else {
@@ -50,7 +50,7 @@ final class LocallangCreator implements LocallangCreatorInterface
         // Serialize + write back
         $xmlOut = $dom->saveXML();
         if ($xmlOut === false) {
-            throw new \RuntimeException('Failed to serialize XLIFF DOM.');
+            throw new \RuntimeException('Failed to serialize XLIFF DOM.', 5696154828);
         }
 
         $xmlOut = $this->indentWithTabs($xmlOut, 2);
@@ -113,7 +113,7 @@ final class LocallangCreator implements LocallangCreatorInterface
         $dom->formatOutput = true;
         $opts = LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_NONET;
         if (!$dom->loadXML($xml, $opts)) {
-            throw new \RuntimeException('Invalid XLIFF XML.');
+            throw new \RuntimeException('Invalid XLIFF XML.', 1403748209);
         }
         return $dom;
     }
@@ -205,7 +205,7 @@ final class LocallangCreator implements LocallangCreatorInterface
                 throw new \RuntimeException(sprintf(
                     'trans-unit "%s" already exists with a different <source>. Use $force=true to overwrite.',
                     $id
-                ));
+                ), 9435398299);
             }
             // Set anyway (idempotent if same)
             $src->nodeValue = $source;
@@ -222,7 +222,7 @@ final class LocallangCreator implements LocallangCreatorInterface
                     throw new \RuntimeException(sprintf(
                         'trans-unit "%s" already exists with a different <target>. Use $force=true to overwrite.',
                         $id
-                    ));
+                    ), 8736663261);
                 }
                 $tgt->nodeValue = $target;
             } else {

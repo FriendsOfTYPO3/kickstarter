@@ -11,7 +11,7 @@ final class TransUnitInformation
     ) {
         $this->id = trim($this->id);
         if ($this->id === '') {
-            throw new \InvalidArgumentException('trans-unit id must not be empty.');
+            throw new \InvalidArgumentException('trans-unit id must not be empty.', 7720492439);
         }
     }
 
