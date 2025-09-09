@@ -157,10 +157,6 @@ class ModelCreator implements DomainCreatorInterface
         }
     }
 
-    /**
-     * @param FileStructure $fileStructure
-     * @param array $initializableProps
-     */
     public function addInitializeObjectMethod(FileStructure $fileStructure, array $initializableProps): void
     {
         $fileStructure->addMethodStructure(new MethodStructure(
