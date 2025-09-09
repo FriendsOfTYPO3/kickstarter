@@ -51,9 +51,9 @@ To set up a development environment for this extension:
 1. Clone the repository
 2. Install dependencies and set up the environment using:
 
-    ```bash
-    Build/Scripts/runTests.sh -s composerUpdate
-    ```
+```bash
+Build/Scripts/runTests.sh -s composerUpdate
+```
 
 ## ✅ Testing
 
@@ -73,7 +73,6 @@ Build/Scripts/runTests.sh -s phpstan
 
 ### 🧹 For `rector`:
 
-Rector is installed independently as it is not fully compatible with TYPO3 v13.
 Before running the tests, make sure to update rector:
 
 ```bash
@@ -94,7 +93,7 @@ We expect all contributors to be respectful and considerate of others. We aim to
 
 ## 📄 License
 
-By contributing to this project, you agree that your contributions will be licensed under the same license as the project (see LICENSE.txt).
+By contributing to this project, you agree that your contributions will be licensed under the same license as the project, (see [LICENSE.txt](LICENSE.txt)).
 
 ## ❓ Questions?
 
@@ -107,4 +106,3 @@ Thank you for your contributions!
 ## 🙌 Thank You!
 
 We appreciate your contributions—whether it's filing an issue, suggesting an improvement, or submitting a pull request. Let's build something great together!
-
