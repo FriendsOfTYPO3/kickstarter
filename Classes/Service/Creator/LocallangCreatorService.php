@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Creator\Locallang\LocallangCreatorInterface;

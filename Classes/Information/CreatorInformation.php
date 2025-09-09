@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FriendsOfTYPO3\Kickstarter\Information;
 
 use FriendsOfTYPO3\Kickstarter\Enums\FileModificationType;
