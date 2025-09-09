@@ -46,7 +46,7 @@ class ModuleCommand extends Command
         $this->addArgument(
             'extension_key',
             InputArgument::OPTIONAL,
-            'Provide the extension key you want to extend.',
+            'Provide the extension key you want to extend',
         );
     }
 
