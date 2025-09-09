@@ -292,7 +292,6 @@ class TcaTableCreator implements TcaTableCreatorInterface
                     'items' => [
                         [
                             'label' => '',
-                            'value' => '',
                             'invertStateDisplay' => true,
                         ],
                     ],
