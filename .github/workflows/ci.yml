@@ -22,20 +22,26 @@ jobs:
       - name: 'Lint PHP'
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s lint
 
-      - name: 'Install testing system'
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerUpdate
-
       - name: 'Composer validate'
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerValidate
+
+      - name: 'Install testing system'
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerUpdate
 
       - name: 'Composer normalize'
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerNormalize -n
 
       - name: 'CGL'
-        run: Build/Scripts/runTests.sh -n -p ${{ matrix.php }} -s cgl
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s cgl -n
+
+      - name: 'Install Rector dependencies'
+        run: Build/Scripts/runTests.sh -s composerUpdateRector
+
+      - name: 'Run Rector'
+        run: Build/Scripts/runTests.sh -s rector -n
 
       - name: 'PHPStan'
-        run: Build/Scripts/runTests.sh -n -p ${{ matrix.php }} -s phpstan
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s phpstan
 
       - name: 'Functional Tests'
-        run: Build/Scripts/runTests.sh -n -p ${{ matrix.php }} -s functional
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s functional
