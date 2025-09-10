@@ -14,7 +14,6 @@ namespace FriendsOfTYPO3\Kickstarter\Command;
 use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
 use FriendsOfTYPO3\Kickstarter\Configuration\ExtConf;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
-use FriendsOfTYPO3\Kickstarter\Creator\Extension\ExtensionCreatorInterface;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
 use FriendsOfTYPO3\Kickstarter\Information\SitePackageInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\SitePackageCreatorService;
@@ -26,9 +25,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * @param iterable<ExtensionCreatorInterface> $creators
- */
 class SitePackageCommand extends Command
 {
     use CreatorInformationTrait;

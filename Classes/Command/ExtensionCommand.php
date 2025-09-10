@@ -19,7 +19,6 @@ use FriendsOfTYPO3\Kickstarter\Command\Input\Question\VersionQuestion;
 use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
 use FriendsOfTYPO3\Kickstarter\Configuration\ExtConf;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
-use FriendsOfTYPO3\Kickstarter\Creator\Extension\ExtensionCreatorInterface;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\ExtensionCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
@@ -31,9 +30,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Registry;
 
-/**
- * @param iterable<ExtensionCreatorInterface> $creators
- */
 class ExtensionCommand extends Command
 {
     use CreatorInformationTrait;

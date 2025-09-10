@@ -11,10 +11,14 @@ declare(strict_types=1);
 
 namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
+use FriendsOfTYPO3\Kickstarter\Creator\Extension\ExtensionCreatorInterface;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
 
 readonly class ExtensionCreatorService
 {
+    /**
+     * @param iterable<ExtensionCreatorInterface> $extensionCreators
+     */
     public function __construct(
         private iterable $extensionCreators,
     ) {}
