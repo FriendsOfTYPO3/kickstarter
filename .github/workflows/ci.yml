@@ -34,9 +34,6 @@ jobs:
       - name: 'CGL'
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s cgl -n
 
-      - name: 'Install Rector dependencies'
-        run: Build/Scripts/runTests.sh -s composerUpdateRector
-
       - name: 'Run Rector'
         run: Build/Scripts/runTests.sh -s rector -n
 

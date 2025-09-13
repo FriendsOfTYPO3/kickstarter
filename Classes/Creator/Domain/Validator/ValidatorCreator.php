@@ -32,6 +32,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class ValidatorCreator implements ValidatorCreatorInterface
 {
@@ -74,7 +75,7 @@ class ValidatorCreator implements ValidatorCreatorInterface
         );
 
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator'))
+            new UseStructure($this->nodeFactory->createUseImport(AbstractValidator::class))
         );
         $fileStructure->addClassStructure(
             new ClassStructure(

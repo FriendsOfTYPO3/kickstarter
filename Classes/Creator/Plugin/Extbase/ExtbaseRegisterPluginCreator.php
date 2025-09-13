@@ -27,6 +27,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 /**
  * Registers the Extbase plugin in the TCA/Overrides
@@ -61,7 +62,7 @@ class ExtbaseRegisterPluginCreator implements ExtbasePluginCreatorInterface
         }
 
         $fileStructure->addUseStructure(new UseStructure(
-            $this->builderFactory->use('TYPO3\CMS\Extbase\Utility\ExtensionUtility')->getNode()
+            $this->builderFactory->use(ExtensionUtility::class)->getNode()
         ));
 
         if (!$this->getStaticCallForRegisterPlugin($fileStructure, $pluginInformation) instanceof StaticCall) {

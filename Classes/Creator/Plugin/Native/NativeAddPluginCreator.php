@@ -20,6 +20,7 @@ use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\UseStructure;
 use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Expression;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class NativeAddPluginCreator implements NativePluginCreatorInterface
 {
@@ -44,7 +45,7 @@ class NativeAddPluginCreator implements NativePluginCreatorInterface
         }
 
         $fileStructure->addUseStructure(new UseStructure(
-            $this->builderFactory->use('TYPO3\CMS\Core\Utility\ExtensionManagementUtility')->getNode()
+            $this->builderFactory->use(ExtensionManagementUtility::class)->getNode()
         ));
         $fileStructure->addExpressionStructure(new ExpressionStructure(
             $this->getExpressionForAddPlugin($pluginInformation)

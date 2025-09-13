@@ -22,6 +22,7 @@ use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\NamespaceStructure;
 use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\UseStructure;
 use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
 use PhpParser\BuilderFactory;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class EventListenerCreator implements EventListenerCreatorInterface
@@ -73,7 +74,7 @@ class EventListenerCreator implements EventListenerCreatorInterface
         );
 
         $fileStructure->addUseStructure(new UseStructure(
-            $this->builderFactory->use('TYPO3\CMS\Core\Attribute\AsEventListener')->getNode()
+            $this->builderFactory->use(AsEventListener::class)->getNode()
         ));
 
         $fileStructure->addClassStructure(

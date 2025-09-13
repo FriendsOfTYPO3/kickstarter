@@ -21,6 +21,10 @@ use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\MethodStructure;
 use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\NamespaceStructure;
 use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\UseStructure;
 use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class MiddlewareCreator implements MiddlewareCreatorInterface
@@ -72,16 +76,16 @@ class MiddlewareCreator implements MiddlewareCreatorInterface
             new ClassStructure($this->nodeFactory->createMiddlewareClass($middlewareInformation->getClassName()))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('Psr\Http\Message\ResponseInterface'))
+            new UseStructure($this->nodeFactory->createUseImport(ResponseInterface::class))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('Psr\Http\Server\RequestHandlerInterface'))
+            new UseStructure($this->nodeFactory->createUseImport(RequestHandlerInterface::class))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('Psr\Http\Server\MiddlewareInterface'))
+            new UseStructure($this->nodeFactory->createUseImport(MiddlewareInterface::class))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('Psr\Http\Message\ServerRequestInterface'))
+            new UseStructure($this->nodeFactory->createUseImport(ServerRequestInterface::class))
         );
     }
 }

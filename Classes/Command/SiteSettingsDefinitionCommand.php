@@ -172,7 +172,7 @@ class SiteSettingsDefinitionCommand extends Command
             // --- Parent Selection ---
             $parent = null;
             if ($categories !== []) {
-                $parentChoices = array_merge(['none'], array_map(fn($c) => $c->key, $categories));
+                $parentChoices = array_merge(['none'], array_map(static fn($c): string => $c->key, $categories));
                 $parentKey = $io->choice('Select a parent category by key or choose "none"', $parentChoices, 'none');
 
                 if ($parentKey !== 'none') {

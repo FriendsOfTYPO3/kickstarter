@@ -25,6 +25,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
+use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 
 /**
  * Registers the plugin icon into Icons.php
@@ -52,7 +53,7 @@ class RegisterPluginIconIdentifierCreator implements ExtbasePluginCreatorInterfa
         }
 
         $fileStructure->addUseStructure(new UseStructure(
-            $this->builderFactory->use('TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider')->getNode()
+            $this->builderFactory->use(SvgIconProvider::class)->getNode()
         ));
 
         if (!$this->hasArrayItemWithPluginIcon($fileStructure, $pluginInformation)) {

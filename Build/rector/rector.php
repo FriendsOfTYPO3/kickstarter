@@ -21,6 +21,15 @@ return RectorConfig::configure()
         __DIR__ . '/../../Tests',
         __DIR__ . '/../../ext_emconf.php',
     ])
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+        typeDeclarations: true,
+        privatization: true,
+        instanceOf: true,
+        earlyReturn: true,
+        strictBooleans: true,
+    )
     ->withPhpSets(php82: true)
     ->withPhpVersion(PhpVersion::PHP_82)
     ->withSets([
@@ -28,10 +37,7 @@ return RectorConfig::configure()
         Typo3SetList::GENERAL,
         Typo3LevelSetList::UP_TO_TYPO3_13,
     ])
-    // To have a better analysis from PHPStan, we teach it here some more things
     ->withPHPStanConfigs([Typo3Option::PHPSTAN_FOR_RECTOR_PATH])
-    ->withRules([
-    ])
     ->withConfiguredRule(ExtEmConfRector::class, [
         ExtEmConfRector::TYPO3_VERSION_CONSTRAINT => '13.4.0-13.4.99',
         ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED => [],
@@ -49,17 +55,6 @@ return RectorConfig::configure()
             __DIR__ . '/../../Classes/PhpParser/Printer/PrettyTypo3Printer.php',
         ],
         '*Build/*',
-        // Exclude any "Build" subdirectory
         '*Resources/*',
-        // Exclude any "Build" subdirectory
         '*Model/*',
-    ])
-    ->withPreparedSets(
-        deadCode: true,
-        codeQuality: true,
-        typeDeclarations: true,
-        privatization: true,
-        instanceOf: true,
-        earlyReturn: true,
-        strictBooleans: true,
-    );
+    ]);

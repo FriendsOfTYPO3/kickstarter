@@ -21,6 +21,8 @@ use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\MethodStructure;
 use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\NamespaceStructure;
 use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\UseStructure;
 use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class NativeControllerCreator implements NativeControllerCreatorInterface
@@ -70,10 +72,10 @@ class NativeControllerCreator implements NativeControllerCreatorInterface
             new ClassStructure($this->nodeFactory->createClass($controllerInformation->getControllerName()))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('Psr\Http\Message\ResponseInterface'))
+            new UseStructure($this->nodeFactory->createUseImport(ResponseInterface::class))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('TYPO3\CMS\Core\Http\HtmlResponse'))
+            new UseStructure($this->nodeFactory->createUseImport(HtmlResponse::class))
         );
     }
 }
