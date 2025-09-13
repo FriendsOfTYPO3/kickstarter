@@ -139,7 +139,6 @@ Options:
             - composer: "composer" with all remaining arguments dispatched.
             - composerNormalize: "composer normalize"
             - composerUpdate: "composer update", handy if host has no PHP
-            - composerUpdateRector: "composer update", for rector subdirectory
             - composerValidate: "composer validate"
             - functional: PHP functional tests
             - functionalUpdateBaseline: functional tests with UPDATE_BASELINE=1
@@ -258,7 +257,7 @@ DBMS_VERSION=""
 PHP_VERSION="8.2"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9003
-CGLCHECK_DRY_RUN=0
+DRY_RUN=0
 CI_PARAMS="${CI_PARAMS:-}"
 DOCS_PARAMS="${DOCS_PARAMS:=--pull always}"
 CONTAINER_BIN=""
@@ -303,7 +302,7 @@ while getopts "a:b:d:i:s:p:xy:nhu" OPT; do
             PHP_XDEBUG_PORT=${OPTARG}
             ;;
         n)
-            CGLCHECK_DRY_RUN=1
+            DRY_RUN=1
             ;;
         h)
             loadHelp
@@ -411,11 +410,11 @@ fi
 # Suite execution
 case ${TEST_SUITE} in
     cgl)
-        if [ "${CGLCHECK_DRY_RUN}" -eq 1 ]; then
-            COMMAND="php -dxdebug.mode=off .Build/bin/php-cs-fixer fix -v --dry-run --diff --config=Build/cgl/.php-cs-fixer.dist.php --using-cache=no"
-        else
-            COMMAND="php -dxdebug.mode=off .Build/bin/php-cs-fixer fix -v --config=Build/cgl/.php-cs-fixer.dist.php --using-cache=no"
+        DRY_RUN_OPTIONS=''
+        if [ "${DRY_RUN}" -eq 1 ]; then
+            DRY_RUN_OPTIONS='--dry-run --diff'
         fi
+        COMMAND="php -dxdebug.mode=off .Build/bin/php-cs-fixer fix -v ${DRY_RUN_OPTIONS} --config=Build/cgl/.php-cs-fixer.dist.php --using-cache=no"
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name cgl-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
         SUITE_EXIT_CODE=$?
         ;;
@@ -435,7 +434,7 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         ;;
     composerNormalize)
-        if [ "${CGLCHECK_DRY_RUN}" -eq 1 ]; then
+        if [ "${DRY_RUN}" -eq 1 ]; then
             COMMAND=(composer normalize -n)
         else
             COMMAND=(composer normalize)
@@ -454,18 +453,6 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         cp ${ROOT_DIR}/composer.json ${ROOT_DIR}/composer.json.testing
         mv ${ROOT_DIR}/composer.json.orig ${ROOT_DIR}/composer.json
-        ;;
-    composerUpdateRector)
-        rm -rf Build/rector/.Build/bin/ Build/rector/.Build/vendor Build/rector/composer.lock
-        cp ${ROOT_DIR}/Build/rector/composer.json ${ROOT_DIR}/Build/rector/composer.json.orig
-        if [ -f "${ROOT_DIR}/Build/rector/composer.json.testing" ]; then
-            cp ${ROOT_DIR}/Build/rector/composer.json ${ROOT_DIR}/Build/rector/composer.json.orig
-        fi
-        COMMAND=(composer require --working-dir=${ROOT_DIR}/Build/rector --no-ansi --no-interaction --no-progress)
-        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-install-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} "${COMMAND[@]}"
-        SUITE_EXIT_CODE=$?
-        cp ${ROOT_DIR}/Build/rector/composer.json ${ROOT_DIR}/Build/rector/composer.json.testing
-        mv ${ROOT_DIR}/Build/rector/composer.json.orig ${ROOT_DIR}/Build/rector/composer.json
         ;;
     composerValidate)
         COMMAND=(composer validate "$@")
@@ -524,12 +511,12 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         ;;
     rector)
-        if [ "${CGLCHECK_DRY_RUN}" -eq 1 ]; then
-            COMMAND=(php -dxdebug.mode=off Build/rector/.Build/bin/rector -n --config=Build/rector/rector.php --clear-cache "$@")
-        else
-            COMMAND=(php -dxdebug.mode=off Build/rector/.Build/bin/rector --config=Build/rector/rector.php --clear-cache "$@")
+        DRY_RUN_OPTIONS=''
+        if [ "${DRY_RUN}" -eq 1 ]; then
+            DRY_RUN_OPTIONS='--dry-run'
         fi
-        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name rector-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} "${COMMAND[@]}"
+        COMMAND="php -dxdebug.mode=off .Build/bin/rector process ${DRY_RUN_OPTIONS} --config=Build/rector/rector.php --no-progress-bar --ansi"
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name rector-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
         SUITE_EXIT_CODE=$?
         ;;
     renderDocumentation)

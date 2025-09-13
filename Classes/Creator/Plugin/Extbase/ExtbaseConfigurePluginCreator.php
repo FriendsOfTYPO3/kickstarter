@@ -31,6 +31,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 /**
  * Configures the Extbase plugin in the ext_localconf.php
@@ -58,7 +59,7 @@ class ExtbaseConfigurePluginCreator implements ExtbasePluginCreatorInterface
         }
 
         $fileStructure->addUseStructure(new UseStructure(
-            $this->builderFactory->use('TYPO3\CMS\Extbase\Utility\ExtensionUtility')->getNode()
+            $this->builderFactory->use(ExtensionUtility::class)->getNode()
         ));
 
         foreach ($pluginInformation->getReferencedControllerNames() as $controllerName) {

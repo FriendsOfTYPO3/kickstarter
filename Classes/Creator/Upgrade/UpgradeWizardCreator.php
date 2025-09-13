@@ -24,6 +24,9 @@ use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Install\Attribute\UpgradeWizard;
+use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
+use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 class UpgradeWizardCreator implements UpgradeWizardCreatorInterface
 {
@@ -65,13 +68,13 @@ class UpgradeWizardCreator implements UpgradeWizardCreatorInterface
             new DeclareStructure($this->nodeFactory->createDeclareStrictTypes())
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('TYPO3\CMS\Install\Attribute\UpgradeWizard'))
+            new UseStructure($this->nodeFactory->createUseImport(UpgradeWizard::class))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite'))
+            new UseStructure($this->nodeFactory->createUseImport(DatabaseUpdatedPrerequisite::class))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('TYPO3\CMS\Install\Updates\UpgradeWizardInterface'))
+            new UseStructure($this->nodeFactory->createUseImport(UpgradeWizardInterface::class))
         );
         $fileStructure->addNamespaceStructure(
             new NamespaceStructure($this->nodeFactory->createNamespace(

@@ -21,7 +21,9 @@ use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\MethodStructure;
 use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\NamespaceStructure;
 use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\UseStructure;
 use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 class ExtbaseControllerCreator implements ExtbaseControllerCreatorInterface
 {
@@ -70,10 +72,10 @@ class ExtbaseControllerCreator implements ExtbaseControllerCreatorInterface
             new ClassStructure($this->nodeFactory->createExtbaseControllerClass($controllerInformation->getControllerName()))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('Psr\Http\Message\ResponseInterface'))
+            new UseStructure($this->nodeFactory->createUseImport(ResponseInterface::class))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('TYPO3\CMS\Extbase\Mvc\Controller\ActionController'))
+            new UseStructure($this->nodeFactory->createUseImport(ActionController::class))
         );
     }
 }

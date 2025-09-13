@@ -22,6 +22,7 @@ use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\UseStructure;
 use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
 use PhpParser\BuilderFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 class RepositoryCreator implements RepositoryCreatorInterface
 {
@@ -63,7 +64,7 @@ class RepositoryCreator implements RepositoryCreatorInterface
             new DeclareStructure($this->nodeFactory->createDeclareStrictTypes())
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('TYPO3\CMS\Extbase\Persistence\Repository'))
+            new UseStructure($this->nodeFactory->createUseImport(Repository::class))
         );
         $fileStructure->addNamespaceStructure(
             new NamespaceStructure($this->nodeFactory->createNamespace(
