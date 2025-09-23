@@ -1,0 +1,20 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+  MyVendor\MyExtension\:
+    resource: '../Classes/*'
+    exclude:
+      - '../Classes/Domain/Model/*'
+  MyVendor\MyExtension\Configuration\ExtConf:
+    public: true
+  MyVendor\MyExtensionr\Command\MyCommand:
+    tags:
+      -
+        name: console.command
+        command: 'my:command'
+        description: 'Add a console command to your TYPO3 extension.'
+        schedulable: false
+    arguments:
+      $questionCollection: '@questions.extension'

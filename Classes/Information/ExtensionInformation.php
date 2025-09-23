@@ -30,13 +30,17 @@ class ExtensionInformation
         'l10n_diffsource',
     ];
 
-    private const SITE_SET_PATH = 'Configuration/Sets/';
-
-    private const TCA_PATH = 'Configuration/TCA/';
+    private const CLASSES_PATH = 'Classes/';
 
     private const CONTROLLER_PATH = 'Classes/Controller/';
 
     private const MODEL_PATH = 'Classes/Domain/Model/';
+
+    private const CONFIGURATION_PATH = 'Configuration/';
+
+    private const SITE_SET_PATH = 'Configuration/Sets/';
+
+    private const TCA_PATH = 'Configuration/TCA/';
 
     private const TCA_OVERRIDES_PATH = 'Configuration/TCA/Overrides/';
 
@@ -140,6 +144,16 @@ class ExtensionInformation
     public function getExtensionPath(): string
     {
         return $this->extensionPath;
+    }
+
+    public function getClassesPath(): string
+    {
+        return $this->extensionPath . self::CLASSES_PATH;
+    }
+
+    public function getConfigurationPath(): string
+    {
+        return $this->getExtensionPath() . self::CONFIGURATION_PATH;
     }
 
     public function getControllerPath(): string

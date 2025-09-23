@@ -20,6 +20,7 @@ use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
 use FriendsOfTYPO3\Kickstarter\Configuration\ExtConf;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
+use FriendsOfTYPO3\Kickstarter\Information\ServicesConfigInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\ExtensionCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
@@ -75,7 +76,7 @@ class ExtensionCommand extends Command
 
         $extensionInformation = $this->askForExtensionInformation($commandContext, $extensionKey);
 
-        $this->extensionCreatorService->create($extensionInformation);
+        $this->extensionCreatorService->create($extensionInformation, new ServicesConfigInformation($extensionInformation));
 
         $path = $extensionInformation->getExtensionPath();
 
