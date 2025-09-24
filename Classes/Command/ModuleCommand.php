@@ -96,7 +96,7 @@ class ModuleCommand extends Command
 
         $extensionName = GeneralUtility::underscoredToUpperCamelCase($extensionInformation->getExtensionKey());
 
-        $identifier  = (string)$this->questionCollection->askQuestion(
+        $identifier = (string)$this->questionCollection->askQuestion(
             ModuleIdentifierQuestion::ARGUMENT_NAME,
             $commandContext,
             $parentModule . '_' . $extensionName

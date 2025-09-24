@@ -219,8 +219,8 @@ class ModelCommand extends Command
             }
 
             // 1) read TCA default, 2) convert to native, 3) ask user (pre-filled)
-            $tcaDefault     = (string)($tableTca['columns'][$columnName]['config']['default'] ?? '');
-            $defaultValue   = $this->askForDefaultValue($commandContext, $propertyName, $dataType, $tcaDefault);
+            $tcaDefault = (string)($tableTca['columns'][$columnName]['config']['default'] ?? '');
+            $defaultValue = $this->askForDefaultValue($commandContext, $propertyName, $dataType, $tcaDefault);
 
             $properties[$columnName]['defaultValue'] = $defaultValue;
         }

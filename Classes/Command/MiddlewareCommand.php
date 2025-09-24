@@ -109,7 +109,7 @@ class MiddlewareCommand extends Command
     {
         do {
             $valid = false;
-            $identifier  = (string)$this->questionCollection->askQuestion(
+            $identifier = (string)$this->questionCollection->askQuestion(
                 MiddlewareIdentifierQuestion::ARGUMENT_NAME,
                 $commandContext,
                 $default
@@ -141,7 +141,7 @@ class MiddlewareCommand extends Command
      */
     private function askForBeforeAfter(SymfonyStyle $io, string $stack, string $location): array
     {
-        $entries  = array_keys($this->middlewareStackResolver->resolve($stack) ?? []);
+        $entries = array_keys($this->middlewareStackResolver->resolve($stack) ?? []);
 
         array_unshift($entries, 'none');
 
