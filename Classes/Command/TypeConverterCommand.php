@@ -82,7 +82,7 @@ class TypeConverterCommand extends Command
             $this->askForTypeConverterClassName($io),
             (int)$io->ask('Set priority', '10'),
             (string)$io->ask('Set source data type(s)', 'int,string,array'),
-            (string)$io->ask('Set target data type. Can be any PHP data type or object/model (in that case FQCN: "\MyVendor\MxExt\Domain\Model\Car")'),
+            (string)$io->ask('Set target data type. Can be any PHP data type or object/model (in that case FQCN: "\MyVendor\MyExt\Domain\Model\Car")'),
         );
     }
 
@@ -98,19 +98,19 @@ class TypeConverterCommand extends Command
 
             if (preg_match('/^\d/', $typeConverterClassName)) {
                 $io->error('Class name should not start with a number.');
-                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'TypeConverter');
+                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'Converter');
                 $validTypeConverterClassName = false;
             } elseif (preg_match('/[^a-zA-Z0-9]/', $typeConverterClassName)) {
                 $io->error('Class name contains invalid chars. Please provide just letters and numbers.');
-                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'TypeConverter');
+                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'Converter');
                 $validTypeConverterClassName = false;
             } elseif (preg_match('/^[A-Z][a-zA-Z0-9]+$/', $typeConverterClassName) === 0) {
-                $io->error('Class name must be written in UpperCamelCase like "FileUploadTypeConverter".');
-                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'TypeConverter');
+                $io->error('Class name must be written in UpperCamelCase like "FileUploadConverter".');
+                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'Converter');
                 $validTypeConverterClassName = false;
-            } elseif (!str_ends_with($typeConverterClassName, 'TypeConverter')) {
-                $io->error('Class name must end with "TypeConverter".');
-                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'TypeConverter');
+            } elseif (!str_ends_with($typeConverterClassName, 'Converter')) {
+                $io->error('Class name must end with "Converter".');
+                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'Converter');
                 $validTypeConverterClassName = false;
             } else {
                 $validTypeConverterClassName = true;
