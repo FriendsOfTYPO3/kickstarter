@@ -82,8 +82,8 @@ final readonly class LocallangCreator implements LocallangCreatorInterface
 
         return (string)preg_replace_callback('/^ +/m', static function (array $matches) use ($spacesPerTab): string {
             $spaces = strlen($matches[0]);
-            $tabs   = intdiv($spaces, $spacesPerTab);
-            $rest   = $spaces % $spacesPerTab; // keep any odd leftover spaces as-is
+            $tabs = intdiv($spaces, $spacesPerTab);
+            $rest = $spaces % $spacesPerTab; // keep any odd leftover spaces as-is
             return str_repeat("\t", $tabs) . str_repeat(' ', $rest);
         }, $xml);
     }
