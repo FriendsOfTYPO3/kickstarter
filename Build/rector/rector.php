@@ -9,11 +9,9 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
-use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\ValueObject\PhpVersion;
 use Ssch\TYPO3Rector\CodeQuality\General\ExtEmConfRector;
@@ -55,8 +53,6 @@ return RectorConfig::configure()
     ])
     ->withImportNames(importShortClasses: false, removeUnusedImports: true)
     ->withSkip([
-        RemoveUnusedPrivateMethodParameterRector::class,
-        CompleteDynamicPropertiesRector::class,
         NullToStrictStringFuncCallArgRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class => [
             __DIR__ . '/../../Classes/PhpParser/Printer/PrettyTypo3Printer.php',

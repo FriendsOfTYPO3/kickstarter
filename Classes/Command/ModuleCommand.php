@@ -136,7 +136,7 @@ class ModuleCommand extends Command
             isExtbaseModule: $isExtbase,
             extensionName: $extensionName,
             referencedControllerActions: $this->askForReferencedControllerActions($commandContext, $extbaseControllers, $extensionInformation),
-            referencedRoutes: $this->askForNativeRoutes($commandContext, $extensionInformation->getControllerClassnames(), $extensionInformation),
+            referencedRoutes: $this->askForNativeRoutes(),
         );
     }
 
@@ -174,11 +174,8 @@ class ModuleCommand extends Command
         return $referencedControllerActions;
     }
 
-    private function askForNativeRoutes(
-        CommandContext $commandContext,
-        array $controllerClassnames,
-        ExtensionInformation $extensionInformation,
-    ): array {
+    private function askForNativeRoutes(): array
+    {
         return [];
     }
 }
