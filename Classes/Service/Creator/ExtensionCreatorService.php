@@ -13,6 +13,7 @@ namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Creator\Extension\ExtensionCreatorInterface;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
+use FriendsOfTYPO3\Kickstarter\Information\ServicesConfigInformation;
 
 readonly class ExtensionCreatorService
 {
@@ -21,12 +22,16 @@ readonly class ExtensionCreatorService
      */
     public function __construct(
         private iterable $extensionCreators,
+        private iterable $servicesConfigCreators,
     ) {}
 
-    public function create(ExtensionInformation $extensionInformation): void
+    public function create(ExtensionInformation $extensionInformation, ServicesConfigInformation $servicesConfigInformation): void
     {
         foreach ($this->extensionCreators as $creator) {
             $creator->create($extensionInformation);
+        }
+        foreach ($this->servicesConfigCreators as $creator) {
+            $creator->create($servicesConfigInformation);
         }
     }
 }

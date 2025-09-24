@@ -16,6 +16,7 @@ use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
 use FriendsOfTYPO3\Kickstarter\Information\ModelInformation;
 use FriendsOfTYPO3\Kickstarter\Information\PluginInformation;
 use FriendsOfTYPO3\Kickstarter\Information\RepositoryInformation;
+use FriendsOfTYPO3\Kickstarter\Information\ServicesConfigInformation;
 use FriendsOfTYPO3\Kickstarter\Information\TableInformation;
 use FriendsOfTYPO3\Kickstarter\Model\Graph;
 use FriendsOfTYPO3\Kickstarter\Model\Node\Main\AuthorNode;
@@ -68,7 +69,8 @@ readonly class BuildExtensionService
 
     private function generateExtensionFiles(Graph $graph): void
     {
-        $this->extensionCreatorService->create($this->getExtensionInformation($graph));
+        $extensionInformation = $this->getExtensionInformation($graph);
+        $this->extensionCreatorService->create($extensionInformation, new ServicesConfigInformation($extensionInformation));
         $this->createPlugins($graph);
         $this->createControllers($graph);
         $this->createRepositories($graph);

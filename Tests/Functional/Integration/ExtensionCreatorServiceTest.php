@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Tests\Functional\Integration;
 
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
+use FriendsOfTYPO3\Kickstarter\Information\ServicesConfigInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\ExtensionCreatorService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -58,7 +59,7 @@ class ExtensionCreatorServiceTest extends AbstractServiceCreatorTestCase
         mkdir($extensionInfo->getExtensionPath(), 0777, true);
 
         $creatorService = $this->get(ExtensionCreatorService::class);
-        $creatorService->create($extensionInfo);
+        $creatorService->create($extensionInfo, new ServicesConfigInformation($extensionInfo));
 
         self::assertDirectoryExists($generatedPath);
 

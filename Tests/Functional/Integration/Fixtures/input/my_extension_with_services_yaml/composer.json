@@ -1,0 +1,32 @@
+{
+    "name": "my-vendor/my-extension",
+    "description": "This is a test extension",
+    "type": "typo3-cms-extension",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "John Doe",
+            "email": "john@example.com"
+        }
+    ],
+    "require": {
+        "typo3/cms-core": "^13.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vendor\\MyExtension\\": "Classes/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "typo3/class-alias-loader": true,
+            "typo3/cms-composer-installers": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "my_extension"
+        }
+    }
+}

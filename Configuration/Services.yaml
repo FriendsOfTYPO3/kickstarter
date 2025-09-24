@@ -115,6 +115,15 @@ services:
     arguments:
       $questionCollection: '@questions.extension'
 
+  FriendsOfTYPO3\Kickstarter\Command\ServicesYamlCommand:
+    tags:
+      - name: console.command
+        command: 'make:services-yaml'
+        description: 'Add or update the services.yaml.'
+        schedulable: false
+    arguments:
+      $questionCollection: '@questions.extension'
+
   FriendsOfTYPO3\Kickstarter\Command\SiteSetCommand:
     tags:
       - name: console.command
@@ -228,6 +237,7 @@ services:
   FriendsOfTYPO3\Kickstarter\Service\Creator\ExtensionCreatorService:
     arguments:
       $extensionCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.extension' }
+      $servicesConfigCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.servicesConfig' }
   FriendsOfTYPO3\Kickstarter\Service\Creator\LocallangCreatorService:
     arguments:
       $locallangCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.locallang' }
@@ -245,6 +255,9 @@ services:
   FriendsOfTYPO3\Kickstarter\Service\Creator\SitePackageCreatorService:
     arguments:
       $sitePackageCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.property.site-package' }
+  FriendsOfTYPO3\Kickstarter\Service\Creator\ServicesConfigCreatorService:
+    arguments:
+      $servicesConfigCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.servicesConfig' }
   FriendsOfTYPO3\Kickstarter\Service\Creator\SiteSetCreatorService:
     arguments:
       $siteSetCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.site-set' }
