@@ -71,6 +71,7 @@ class PluginCommand extends Command
     private function askForPluginInformation(CommandContext $commandContext): PluginInformation
     {
         $io = $commandContext->getIo();
+
         $extensionInformation = $this->getExtensionInformation(
             (string)$this->questionCollection->askQuestion(
                 ChooseExtensionKeyQuestion::ARGUMENT_NAME,
@@ -78,6 +79,20 @@ class PluginCommand extends Command
             ),
             $commandContext
         );
+
+        $extbaseControllerClassnames = [];
+        $isExtbasePlugin = $io->confirm('Do you prefer to create an Extbase based plugin?');
+        if ($isExtbasePlugin) {
+            $extbaseControllerClassnames = $extensionInformation->getExtbaseControllerClassnames();
+            if ($extbaseControllerClassnames === []) {
+                $io->error([
+                    'Your extension does not contain any extbase controllers.',
+                    'Please create at least one extbase controller with \'typo3 make:controller\' before creating a plugin.',
+                ]);
+                die();
+            }
+        }
+
         $pluginLabel = (string)$io->ask(
             'Please provide a label for your plugin. You will see the label in the backend',
         );
@@ -98,15 +113,6 @@ class PluginCommand extends Command
         $isExtbasePlugin = $io->confirm('Do you prefer to create an extbase based plugin?');
         $templatePath = '';
         if ($isExtbasePlugin) {
-            $extbaseControllerClassnames = $extensionInformation->getExtbaseControllerClassnames();
-            if ($extbaseControllerClassnames === []) {
-                $io->error([
-                    'Your extension does not contain any extbase controllers.',
-                    'Please create at least one extbase controller with \'typo3 make:controller\' before creating a plugin.',
-                ]);
-                die();
-            }
-
             $referencedControllerActions = $this->askForReferencedControllerActions(
                 $commandContext,
                 $extbaseControllerClassnames,
