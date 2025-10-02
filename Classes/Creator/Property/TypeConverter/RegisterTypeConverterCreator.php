@@ -19,10 +19,10 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class RegisterTypeConverterCreator implements TypeConverterCreatorInterface
+readonly class RegisterTypeConverterCreator implements TypeConverterCreatorInterface
 {
     public function __construct(
-        private readonly FileManager $fileManager,
+        private FileManager $fileManager,
     ) {}
 
     public function create(TypeConverterInformation $typeConverterInformation): void

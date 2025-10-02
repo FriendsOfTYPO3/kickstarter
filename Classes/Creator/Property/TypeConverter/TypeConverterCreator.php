@@ -28,7 +28,7 @@ class TypeConverterCreator implements TypeConverterCreatorInterface
 {
     use FileStructureBuilderTrait;
 
-    private BuilderFactory $builderFactory;
+    private readonly BuilderFactory $builderFactory;
 
     public function __construct(
         private readonly NodeFactory $nodeFactory,
