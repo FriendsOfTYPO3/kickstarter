@@ -51,7 +51,7 @@ class PrettyTypo3Printer extends Standard
             return false;
         }
 
-        // If arguments of method/function arguments is too long activate multiline
+        // If the arguments of method/function arguments are too long, activate multiline
         $maxLineLength = 100;
         if ($this->getLineLengthOfNodes($nodes) > $maxLineLength) {
             return true;
