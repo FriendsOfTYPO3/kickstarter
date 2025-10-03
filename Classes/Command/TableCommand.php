@@ -14,6 +14,7 @@ namespace FriendsOfTYPO3\Kickstarter\Command;
 use FriendsOfTYPO3\Kickstarter\Command\Input\Question\ChooseExtensionKeyQuestion;
 use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
+use FriendsOfTYPO3\Kickstarter\Enums\TcaFieldType;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
 use FriendsOfTYPO3\Kickstarter\Information\TableInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\TableCreatorService;
@@ -183,10 +184,10 @@ class TableCommand extends Command
     {
         $tableColumnType = $io->choice(
             'Choose TCA column type',
-            array_keys(TableCreatorService::TABLE_COLUMN_TYPES),
+            TcaFieldType::values(),
             'input'
         );
 
-        return TableCreatorService::TABLE_COLUMN_TYPES[$tableColumnType] ?? [];
+        return TcaFieldType::from($tableColumnType)->exampleTca();
     }
 }
