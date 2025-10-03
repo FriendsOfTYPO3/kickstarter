@@ -224,7 +224,7 @@ class ExtensionInformation
             $className = pathinfo($file, PATHINFO_FILENAME);
 
             // Must be a valid PHP class name and not start with "_"
-            if (preg_match('/^[A-Za-z]w*$/', $className)) {
+            if (preg_match('/^[A-Za-z][A-Za-z0-9]*$/', $className)) {
                 $controllerClasses[] = $className;
             }
         }
