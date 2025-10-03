@@ -15,6 +15,7 @@ use FriendsOfTYPO3\Kickstarter\Command\Input\Question\ChooseExtensionKeyQuestion
 use FriendsOfTYPO3\Kickstarter\Command\Input\Question\ModelClassNameQuestion;
 use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
+use FriendsOfTYPO3\Kickstarter\Enums\ModelPropertyType;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
 use FriendsOfTYPO3\Kickstarter\Information\ModelInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\ModelCreatorService;
@@ -26,24 +27,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 class ModelCommand extends Command
 {
     use CreatorInformationTrait;
     use ExtensionInformationTrait;
     use TryToCorrectClassNameTrait;
-
-    private const DATA_TYPES = [
-        'array',
-        'bool',
-        'float',
-        'int',
-        'string',
-        'object',
-        \DateTime::class,
-        ObjectStorage::class,
-    ];
 
     public function __construct(
         private readonly ModelCreatorService $modelCreatorService,
@@ -202,7 +191,7 @@ class ModelCommand extends Command
 
             $dataType = $io->choice(
                 sprintf('Which data type you prefer for your property: "%s"', $propertyName),
-                self::DATA_TYPES,
+                ModelPropertyType::values(),
                 'string'
             );
 
@@ -212,15 +201,16 @@ class ModelCommand extends Command
                 'dataType' => $dataType,
             ];
 
+            $type = ModelPropertyType::from($dataType);
+
             // handle object-initializable types
-            if (!in_array($dataType, ['int', 'float', 'string', 'bool', 'array'], true)) {
+            if ($type->needsInitialization()) {
                 $properties[$columnName]['initializeObject'] = true;
-                continue;
             }
 
             // 1) read TCA default, 2) convert to native, 3) ask user (pre-filled)
             $tcaDefault = (string)($tableTca['columns'][$columnName]['config']['default'] ?? '');
-            $defaultValue = $this->askForDefaultValue($commandContext, $propertyName, $dataType, $tcaDefault);
+            $defaultValue = $this->askForDefaultValue($commandContext, $propertyName, $type, $tcaDefault);
 
             $properties[$columnName]['defaultValue'] = $defaultValue;
         }
@@ -231,19 +221,43 @@ class ModelCommand extends Command
     private function askForDefaultValue(
         CommandContext $commandContext,
         string $propertyName,
-        string $dataType,
+        ModelPropertyType $type,
         ?string $suggestedDefault = null
     ): mixed {
         $io = $commandContext->getIo();
-        return match ($dataType) {
-            'int' => (int)$io->ask(sprintf("Default value for '%s' (int)", $propertyName), $suggestedDefault ?? '0'),
-            'float' => (float)$io->ask(sprintf("Default value for '%s' (float)", $propertyName), $suggestedDefault ?? '0.0'),
-            'bool' => $io->confirm(sprintf("Default value for '%s' (bool)?", $propertyName), (bool)$suggestedDefault),
-            'string' => (string)$io->ask(sprintf("Default value for '%s' (string)", $propertyName), $suggestedDefault ?? ''),
-            'array' => json_decode(
-                (string)$io->ask(sprintf("Default value for '%s' (array, JSON format)", $propertyName), $suggestedDefault !== null && $suggestedDefault !== '' && $suggestedDefault !== '0' ? json_encode($suggestedDefault) : '[]'),
-                true
+        if (!$type->supportsDefault()) {
+            return null;
+        }
+
+        $suggestion = $suggestedDefault ?? $type->suggestedDefault();
+        return match ($type) {
+            // array: special handling with JSON
+            ModelPropertyType::ARRAY => $type->coerceDefault(
+                (string)$io->ask(
+                    sprintf("Default value for '%s' (array, JSON format)", $propertyName),
+                    is_array($suggestion)
+                        ? json_encode($suggestion, JSON_UNESCAPED_SLASHES)
+                        : '[]'
+                )
             ),
+
+            // bool: confirm instead of free-text ask
+            ModelPropertyType::BOOL => $io->confirm(
+                sprintf("Default value for '%s' (bool)?", $propertyName),
+                (bool)$suggestion
+            ),
+
+            // int, float, string: handled uniformly
+            ModelPropertyType::INT,
+            ModelPropertyType::FLOAT,
+            ModelPropertyType::STRING => $type->coerceDefault(
+                $io->ask(
+                    sprintf("Default value for '%s' (%s)", $propertyName, $type->value),
+                    (string)$suggestion
+                )
+            ),
+
+            // fallback for non-defaultable types
             default => null,
         };
     }
