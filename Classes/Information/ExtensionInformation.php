@@ -216,7 +216,17 @@ class ExtensionInformation
             if ($file === '..') {
                 continue;
             }
-            $controllerClasses[] = pathinfo($file, PATHINFO_FILENAME);
+            // Only include files that end with "Controller.php"
+            if (!str_ends_with($file, 'Controller.php')) {
+                continue;
+            }
+
+            $className = pathinfo($file, PATHINFO_FILENAME);
+
+            // Must be a valid PHP class name and not start with "_"
+            if (preg_match('/^[A-Za-z][A-Za-z0-9]*$/', $className)) {
+                $controllerClasses[] = $className;
+            }
         }
 
         sort($controllerClasses);
