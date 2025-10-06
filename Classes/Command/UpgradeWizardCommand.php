@@ -19,6 +19,7 @@ use FriendsOfTYPO3\Kickstarter\Service\Creator\UpgradeWizardCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\TryToCorrectClassNameTrait;
+use FriendsOfTYPO3\Kickstarter\Validator\PhpClassNameValidator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,6 +35,7 @@ class UpgradeWizardCommand extends Command
     public function __construct(
         private readonly UpgradeWizardCreatorService $upgradeWizardCreatorService,
         private readonly QuestionCollection $questionCollection,
+        private readonly PhpClassNameValidator $classNameValidator,
     ) {
         parent::__construct();
     }
@@ -93,13 +95,11 @@ class UpgradeWizardCommand extends Command
                 $defaultUpgradeWizardClassName,
             );
 
-            if (preg_match('/^\d/', $upgradeWizardClassName)) {
-                $io->error('Class name should not start with a number.');
-                $defaultUpgradeWizardClassName = $this->tryToCorrectClassName($upgradeWizardClassName, 'Upgrade');
+            if ($upgradeWizardClassName === '') {
+                $io->error('Class name can not be empty.');
                 $validUpgradeWizardClassName = false;
-            } elseif (preg_match('/[^a-zA-Z0-9]/', $upgradeWizardClassName)) {
-                $io->error('Class name contains invalid chars. Please provide just letters and numbers.');
-                $defaultUpgradeWizardClassName = $this->tryToCorrectClassName($upgradeWizardClassName, 'Upgrade');
+            } elseif (!$this->classNameValidator->validate($upgradeWizardClassName)) {
+                $io->error('Class name is not a valid php class name.');
                 $validUpgradeWizardClassName = false;
             } elseif (preg_match('/^[A-Z][a-zA-Z0-9]+$/', $upgradeWizardClassName) === 0) {
                 $io->error('Action must be written in UpperCamelCase like "CorrectPluginUpgrade".');
