@@ -19,6 +19,7 @@ use FriendsOfTYPO3\Kickstarter\Service\Creator\TypeConverterCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\TryToCorrectClassNameTrait;
+use FriendsOfTYPO3\Kickstarter\Validator\PhpClassNameValidator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,6 +35,7 @@ class TypeConverterCommand extends Command
     public function __construct(
         private readonly TypeConverterCreatorService $typeConverterCreatorService,
         private readonly QuestionCollection $questionCollection,
+        private readonly PhpClassNameValidator $classNameValidator,
     ) {
         parent::__construct();
     }
@@ -96,13 +98,11 @@ class TypeConverterCommand extends Command
                 $defaultTypeConverterClassName,
             );
 
-            if (preg_match('/^\d/', $typeConverterClassName)) {
-                $io->error('Class name should not start with a number.');
-                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'Converter');
+            if ($typeConverterClassName === '') {
+                $io->error('Class name can not be empty.');
                 $validTypeConverterClassName = false;
-            } elseif (preg_match('/[^a-zA-Z0-9]/', $typeConverterClassName)) {
-                $io->error('Class name contains invalid chars. Please provide just letters and numbers.');
-                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'Converter');
+            } elseif (!$this->classNameValidator->validate($typeConverterClassName)) {
+                $io->error('Class name is not a valid php class name.');
                 $validTypeConverterClassName = false;
             } elseif (preg_match('/^[A-Z][a-zA-Z0-9]+$/', $typeConverterClassName) === 0) {
                 $io->error('Class name must be written in UpperCamelCase like "FileUploadConverter".');
