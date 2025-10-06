@@ -33,6 +33,23 @@ abstract class AbstractServiceCreatorTestCase extends FunctionalTestCase
         return trim($content);
     }
 
+    /**
+     * Replace volatile bits (like Unix timestamps) with placeholders.
+     */
+    protected function normalizeForComparison(string $content): string
+    {
+        // Normalize newlines first
+        $content = preg_replace('/\R/u', "\n", $content);
+
+        // 10-digit Unix timestamps (roughly 2015..2099) → <TS>
+        $content = preg_replace('/(?<!\d)(?:1[5-9]\d{8}|2\d{9})(?!\d)/', '<TS>', $content);
+
+        // 13-digit millisecond timestamps → <TS_MS>
+        $content = preg_replace('/(?<!\d)\d{13}(?!\d)/', '<TS_MS>', $content);
+
+        return trim($content);
+    }
+
     protected function shouldUpdateBaseline(): bool
     {
         // Environment variable support
@@ -57,8 +74,8 @@ abstract class AbstractServiceCreatorTestCase extends FunctionalTestCase
 
             self::assertFileExists($actualFile, sprintf('Missing file: %s', $relativePath));
             self::assertSame(
-                $this->getTrimmedFileContent($file->getPathname()),
-                $this->getTrimmedFileContent($actualFile),
+                $this->normalizeForComparison($this->getTrimmedFileContent($file->getPathname())),
+                $this->normalizeForComparison($this->getTrimmedFileContent($actualFile)),
                 sprintf('File contents differ for: %s', $relativePath)
             );
         }

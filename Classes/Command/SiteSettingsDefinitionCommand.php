@@ -142,7 +142,7 @@ class SiteSettingsDefinitionCommand extends Command
                 'Enter category key (alphanumeric and dots allowed, e.g., BlogExample.pages)',
                 null,
                 function (?string $value) use ($categories): string {
-                    if ($value === null || $value === '' || $value === '0') {
+                    if (in_array($value, [null, '', '0'], true)) {
                         throw new \RuntimeException('Key cannot be empty.', 4823022337);
                     }
                     if (in_array(preg_match('/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/', $value), [0, false], true)) {
@@ -159,7 +159,7 @@ class SiteSettingsDefinitionCommand extends Command
 
             // --- Label ---
             $label = $io->ask('Enter category label', null, function (?string $value): string {
-                if ($value === null || $value === '' || $value === '0') {
+                if (in_array($value, [null, '', '0'], true)) {
                     throw new \RuntimeException('Label cannot be empty.', 8647488631);
                 }
                 return $value;
@@ -237,7 +237,7 @@ class SiteSettingsDefinitionCommand extends Command
         do {
             // --- Key ---
             $key = $io->ask('Enter settings key (alphanumeric with dots allowed)', null, function (?string $value) use ($settings): string {
-                if ($value === null || $value === '' || $value === '0') {
+                if (in_array($value, [null, '', '0'], true)) {
                     throw new \RuntimeException('Key cannot be empty.', 7392794136);
                 }
                 if (in_array(preg_match('/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/', $value), [0, false], true)) {
@@ -253,7 +253,7 @@ class SiteSettingsDefinitionCommand extends Command
 
             // --- Label ---
             $label = $io->ask('Enter setting label', null, function (?string $value): string {
-                if ($value === null || $value === '' || $value === '0') {
+                if (in_array($value, [null, '', '0'], true)) {
                     throw new \RuntimeException('Label cannot be empty.', 8317461797);
                 }
                 return $value;
