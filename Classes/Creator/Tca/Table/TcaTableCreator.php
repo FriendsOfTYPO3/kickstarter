@@ -192,7 +192,7 @@ class TcaTableCreator implements TcaTableCreatorInterface
                         new ArrayItem($this->getCtrlArrayItems($tableInformation), new String_('ctrl')),
                         new ArrayItem($this->getTypesArrayItems(), new String_('types')),
                         new ArrayItem($this->getPalettesArrayItems(), new String_('palettes')),
-                        new ArrayItem($this->getColumnsArrayItems($tableInformation), new String_('columns')),
+                        new ArrayItem($this->getColumnsArrayItems(), new String_('columns')),
                     ])
                 )
             )
@@ -252,79 +252,8 @@ class TcaTableCreator implements TcaTableCreatorInterface
         ]);
     }
 
-    private function getColumnsArrayItems(TableInformation $tableInformation): Expr
+    private function getColumnsArrayItems(): Expr
     {
-        return $this->factory->val([
-            'sys_language_uid' => [
-                'exclude' => true,
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-                'config' => [
-                    'type' => 'language',
-                ],
-            ],
-            'l10n_parent' => [
-                'displayCond' => 'FIELD:sys_language_uid:>:0',
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
-                'config' => [
-                    'type' => 'group',
-                    'allowed' => $tableInformation->getTableName(),
-                    'size' => 1,
-                    'maxitems' => 1,
-                    'minitems' => 0,
-                    'default' => 0,
-                    'suggestOptions' => [
-                        'default' => [
-                            'searchWholePhrase' => true,
-                            'addWhere' => 'AND ' . $tableInformation->getTableName() . '.sys_language_uid IN (0,-1)',
-                        ],
-                    ],
-                ],
-            ],
-            'l10n_diffsource' => [
-                'config' => [
-                    'type' => 'passthrough',
-                    'default' => '',
-                ],
-            ],
-            'hidden' => [
-                'exclude' => true,
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.visible',
-                'config' => [
-                    'type' => 'check',
-                    'renderType' => 'checkboxToggle',
-                    'items' => [
-                        [
-                            'label' => '',
-                            'invertStateDisplay' => true,
-                        ],
-                    ],
-                ],
-            ],
-            'starttime' => [
-                'exclude' => true,
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-                'config' => [
-                    'type' => 'datetime',
-                    'format' => 'datetime',
-                    'default' => 0,
-                ],
-                'l10n_mode' => 'exclude',
-                'l10n_display' => 'defaultAsReadonly',
-            ],
-            'endtime' => [
-                'exclude' => true,
-                'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-                'config' => [
-                    'type' => 'datetime',
-                    'format' => 'datetime',
-                    'default' => 0,
-                    'range' => [
-                        'upper' => mktime(0, 0, 0, 1, 1, 2038),
-                    ],
-                ],
-                'l10n_mode' => 'exclude',
-                'l10n_display' => 'defaultAsReadonly',
-            ],
-        ]);
+        return $this->factory->val([]);
     }
 }
