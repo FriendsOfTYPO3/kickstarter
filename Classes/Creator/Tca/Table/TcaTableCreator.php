@@ -97,7 +97,7 @@ class TcaTableCreator implements TcaTableCreatorInterface
             $existingTcaColumns[] = new ArrayItem($this->factory->val([
                 'exclude' => true,
                 'label' => $columnConfiguration['label'],
-                'config' => $columnConfiguration['config'],
+                'config' => $columnConfiguration['config'] ?? $columnConfiguration['type_info']->exampleTca(),
             ]), new String_($columnName));
         }
 

@@ -63,4 +63,14 @@ readonly class TableInformation
     {
         return $this->creatorInformation;
     }
+
+    public function hasExtTables(): bool
+    {
+        foreach ($this->columns as $column) {
+            if (!$column['type_info']?->isDatabaseColumnAutoCreated()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

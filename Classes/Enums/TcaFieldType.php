@@ -153,4 +153,16 @@ enum TcaFieldType: string
             ],
         };
     }
+
+    public function isDatabaseColumnAutoCreated(): bool
+    {
+        return match ($this) {
+            self::PASSTHROUGH,
+            self::NONE,
+            self::USER,
+            => false,
+
+            default => true,
+        };
+    }
 }

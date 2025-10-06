@@ -24,6 +24,9 @@ class ExtTablesSqlCreator implements TcaTableCreatorInterface
 
     public function create(TableInformation $tableInformation): void
     {
+        if (!$tableInformation->hasExtTables()) {
+            return;
+        }
         $targetFile = $tableInformation->getExtensionInformation()->getExtensionPath() . 'ext_tables.sql';
         $tableName = $tableInformation->getTableName();
         $extTablesSqlLines = is_file($targetFile) ? file($targetFile, FILE_IGNORE_NEW_LINES) : [];
@@ -103,13 +106,19 @@ class ExtTablesSqlCreator implements TcaTableCreatorInterface
         $columnDefinitionLines = [];
 
         foreach ($tableInformation->getColumns() as $tableColumnName => $columnConfiguration) {
+            if ($columnConfiguration['type_info']->isDatabaseColumnAutoCreated()) {
+                continue;
+            }
+            if (!isset($columnConfiguration['config']) || !isset($columnConfiguration['config']['type'])) {
+                $columnConfiguration['config'] = $columnConfiguration['type_info']->exampleTca();
+            }
             $columnConfiguration['config']['columnName'] = $tableColumnName;
             $extTablesSqlInformation = $this->tcaSchemaService->getExtTablesSqlInformationBasedOnTca(
                 $columnConfiguration['config']['type'],
                 $columnConfiguration['config']
             );
 
-            $columnDefinitionLines[] = $extTablesSqlInformation->getColumnDefinitionSql();
+            $columnDefinitionLines[] = $extTablesSqlInformation?->getColumnDefinitionSql() ?? ('`' . $tableColumnName . '` VARCHAR(255) DEFAULT \'\' NOT NULL,');
         }
 
         return $columnDefinitionLines;
