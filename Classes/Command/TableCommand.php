@@ -157,7 +157,7 @@ class TableCommand extends Command
                     'Please provide a label for the column',
                     ucwords(str_replace('_', ' ', $tableColumnName))
                 );
-                $tableColumns[$tableColumnName]['config'] = $this->askForTableColumnConfiguration($io);
+                $tableColumns[$tableColumnName]['type_info'] = TcaFieldType::from($this->askForTableColumnConfiguration($io));
                 if ($io->confirm('Do you want to add another table column?')) {
                     continue;
                 }
@@ -180,14 +180,12 @@ class TableCommand extends Command
         return preg_replace('/[^a-zA-Z0-9_]/', '', $cleanedColumnName);
     }
 
-    private function askForTableColumnConfiguration(SymfonyStyle $io): array
+    private function askForTableColumnConfiguration(SymfonyStyle $io): string
     {
-        $tableColumnType = $io->choice(
+        return $io->choice(
             'Choose TCA column type',
             TcaFieldType::values(),
             'input'
         );
-
-        return TcaFieldType::from($tableColumnType)->exampleTca();
     }
 }
