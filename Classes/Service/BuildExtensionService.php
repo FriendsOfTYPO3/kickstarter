@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace FriendsOfTYPO3\Kickstarter\Service;
 
+use FriendsOfTYPO3\Kickstarter\Enums\TcaFieldType;
 use FriendsOfTYPO3\Kickstarter\Information\ControllerInformation;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
 use FriendsOfTYPO3\Kickstarter\Information\ModelInformation;
@@ -167,7 +168,7 @@ readonly class BuildExtensionService
                 $columns[$columnNode->getColumnName()] = [
                     'exclude' => true,
                     'label' => $columnNode->getLabel(),
-                    'config' => TableCreatorService::TABLE_COLUMN_TYPES[$columnNode->getColumnType()],
+                    'config' => TcaFieldType::from($columnNode->getColumnType())->exampleTca(),
                 ];
             }
 
