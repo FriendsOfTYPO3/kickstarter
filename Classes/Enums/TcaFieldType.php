@@ -15,10 +15,12 @@ enum TcaFieldType: string
 {
     case CATEGORY = 'category';
     case CHECK = 'check';
+    case CHECK_TOGGLE = 'check-toggle';
     case COLOR = 'color';
     case DATETIME = 'datetime';
     case EMAIL = 'email';
     case FILE = 'file';
+    case FILE_IMAGES = 'file-images';
     case FLEX = 'flex';
     case FOLDER = 'folder';
     case GROUP = 'group';
@@ -34,8 +36,10 @@ enum TcaFieldType: string
     case PASSWORD = 'password';
     case RADIO = 'radio';
     case SELECT = 'select';
+    case SELECT_FOREIGN = 'select-foreign';
     case SLUG = 'slug';
     case TEXT = 'text';
+    case TEXT_RTE = 'text-rte';
     case USER = 'user';
     case UUID = 'uuid';
 
@@ -48,6 +52,61 @@ enum TcaFieldType: string
     public static function values(): array
     {
         return array_map(static fn(self $c) => $c->value, self::cases());
+    }
+
+    public function basicFields(): array
+    {
+        return [
+            self::INPUT,
+            self::TEXT_RTE,
+            self::LINK,
+            self::FILE_IMAGES,
+            self::NUMBER,
+            self::DATETIME,
+            self::CHECK_TOGGLE,
+            self::RADIO,
+            self::SELECT,
+        ];
+    }
+
+    public function additionalFields(): array
+    {
+        // Get all defined cases
+        $all = self::cases();
+
+        // Collect all fields already used in the other groups
+        $used = array_merge(
+            $this->basicFields(),
+            $this->systemFields(),
+            $this->relationalFields(),
+        );
+
+        // Filter out the used ones
+        return array_values(array_filter(
+            $all,
+            fn(self $case): bool => !in_array($case, $used, true)
+        ));
+    }
+
+    public function systemFields(): array
+    {
+        return [
+            self::FLEX,
+            self::IMAGE_MANIPULATION,
+            self::JSON,
+            self::NONE,
+            self::PASSTHROUGH,
+            self::UUID,
+        ];
+    }
+
+    public function relationalFields(): array
+    {
+        return [
+            self::INLINE,
+            self::GROUP,
+            self::SELECT_FOREIGN,
+        ];
     }
 
     /**
@@ -63,9 +122,16 @@ enum TcaFieldType: string
             ],
             self::CHECK => [
                 'type' => 'check',
+                'items' => [
+                    ['label' => 'Option 1'],
+                    ['label' => 'Option 2'],
+                ],
+            ],
+            self::CHECK_TOGGLE => [
+                'type' => 'check',
                 'renderType' => 'checkboxToggle',
                 'items' => [
-                    ['label' => 'Change me'],
+                    ['label' => 'Enable'],
                 ],
             ],
             self::COLOR => [
@@ -82,6 +148,10 @@ enum TcaFieldType: string
             self::FILE => [
                 'type' => 'file',
                 'maxitems' => 1,
+                'allowed' => 'common-text-types',
+            ],
+            self::FILE_IMAGES => [
+                'type' => 'file',
                 'allowed' => 'common-image-types',
             ],
             self::FLEX => [
@@ -92,16 +162,18 @@ enum TcaFieldType: string
             ],
             self::GROUP => [
                 'type' => 'group',
-                'allowed' => '',
+                'allowed' => 'tx_someextension_changeme',
             ],
             self::IMAGE_MANIPULATION => [
                 'type' => 'imageManipulation',
             ],
             self::INLINE => [
                 'type' => 'inline',
+                'foreign_table' => 'tx_someextension_changeme',
             ],
             self::INPUT => [
                 'type' => 'input',
+                'eval' => 'trim',
             ],
             self::JSON => [
                 'type' => 'json',
@@ -137,6 +209,11 @@ enum TcaFieldType: string
                     ['label' => 'Change me', 'value' => 1],
                 ],
             ],
+            self::SELECT_FOREIGN => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'foreign_table' => 'tx_someextension_changeme',
+            ],
             self::SLUG => [
                 'type' => 'slug',
             ],
@@ -144,6 +221,10 @@ enum TcaFieldType: string
                 'type' => 'text',
                 'cols' => 40,
                 'rows' => 7,
+            ],
+            self::TEXT_RTE => [
+                'type' => 'text',
+                'enableRichtext' => true,
             ],
             self::USER => [
                 'type' => 'user',
