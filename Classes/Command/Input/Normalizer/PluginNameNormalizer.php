@@ -18,6 +18,6 @@ class PluginNameNormalizer implements NormalizerInterface
 {
     public function __invoke(?string $userInput): string
     {
-        return preg_replace('#[^a-zA-Z0-9]+#', '', $userInput ?? '');
+        return ucfirst(preg_replace('#[^a-zA-Z0-9]+#', '', $userInput ?? ''));
     }
 }
