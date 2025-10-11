@@ -110,7 +110,6 @@ class PluginCommand extends Command
         $referencedControllerActions = [];
         $isTypoScriptCreation = false;
         $typoScriptSet = null;
-        $isExtbasePlugin = $io->confirm('Do you prefer to create an extbase based plugin?');
         $templatePath = '';
         if ($isExtbasePlugin) {
             $referencedControllerActions = $this->askForReferencedControllerActions(
