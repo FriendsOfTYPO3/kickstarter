@@ -1,50 +1,3 @@
-<?php
-
-declare(strict_types=1);
-
-/*
- * This file is part of the package friendsoftypo3/kickstarter.
- *
- * For the full copyright and license information, please read the
- * LICENSE file that was distributed with this source code.
- */
-
-namespace FriendsOfTYPO3\Kickstarter\Creator\Test\Environment;
-
-use FriendsOfTYPO3\Kickstarter\Creator\FileManager;
-use FriendsOfTYPO3\Kickstarter\Information\TestEnvInformation;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
-class RunScriptsCreator implements TestEnvCreatorInterface
-{
-    public function __construct(
-        private readonly FileManager $fileManager,
-    ) {}
-
-    public function create(TestEnvInformation $testEnvInformation): void
-    {
-        $scriptsPath = $testEnvInformation->getBuildPath() . 'Scripts/';
-        GeneralUtility::mkdir_deep($scriptsPath);
-        $targetFile = $scriptsPath . 'runTests.sh';
-        if (is_file($scriptsPath)) {
-            $testEnvInformation->getCreatorInformation()->fileExists(
-                $targetFile
-            );
-            return;
-        }
-        $this->fileManager->createFile(
-            $targetFile,
-            $this->getTemplate(),
-            $testEnvInformation->getCreatorInformation(),
-        );
-
-        // runTests.sh must be executable
-        chmod($scriptsPath . 'runTests.sh', 0755);
-    }
-
-    private function getTemplate(): string
-    {
-        return <<<'EOT'
 #!/usr/bin/env bash
 
 #
@@ -651,6 +604,3 @@ echo "" >&2
 
 # Exit with code of test suite - This script return non-zero if the executed test failed.
 exit $SUITE_EXIT_CODE
-EOT;
-    }
-}
