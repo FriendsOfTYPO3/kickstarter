@@ -19,6 +19,7 @@ use FriendsOfTYPO3\Kickstarter\Service\Creator\RepositoryCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\TryToCorrectClassNameTrait;
+use FriendsOfTYPO3\Kickstarter\Validator\PhpClassNameValidator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,6 +35,7 @@ class RepositoryCommand extends Command
     public function __construct(
         private readonly RepositoryCreatorService $repositoryCreatorService,
         private readonly QuestionCollection $questionCollection,
+        private readonly PhpClassNameValidator $classNameValidator,
     ) {
         parent::__construct();
     }
@@ -96,13 +98,8 @@ class RepositoryCommand extends Command
             if ($repositoryClassName === '') {
                 $io->error('Class name can not be empty.');
                 $validRepositoryClassName = false;
-            } elseif (preg_match('/^\d/', $repositoryClassName)) {
-                $io->error('Class name should not start with a number.');
-                $defaultRepositoryClassName = $this->tryToCorrectClassName($repositoryClassName, 'Repository');
-                $validRepositoryClassName = false;
-            } elseif (preg_match('/[^a-zA-Z0-9]/', $repositoryClassName)) {
-                $io->error('Class name contains invalid chars. Please provide just letters and numbers.');
-                $defaultRepositoryClassName = $this->tryToCorrectClassName($repositoryClassName, 'Repository');
+            } elseif (!$this->classNameValidator->validate($repositoryClassName)) {
+                $io->error('Class name is not a valid php class name.');
                 $validRepositoryClassName = false;
             } elseif (preg_match('/^[A-Z][a-zA-Z0-9]+$/', $repositoryClassName) === 0) {
                 $io->error('Action must be written in UpperCamelCase like "CarRepository".');
