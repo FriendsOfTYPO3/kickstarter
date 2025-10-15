@@ -32,6 +32,16 @@ class TableCommand extends Command
     use CreatorInformationTrait;
     use ExtensionInformationTrait;
 
+    private const SWITCH_BASIC       = '⇢ Switch to: basic types';
+
+    private const SWITCH_RELATIONAL  = '⇢ Switch to: relational types';
+
+    private const SWITCH_ADDITIONAL  = '⇢ Switch to: additional types';
+
+    private const SWITCH_SYSTEM      = '⇢ Switch to: system types';
+
+    private const SWITCH_ALL         = '⇢ Switch to: all types';
+
     public function __construct(
         private readonly TableCreatorService $tableCreatorService,
         private readonly QuestionCollection $questionCollection,
@@ -182,10 +192,97 @@ class TableCommand extends Command
 
     private function askForTableColumnConfiguration(SymfonyStyle $io): string
     {
-        return $io->choice(
-            'Choose TCA column type',
-            TcaFieldType::values(),
-            'input'
-        );
+        $mode = 'basic';
+
+        while (true) {
+            [$choices, $default] = $this->choicesForMode($mode);
+
+            $answer = $io->choice(
+                sprintf('Choose TCA column type (%s)', $mode),
+                $choices,
+                $default
+            );
+
+            // Handle “switch” selections
+            switch ($answer) {
+                case self::SWITCH_BASIC:      $mode = 'basic';
+                    continue 2;
+                case self::SWITCH_RELATIONAL: $mode = 'relational';
+                    continue 2;
+                case self::SWITCH_ADDITIONAL: $mode = 'additional';
+                    continue 2;
+                case self::SWITCH_SYSTEM:     $mode = 'system';
+                    continue 2;
+                case self::SWITCH_ALL:        $mode = 'all';
+                    continue 2;
+            }
+
+            // A real type was chosen
+            return $answer;
+        }
+    }
+
+    /**
+     * Build the list of visible choices for a given mode, plus the default.
+     *
+     * @return array{0: list<string>, 1: string|null}
+     */
+    private function choicesForMode(string $mode): array
+    {
+        $switches = [
+            self::SWITCH_BASIC,
+            self::SWITCH_RELATIONAL,
+            self::SWITCH_ADDITIONAL,
+            self::SWITCH_SYSTEM,
+            self::SWITCH_ALL,
+        ];
+
+        // Helper to map enum cases to their string values
+        $toValues = fn(array $cases): array => array_map(fn(TcaFieldType $c) => $c->value, $cases);
+
+        switch ($mode) {
+            case 'basic':
+                $choices = [
+                    ...$toValues(TcaFieldType::INPUT->basicFields()),
+                    ...$switches,
+                ];
+                $default = TcaFieldType::INPUT->value; // 'input'
+                break;
+
+            case 'relational':
+                $choices = [
+                    ...$toValues(TcaFieldType::INPUT->relationalFields()),
+                    ...$switches,
+                ];
+                $default = null;
+                break;
+
+            case 'additional':
+                $choices = [
+                    ...$toValues(TcaFieldType::INPUT->additionalFields()),
+                    ...$switches,
+                ];
+                $default = null;
+                break;
+
+            case 'system':
+                $choices = [
+                    ...$toValues(TcaFieldType::INPUT->systemFields()),
+                    ...$switches,
+                ];
+                $default = null;
+                break;
+
+            case 'all':
+            default:
+                $choices = [
+                    ...TcaFieldType::values(),
+                    ...$switches,
+                ];
+                $default = null;
+                break;
+        }
+
+        return [$choices, $default];
     }
 }

@@ -2,8 +2,8 @@
 
 return [
     'ctrl' => [
-        'title' => 'title',
-        'label' => 'My Table',
+        'title' => 'My Table',
+        'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'versioningWS' => true,
@@ -48,6 +48,7 @@ return [
             'label' => 'My Input',
             'config' => [
                 'type' => 'input',
+                'eval' => 'trim',
             ],
         ],
     ],
