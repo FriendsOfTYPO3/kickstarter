@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace FriendsOfTYPO3\Kickstarter\Creator\Plugin\Extbase;
 
+use FriendsOfTYPO3\Kickstarter\Creator\FileManager;
 use FriendsOfTYPO3\Kickstarter\Information\PluginInformation;
 use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -21,6 +22,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class ExtbaseTypoScriptPluginCreator implements ExtbasePluginCreatorInterface
 {
     use FileStructureBuilderTrait;
+
+    public function __construct(
+        private readonly FileManager $fileManager,
+    ) {}
 
     public function create(PluginInformation $pluginInformation): void
     {
@@ -72,7 +77,7 @@ EOT,
                 $templatePath
             );
 
-            file_put_contents($targetSetupFile, $setupContent);
+            $this->fileManager->createOrModifyFile($targetSetupFile, $setupContent, $pluginInformation->getCreatorInformation());
         }
 
         // ----- CONSTANTS -----
@@ -101,7 +106,7 @@ EOT,
                 $templatePath
             );
 
-            file_put_contents($targetConstantFile, $constantContent);
+            $this->fileManager->createOrModifyFile($targetConstantFile, $constantContent, $pluginInformation->getCreatorInformation());
         }
     }
 }
