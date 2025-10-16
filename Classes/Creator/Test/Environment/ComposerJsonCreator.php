@@ -26,8 +26,10 @@ class ComposerJsonCreator implements TestEnvCreatorInterface
         $composerConfig = json_decode(file_get_contents($composerJsonFilepath), true);
 
         if (is_file($composerJsonFilepath)) {
-            $testEnvInformation->getCreatorInformation()->fileExists(
-                $composerJsonFilepath
+            $this->fileManager->modifyFile(
+                $composerJsonFilepath,
+                $this->updateComposerJson($composerConfig),
+                $testEnvInformation->getCreatorInformation(),
             );
             return;
         }
@@ -45,7 +47,7 @@ class ComposerJsonCreator implements TestEnvCreatorInterface
         }
 
         if (!isset($composerConfig['require-dev']['phpstan/phpstan'])) {
-            $composerConfig['require-dev']['phpstan/phpstan'] = '^1.10';
+            $composerConfig['require-dev']['phpstan/phpstan'] = '^2.1.25';
         }
 
         if (!isset($composerConfig['require-dev']['phpunit/phpunit'])) {

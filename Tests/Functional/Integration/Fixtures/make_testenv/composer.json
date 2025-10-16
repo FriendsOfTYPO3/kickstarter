@@ -1,0 +1,44 @@
+{
+    "name": "my-vendor/my-extension",
+    "description": "This is a test extension",
+    "type": "typo3-cms-extension",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "John Doe",
+            "email": "john@example.com"
+        }
+    ],
+    "require": {
+        "typo3/cms-core": "^13.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vendor\\MyExtension\\": "Classes/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "typo3/class-alias-loader": true,
+            "typo3/cms-composer-installers": true
+        },
+        "bin-dir": ".Build/bin",
+        "sort-packages": true,
+        "vendor-dir": ".Build/vendor"
+    },
+    "extra": {
+        "typo3/cms": {
+            "app-dir": ".Build",
+            "extension-key": "my_extension",
+            "web-dir": ".Build/public"
+        }
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.44",
+        "phpstan/phpstan": "^2.1.25",
+        "phpunit/phpunit": "^11.2.5",
+        "typo3/coding-standards": "^0.8",
+        "typo3/testing-framework": "^9.0.1"
+    }
+}
