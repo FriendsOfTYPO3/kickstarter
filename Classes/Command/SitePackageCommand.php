@@ -12,9 +12,7 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Command;
 
 use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
-use FriendsOfTYPO3\Kickstarter\Configuration\ExtConf;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
-use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
 use FriendsOfTYPO3\Kickstarter\Information\SitePackageInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\SitePackageCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
@@ -23,7 +21,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class SitePackageCommand extends Command
 {
@@ -70,6 +67,10 @@ class SitePackageCommand extends Command
     {
         $commandContext = new CommandContext($input, $output);
         $io = $commandContext->getIo();
+        $io->warning('Creating a site package for TYPO3 v14 is not yet supported.');
+        return Command::FAILURE;
+
+        /*
         $io->title('Welcome to the TYPO3 Extension Builder');
 
         $io->text([
@@ -89,6 +90,7 @@ class SitePackageCommand extends Command
         $this->printCreatorInformation($sitePackageInformation->getCreatorInformation(), $commandContext);
 
         return Command::SUCCESS;
+        */
     }
 
     public function printInstallationInstructions(SymfonyStyle $io, SitePackageInformation $sitePackageInformation): void
@@ -138,67 +140,6 @@ class SitePackageCommand extends Command
         ]);
     }
 
-    private function askForSitePackageInformation(SymfonyStyle $io): SitePackageInformation
-    {
-        $extConf = GeneralUtility::makeInstance(ExtConf::class);
-        $io->info([
-            'The extension will be exported to directory: ' . $extConf->getExportDirectory(),
-            'You can configure the export directory in extension settings (available in InstallTool)',
-        ]);
-
-        $title = $this->getTitle($io, $extConf);
-
-        $io->text([
-            'The description describes your new extension in short. It should not exceed more than two sentences.',
-            'This will help users in TER (https://extensions.typo3.org) to get the point of what your extension does/provides',
-        ]);
-        $description = (string)$io->ask('Description');
-
-        $io->text([
-            'Who is the author of this extension?',
-            'Please enter the name of that person with first- and lastname.',
-            'Do not enter company. It will be asked some questions later.',
-        ]);
-        $author = (string)$io->ask('Author name', 'J. Doe');
-
-        $io->text([
-            'Please enter the email of the author (see above)',
-            'It must be a valid email address.',
-        ]);
-        $authorEmail = $this->askForEmail($io, 'j.doe@example.org');
-
-        $io->text([
-            'Enter the company name of the author, the company name will also be used for the vendor part of the Composer name.',
-        ]);
-        $authorCompany = (string)$io->ask('Company name', 'my-vendor');
-
-        $io->text([
-            'To find PHP classes much faster in your extension TYPO3 uses the auto-loading',
-            'mechanism of composer (https://getcomposer.org/doc/01-basic-usage.md#autoloading)',
-            'Please enter the PSR-4 autoload namespace for your extension',
-        ]);
-
-        $extensionInformation =  new ExtensionInformation(
-            'site_package',
-            'my-vendor/site-package',
-            $title,
-            $description,
-            '0.0.1',
-            'fe',
-            'excludeFromUpdates',
-            $author,
-            $authorEmail,
-            $authorCompany,
-            '',
-            $extConf->getExportDirectory(),
-        );
-        return new SitePackageInformation(
-            $extensionInformation,
-            $this->askForSitePackageType($io),
-            $this->askForHomepage($io),
-        );
-    }
-
     private function generateExtensionKeyFromTitle(string $title): string
     {
         // Lowercase first
@@ -222,57 +163,5 @@ class SitePackageCommand extends Command
         }
 
         return $key;
-    }
-
-    private function askForSitePackageType(SymfonyStyle $io): string
-    {
-        $choices = [
-            'site_package_tutorial' => 'Site Package Tutorial (Educational)',
-            'bootstrap_package'     => 'Bootstrap Package',
-            'fluid_styled_content'  => 'Fluid Styled Content',
-        ];
-
-        $io->text([
-            'Choose the base package type. Must be one of:',
-            implode(', ', array_keys($choices)),
-        ]);
-
-        // Default: "Site Package Tutorial"
-        $selectedLabel = $io->choice('Base package type', array_values($choices), $choices['site_package_tutorial']);
-
-        // Map label back to API value
-        return array_search($selectedLabel, $choices, true) ?: 'site_package_tutorial';
-    }
-
-    private function askForHomepage(SymfonyStyle $io): string
-    {
-        $io->text([
-            'Optionally, you can provide a homepage URL for the author/company.',
-            'This will be added to the metadata of the generated site package.',
-        ]);
-
-        return (string)$io->ask('Homepage URL', 'https://www.example.org', function ($value): string {
-            $url = trim((string)$value);
-            if ($url === '' || filter_var($url, FILTER_VALIDATE_URL)) {
-                return $url;
-            }
-            throw new \RuntimeException('Invalid URL. Please enter a valid URL starting with http:// or https://', 7249869161);
-        });
-    }
-
-    private function askForEmail(SymfonyStyle $io, string $default): string
-    {
-        $email = $default;
-        do {
-            $email = (string)$io->ask('Email address', $email);
-            if ($email !== '' && !GeneralUtility::validEmail($email)) {
-                $io->error('You have entered an invalid email address.');
-                $validEmail = false;
-            } else {
-                $validEmail = true;
-            }
-        } while (!$validEmail);
-
-        return $email;
     }
 }

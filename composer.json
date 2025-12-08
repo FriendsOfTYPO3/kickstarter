@@ -42,16 +42,15 @@
 		"ext-libxml": "*",
 		"ext-pdo": "*",
 		"ext-zip": "*",
-		"friendsofphp/php-cs-fixer": "^3.49",
-		"typo3/cms-core": "^13.4.3",
-		"typo3/cms-install": "^13.4.3"
+		"typo3/cms-core": "^14"
 	},
 	"require-dev": {
+		"friendsofphp/php-cs-fixer": "^3.49",
 		"ergebnis/composer-normalize": "^2.44",
 		"phpstan/phpstan": "^2.1.25",
 		"ssch/typo3-rector": "^3.6",
 		"typo3/coding-standards": "^0.8",
-		"typo3/testing-framework": "^8.2"
+		"typo3/testing-framework": "^9.0"
 	},
 	"conflict": {
 		"b13/make": "*"
