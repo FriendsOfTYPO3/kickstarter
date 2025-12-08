@@ -31,7 +31,7 @@ class TestEnvCreatorServiceTest extends AbstractServiceCreatorTestCase
         $extensionPath = $this->instancePath . '/' . $extensionKey . '/';
         $generatedPath = $this->instancePath . '/' . $extensionKey . '/';
 
-        if (file_exists($generatedPath)) {
+        if (is_dir($generatedPath)) {
             GeneralUtility::rmdir($generatedPath, true);
         }
         if ($inputPath !== '') {
