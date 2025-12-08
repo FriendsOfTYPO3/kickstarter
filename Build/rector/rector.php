@@ -33,7 +33,6 @@ return RectorConfig::configure()
         privatization: true,
         instanceOf: true,
         earlyReturn: true,
-        strictBooleans: true,
     )
     ->withPhpSets(php82: true)
     ->withPhpVersion(PhpVersion::PHP_82)

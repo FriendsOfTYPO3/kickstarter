@@ -147,7 +147,7 @@ class ApplyTypo3CglCommand extends Command
     private function isExecAvailable(): bool
     {
         $disabled = explode(',', ini_get('disable_functions') ?: '');
-        $disabled = array_map('trim', $disabled);
+        $disabled = array_map(trim(...), $disabled);
         return !in_array('exec', $disabled, true);
     }
 }

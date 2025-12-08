@@ -26,7 +26,7 @@ class PhpstanTypo3ConstantsCreator implements TestEnvCreatorInterface
         $phpstanPath = $testEnvInformation->getBuildPath() . 'phpstan/';
         GeneralUtility::mkdir_deep($phpstanPath);
         $targetFile = $phpstanPath . 'phpstan-typo3-constants.php';
-        if (!is_file($targetFile)) {
+        if (is_file($targetFile)) {
             $testEnvInformation->getCreatorInformation()->fileExists(
                 $targetFile
             );

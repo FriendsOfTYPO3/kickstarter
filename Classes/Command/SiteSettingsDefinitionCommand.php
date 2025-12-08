@@ -324,7 +324,7 @@ class SiteSettingsDefinitionCommand extends Command
             'int' => (int)$input,
             'float' => (float)$input,
             'bool' => filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
-            'array' => array_map('trim', explode(',', $input)),
+            'array' => array_map(trim(...), explode(',', $input)),
             default => $input,
         };
     }
