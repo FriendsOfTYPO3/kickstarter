@@ -15,20 +15,10 @@ readonly class LocallangInformation
 {
     private const LANGUAGE_PATH = 'Resources/Private/Language/';
 
-    private \DateTime $creationDate;
-
     /**
      * @param TransUnitInformation[] $transUnits
      */
-    public function __construct(
-        private ExtensionInformation $extensionInformation,
-        private string $fileName,
-        ?\DateTime $creationDate = null,
-        private array $transUnits = [],
-        private CreatorInformation $creatorInformation = new CreatorInformation()
-    ) {
-        $this->creationDate = $creationDate ?? new \DateTime();
-    }
+    public function __construct(private ExtensionInformation $extensionInformation, private string $fileName, private ?\DateTime $creationDate = new \DateTime(), private array $transUnits = [], private CreatorInformation $creatorInformation = new CreatorInformation()) {}
 
     public function getTransUnits(): array
     {

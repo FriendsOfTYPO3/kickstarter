@@ -189,8 +189,7 @@ class TcaSchemaService
                         $fieldConfig['columnName'],
                         'VARCHAR',
                         false,
-                        false,
-                        null
+                        false
                     );
                 } else {
                     $extTablesSqlInformation = new ExtTablesSqlInformation(

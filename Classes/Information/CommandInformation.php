@@ -46,7 +46,7 @@ readonly class CommandInformation
 
     public function getAliases(): array
     {
-        return array_map('trim', $this->aliases);
+        return array_map(trim(...), $this->aliases);
     }
 
     public function getCommandFilename(): string
