@@ -77,8 +77,8 @@ class TcaCreatorServiceTest extends AbstractServiceCreatorTestCase
         return [
             'make_table_basic' => [
                 'tableName' => 'tx_myextension_mytable',
-                'title' => 'title',
-                'label' => 'My Table',
+                'title' => 'My Table',
+                'label' => 'title',
                 'columns' => [
                     'my_input' => [
                         'label' => 'My Input',
@@ -96,8 +96,8 @@ class TcaCreatorServiceTest extends AbstractServiceCreatorTestCase
             ],
             'make_table_passtrough' => [
                 'tableName' => 'tx_myextension_mytable',
-                'title' => 'title',
-                'label' => 'My Table',
+                'title' => 'My Table',
+                'label' => 'title',
                 'columns' => [
                     'my_input' => [
                         'label' => 'My Input',
@@ -113,6 +113,38 @@ class TcaCreatorServiceTest extends AbstractServiceCreatorTestCase
                 'expectedDir' => __DIR__ . '/Fixtures/make_table_passtrough',
                 'inputPath' => __DIR__ . '/Fixtures/input/my_extension',
                 'expectedCount' => 2,
+            ],
+            'make_table_article' => [
+                'tableName' => 'tx_myextension_domain_model_article',
+                'title' => 'Article',
+                'label' => 'title',
+                'columns' => [
+                    'title' => [
+                        'label' => 'Title',
+                        'type_info' => 'input',
+                    ],
+                    'content' => [
+                        'label' => 'Content',
+                        'type_info' => 'text-rte',
+                    ],
+                    'images' => [
+                        'label' => 'Images',
+                        'type_info' => 'file-images',
+                    ],
+                    'featured' => [
+                        'label' => 'Do you want to feature this blog post? ',
+                        'type_info' => 'check-toggle',
+                    ],
+                    'published_on' => [
+                        'label' => 'When was this article first published? ',
+                        'type_info' => 'datetime',
+                    ],
+                ],
+                'extensionKey' => 'my_extension',
+                'composerPackageName' => 'my-vendor/my-extension',
+                'expectedDir' => __DIR__ . '/Fixtures/make_table_article',
+                'inputPath' => __DIR__ . '/Fixtures/input/my_extension',
+                'expectedCount' => 1,
             ],
         ];
     }
