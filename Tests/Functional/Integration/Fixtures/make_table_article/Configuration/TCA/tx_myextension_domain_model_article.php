@@ -2,7 +2,7 @@
 
 return [
     'ctrl' => [
-        'title' => 'My Table',
+        'title' => 'Article',
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -24,13 +24,13 @@ return [
     'types' => [
         [
             'showitem' => '
-                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-                    my_input, my_passthrough,
-                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
+                --div--;core.form.tabs:general,
+                    title, content, images, featured, published_on,
+                --div--;core.form.tabs:language,
                     --palette--;;language,
-                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
+                --div--;core.form.tabs:access,
                     hidden,--palette--;;access,
-                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended,
+                --div--;core.form.tabs:extended,
             ',
         ],
     ],
@@ -43,19 +43,50 @@ return [
         ],
     ],
     'columns' => [
-        'my_input' => [
+        'title' => [
             'exclude' => true,
-            'label' => 'My Input',
+            'label' => 'Title',
             'config' => [
                 'type' => 'input',
                 'eval' => 'trim',
             ],
         ],
-        'my_passthrough' => [
+        'content' => [
             'exclude' => true,
-            'label' => 'My Passthrough',
+            'label' => 'Content',
             'config' => [
-                'type' => 'passthrough',
+                'type' => 'text',
+                'enableRichtext' => true,
+            ],
+        ],
+        'images' => [
+            'exclude' => true,
+            'label' => 'Images',
+            'config' => [
+                'type' => 'file',
+                'allowed' => 'common-image-types',
+            ],
+        ],
+        'featured' => [
+            'exclude' => true,
+            'label' => 'Do you want to feature this blog post? ',
+            'config' => [
+                'type' => 'check',
+                'renderType' => 'checkboxToggle',
+                'items' => [
+                    [
+                        'label' => 'Enable',
+                    ],
+                ],
+            ],
+        ],
+        'published_on' => [
+            'exclude' => true,
+            'label' => 'When was this article first published? ',
+            'config' => [
+                'type' => 'datetime',
+                'format' => 'date',
+                'default' => 0,
             ],
         ],
     ],
