@@ -25,6 +25,31 @@ readonly class ServicesConfigInformation
         private CreatorInformation $creatorInformation = new CreatorInformation()
     ) {}
 
+    /**
+     * Convenience factory for tests
+     * Accepts either enum or string for "type" (e.g. 'yaml', 'php').
+     * Unknown keys are ignored.
+     */
+    public static function fromArray(
+        array $info,
+        ExtensionInformation $extensionInformation,
+    ): self {
+        $type = $info['type'] ?? ServicesType::YAML;
+        $autowire = array_key_exists('autowire', $info) ? (bool)$info['autowire'] : true;
+        $autoconfigure = array_key_exists('autoconfigure', $info) ? (bool)$info['autoconfigure'] : true;
+        $public = array_key_exists('public', $info) && (bool)$info['public'];
+        $excludeModels = array_key_exists('excludeModels', $info) ? (bool)$info['excludeModels'] : true;
+
+        return new self(
+            extensionInformation: $extensionInformation,
+            type: $type,
+            autowire: $autowire,
+            autoconfigure: $autoconfigure,
+            public: $public,
+            excludeModels: $excludeModels,
+        );
+    }
+
     public function getType(): ServicesType
     {
         return $this->type;
@@ -102,30 +127,5 @@ readonly class ServicesConfigInformation
                 $namespacePrefix => $serviceDefinition,
             ],
         ];
-    }
-
-    /**
-     * Convenience factory for tests
-     * Accepts either enum or string for "type" (e.g. 'yaml', 'php').
-     * Unknown keys are ignored.
-     */
-    public static function fromArray(
-        array $info,
-        ExtensionInformation $extensionInformation,
-    ): self {
-        $type = $info['type'] ?? ServicesType::YAML;
-        $autowire = array_key_exists('autowire', $info) ? (bool)$info['autowire'] : true;
-        $autoconfigure = array_key_exists('autoconfigure', $info) ? (bool)$info['autoconfigure'] : true;
-        $public = array_key_exists('public', $info) && (bool)$info['public'];
-        $excludeModels = array_key_exists('excludeModels', $info) ? (bool)$info['excludeModels'] : true;
-
-        return new self(
-            extensionInformation: $extensionInformation,
-            type: $type,
-            autowire: $autowire,
-            autoconfigure: $autoconfigure,
-            public: $public,
-            excludeModels: $excludeModels,
-        );
     }
 }
