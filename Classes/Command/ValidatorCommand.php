@@ -22,12 +22,16 @@ use FriendsOfTYPO3\Kickstarter\Traits\AskForExtensionKeyTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\TryToCorrectClassNameTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 
+#[AsCommand('make:validator', 'Create a new Validator for a property or model. See also https://docs.typo3.org/permalink/t3coreapi:extbase-domain-validator')]
+#[AsNonSchedulableCommand]
 class ValidatorCommand extends Command
 {
     use AskForExtensionKeyTrait;
