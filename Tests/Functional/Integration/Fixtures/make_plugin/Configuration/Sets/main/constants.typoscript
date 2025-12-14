@@ -1,0 +1,10 @@
+plugin.tx_myextension_newslist {
+    view {
+        templateRootPath = EXT:my_extension/Resources/Private/Templates/
+        partialRootPath = EXT:my_extension/Resources/Private/Partials/
+        layoutRootPath = EXT:my_extension/Resources/Private/Layouts/
+    }
+    persistence {
+        storagePid = 0
+    }
+}

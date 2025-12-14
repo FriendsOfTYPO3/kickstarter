@@ -1,0 +1,13 @@
+plugin.tx_myextension_newslist {
+    view {
+        templateRootPaths.0 = EXT:my_extension/Resources/Private/Templates/
+        templateRootPaths.10 = {$plugin.tx_myextension_newslist.view.templateRootPath}
+        partialRootPaths.0 = EXT:my_extension/Resources/Private/Partials/
+        partialRootPaths.10 = {$plugin.tx_myextension_newslist.view.partialRootPath}
+        layoutRootPaths.0 = EXT:my_extension/Resources/Private/Layouts/
+        layoutRootPaths.10 = {$plugin.tx_myextension_newslist.view.layoutRootPath}
+    }
+    persistence {
+        storagePid = {$plugin.plugin.tx_myextension_newslist.persistence.storagePid}
+    }
+}

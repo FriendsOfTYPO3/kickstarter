@@ -26,6 +26,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 class PluginCommand extends Command
 {
@@ -110,7 +111,8 @@ class PluginCommand extends Command
         $referencedControllerActions = [];
         $isTypoScriptCreation = false;
         $typoScriptSet = null;
-        $templatePath = '';
+        $templatePath = sprintf('EXT:%s/Resources/Private/', $extensionInformation->getExtensionKey());
+        $templates = [];
         if ($isExtbasePlugin) {
             $referencedControllerActions = $this->askForReferencedControllerActions(
                 $commandContext,
@@ -130,9 +132,28 @@ class PluginCommand extends Command
 
                 $templatePath = $io->ask(
                     'To which path do you want to add the Fluid templates?',
-                    sprintf('EXT:%s/Resources/Private/', $extensionInformation->getExtensionKey())
+                    $templatePath
                 );
             }
+
+            $possibleTemplates = [];
+            foreach ($referencedControllerActions as $controller => $actions) {
+                foreach ($actions['cached'] as $action) {
+                    $possibleTemplates[] =
+                        sprintf(
+                            '%sTemplates/%s/%s.fluid.html',
+                            $templatePath,
+                            ExtensionUtility::resolveControllerAliasFromControllerClassName($controller),
+                            ucfirst(preg_replace('/Action$/', '', $action))
+                        );
+                }
+            }
+            $templates = $io->choice(
+                'Which templates do you want to create? ',
+                $possibleTemplates,
+                null,
+                true
+            );
         }
 
         return new PluginInformation(
@@ -146,6 +167,7 @@ class PluginCommand extends Command
             $isTypoScriptCreation,
             $typoScriptSet,
             $templatePath,
+            $templates,
         );
     }
 
