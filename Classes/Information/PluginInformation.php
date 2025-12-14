@@ -24,7 +24,7 @@ readonly class PluginInformation
         private array $referencedControllerActions,
         private CreatorInformation $creatorInformation = new CreatorInformation(),
         private bool $typoScriptCreation = false,
-        private string $set = '',
+        private ?string $set = '',
         private string $templatePath = '',
     ) {}
 
