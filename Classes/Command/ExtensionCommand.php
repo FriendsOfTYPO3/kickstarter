@@ -38,10 +38,9 @@ class ExtensionCommand extends Command
 
     public function __construct(
         private readonly ExtensionCreatorService $extensionCreatorService,
-        private readonly QuestionCollection      $questionCollection,
-        private readonly Registry                $registry,
-    )
-    {
+        private readonly QuestionCollection $questionCollection,
+        private readonly Registry $registry,
+    ) {
         parent::__construct();
     }
 
