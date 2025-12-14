@@ -17,191 +17,86 @@ services:
   ##############
 
   FriendsOfTYPO3\Kickstarter\Command\CommandCommand:
-    tags:
-      - name: console.command
-        command: 'make:command'
-        description: 'Add a console command to your TYPO3 extension.'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\ControllerCommand:
-    tags:
-      - name: console.command
-        command: 'make:controller'
-        description: 'Add a controller to your TYPO3 extension.'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\EventCommand:
-    tags:
-      - name: console.command
-        command: 'make:event'
-        description: 'Create a new Event for your TYPO3 extension.'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\EventListenerCommand:
-    tags:
-      - name: console.command
-        command: 'make:eventlistener'
-        description: 'Create a new Event Listener to your TYPO3 extension.'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\ExtensionCommand:
-    tags:
-      - name: console.command
-        command: 'make:extension'
-        description: 'Create basic files for a new TYPO3 extension.'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\LocallangCommand:
-    tags:
-      - name: console.command
-        command: 'make:locallang'
-        description: 'Create a locallang_something.xlf file to handle translations.'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\MiddlewareCommand:
-    tags:
-      - name: console.command
-        command: 'make:middleware'
-        description: 'Add a middleware handler to your TYPO3 extension.'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\ModelCommand:
-    tags:
-      - name: console.command
-        command: 'make:model'
-        description: 'Add an extbase model to your TYPO3 extension.'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\ModuleCommand:
-    tags:
-      - name: console.command
-        command: 'make:module'
-        description: 'Add an extbase or native backend module to your TYPO3 extension.'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\PluginCommand:
-    tags:
-      - name: console.command
-        command: 'make:plugin'
-        description: 'Add a plugin to your TYPO3 extension.'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\RepositoryCommand:
-    tags:
-      - name: console.command
-        command: 'make:repository'
-        description: 'Add an extbase repository to your TYPO3 extension.'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\ServicesYamlCommand:
-    tags:
-      - name: console.command
-        command: 'make:services-yaml'
-        description: 'Add or update the services.yaml.'
-        schedulable: false
-    arguments:
-      $questionCollection: '@questions.extension'
-
-  FriendsOfTYPO3\Kickstarter\Command\SiteSetCommand:
-    tags:
-      - name: console.command
-        command: 'make:site-set'
-        description: 'Add an site set configuration to your TYPO3 extension.'
-        schedulable: false
-    arguments:
-      $questionCollection: '@questions.extension'
-
-  FriendsOfTYPO3\Kickstarter\Command\SiteSettingsDefinitionCommand:
-    tags:
-      - name: console.command
-        command: 'make:site-settings-definition'
-        description: 'Add an site settings definition to your TYPO3 extension.'
-        schedulable: false
-    arguments:
-      $questionCollection: '@questions.extension'
-
-  FriendsOfTYPO3\Kickstarter\Command\TableCommand:
-    tags:
-      - name: console.command
-        command: 'make:table'
-        description: 'Add a TCA table to your TYPO3 extension.'
-        schedulable: false
-    arguments:
-      $questionCollection: '@questions.extension'
-
-  FriendsOfTYPO3\Kickstarter\Command\TestEnvCommand:
-    tags:
-      - name: console.command
-        command: 'make:testenv'
-        description: 'Add test environment to your TYPO3 extension.'
-        schedulable: false
-    arguments:
-      $questionCollection: '@questions.extension'
-
-  FriendsOfTYPO3\Kickstarter\Command\ValidatorCommand:
-    tags:
-      - name: console.command
-        command: 'make:validator'
-        description: 'Create a new Validator for a property or model. See also https://docs.typo3.org/permalink/t3coreapi:extbase-domain-validator'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\SitePackageCommand:
-    tags:
-      - name: console.command
-        command: 'make:site-package'
-        description: 'Configures and loads a new site package from https://get.typo3.org.'
-        schedulable: false
+    arguments:
+      $questionCollection: '@questions.extension'
+
+  FriendsOfTYPO3\Kickstarter\Command\SiteSetCommand:
+    arguments:
+      $questionCollection: '@questions.extension'
+
+  FriendsOfTYPO3\Kickstarter\Command\SiteSettingsDefinitionCommand:
+    arguments:
+      $questionCollection: '@questions.extension'
+
+  FriendsOfTYPO3\Kickstarter\Command\TableCommand:
+    arguments:
+      $questionCollection: '@questions.extension'
+
+  FriendsOfTYPO3\Kickstarter\Command\TestEnvCommand:
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\TypeConverterCommand:
-    tags:
-      - name: console.command
-        command: 'make:typeconverter'
-        description: 'Create a new Extbase Type Converter to your TYPO3 extension.'
-        schedulable: false
-    arguments:
-      $questionCollection: '@questions.extension'
-
-  FriendsOfTYPO3\Kickstarter\Command\ApplyTypo3CglCommand:
-    tags:
-      - name: console.command
-        command: 'make:applycgl'
-        description: 'Enforces TYPO3 Coding Guidelines (CGL) on extension code. Note: Requires TYPO3 to be installed in Composer mode.'
-        schedulable: false
     arguments:
       $questionCollection: '@questions.extension'
 
   FriendsOfTYPO3\Kickstarter\Command\UpgradeWizardCommand:
-    tags:
-      - name: console.command
-        command: 'make:upgrade'
-        description: 'Create a new Upgrade Wizard to your TYPO3 extension.'
-        schedulable: false
+    arguments:
+      $questionCollection: '@questions.extension'
+
+  FriendsOfTYPO3\Kickstarter\Command\ValidatorCommand:
+    arguments:
+      $questionCollection: '@questions.extension'
+
+  FriendsOfTYPO3\Kickstarter\Command\ApplyTypo3CglCommand:
     arguments:
       $questionCollection: '@questions.extension'
 

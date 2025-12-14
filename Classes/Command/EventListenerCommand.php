@@ -20,11 +20,15 @@ use FriendsOfTYPO3\Kickstarter\Service\Creator\EventListenerCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\TryToCorrectClassNameTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 
+#[AsCommand('make:eventlistener', 'Create a new Event Listener in your TYPO3 extension.')]
+#[AsNonSchedulableCommand]
 class EventListenerCommand extends Command
 {
     use CreatorInformationTrait;

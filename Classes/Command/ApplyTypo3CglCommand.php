@@ -17,13 +17,17 @@ use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\RepositoryCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+#[AsCommand('make:applycgl', 'Enforces TYPO3 Coding Guidelines (CGL) on extension code. Note: Requires TYPO3 to be installed in Composer mode.')]
+#[AsNonSchedulableCommand]
 class ApplyTypo3CglCommand extends Command
 {
     use ExtensionInformationTrait;
