@@ -1,6 +1,6 @@
 {
     "name": "my-vendor/my-extension",
-    "description": "This is a test extension",
+    "description": "My Extension - This is a test extension",
     "type": "typo3-cms-extension",
     "license": "GPL-2.0-or-later",
     "authors": [
@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "typo3/cms-core": "^13.4"
+        "typo3/cms-core": "^14"
     },
     "autoload": {
         "psr-4": {

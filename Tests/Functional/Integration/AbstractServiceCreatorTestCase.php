@@ -21,7 +21,6 @@ abstract class AbstractServiceCreatorTestCase extends FunctionalTestCase
     ];
 
     protected array $coreExtensionsToLoad = [
-        'install',
     ];
 
     protected function getTrimmedFileContent(string $actualFile): string

@@ -33,7 +33,7 @@ class ComposerJsonCreator implements ExtensionCreatorInterface
     {
         $composerConfig = [
             'name' => $extensionInformation->getComposerPackageName(),
-            'description' => $extensionInformation->getDescription(),
+            'description' => sprintf('%s - %s', $extensionInformation->getTitle(), $extensionInformation->getDescription()),
             'type' => 'typo3-cms-extension',
             'license' => 'GPL-2.0-or-later',
             'authors' => [
@@ -43,7 +43,7 @@ class ComposerJsonCreator implements ExtensionCreatorInterface
                 ],
             ],
             'require' => [
-                'typo3/cms-core' => '^13.4',
+                'typo3/cms-core' => '^14',
             ],
             'autoload' => [
                 'psr-4' => [
