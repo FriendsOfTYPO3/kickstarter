@@ -21,11 +21,15 @@ use FriendsOfTYPO3\Kickstarter\Information\TransUnitInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\LocallangCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 
+#[AsCommand('make:locallang', 'Create a locallang_something.xlf file to handle translations.')]
+#[AsNonSchedulableCommand]
 class LocallangCommand extends Command
 {
     use CreatorInformationTrait;

@@ -22,12 +22,16 @@ use FriendsOfTYPO3\Kickstarter\Service\Creator\ModuleCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\AskForExtensionKeyTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\TryToCorrectClassNameTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+#[AsCommand('make:module', 'Add an Extbase or native backend module to your TYPO3 extension.')]
+#[AsNonSchedulableCommand]
 class ModuleCommand extends Command
 {
     use AskForExtensionKeyTrait;

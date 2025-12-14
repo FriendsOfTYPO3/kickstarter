@@ -22,12 +22,16 @@ use FriendsOfTYPO3\Kickstarter\Service\Creator\PluginCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
+#[AsCommand('make:plugin', 'Add a plugin to your TYPO3 extension.')]
+#[AsNonSchedulableCommand]
 class PluginCommand extends Command
 {
     use CreatorInformationTrait;

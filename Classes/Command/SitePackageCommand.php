@@ -16,12 +16,16 @@ use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use FriendsOfTYPO3\Kickstarter\Information\SitePackageInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\SitePackageCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 use TYPO3\CMS\Core\Core\Environment;
 
+#[AsCommand('make:site-package', 'Creates a basic site package')]
+#[AsNonSchedulableCommand]
 class SitePackageCommand extends Command
 {
     use CreatorInformationTrait;
