@@ -149,6 +149,31 @@ class ModelCreatorServiceTest extends AbstractServiceCreatorTestCase
                     FileModificationType::MODIFIED,
                 ],
             ],
+            'add_model_for_core_table' => [
+                'modelClassName' => 'Group',
+                'mappedTableName' => 'fe_groups',
+                'abstractEntity' => true,
+                'properties' => [
+                    [
+                        'propertyName' => 'title',
+                        'dataType' => 'string',
+                        'defaultValue' => '',
+                    ],
+                    [
+                        'propertyName' => 'description',
+                        'dataType' => 'string',
+                        'defaultValue' => '',
+                    ],
+                ],
+                'extensionKey' => 'my_extension',
+                'composerPackageName' => 'my-vendor/my-extension',
+                'expectedDir' => __DIR__ . '/Fixtures/my_extension_with_model_fe_group',
+                'inputPath' => __DIR__ . '/Fixtures/input/my_extension',
+                'createdFileModifications' => [
+                    FileModificationType::CREATED,
+                    FileModificationType::CREATED,
+                ],
+            ],
         ];
     }
 }

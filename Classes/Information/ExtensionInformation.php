@@ -387,17 +387,30 @@ class ExtensionInformation
     public function getTcaForTable(string $tableName): array
     {
         $tcaTableFilePath = $this->getFilePathForTcaTable($tableName);
-        if (!is_file($tcaTableFilePath)) {
-            return [];
+
+        // 1) Local TCA file (for this extension)
+        if (is_file($tcaTableFilePath)) {
+            $tca = require $tcaTableFilePath;
+            if (is_array($tca) && $tca !== []) {
+                return $tca;
+            }
         }
 
-        return require $tcaTableFilePath;
+        // 2) Fallback: global TCA (Core / other extensions)
+        if (isset($GLOBALS['TCA'][$tableName]) && is_array($GLOBALS['TCA'][$tableName])) {
+            return $GLOBALS['TCA'][$tableName];
+        }
+
+        return [];
     }
 
     public function getColumnNamesFromTca(array $tableTca): array
     {
-        $columnNames = array_keys($tableTca['columns']);
+        if (!isset($tableTca['columns']) || !is_array($tableTca['columns'])) {
+            return [];
+        }
 
+        $columnNames = array_keys($tableTca['columns']);
         sort($columnNames);
 
         return $columnNames;
