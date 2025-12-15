@@ -19,6 +19,7 @@ use FriendsOfTYPO3\Kickstarter\Enums\ModelPropertyType;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
 use FriendsOfTYPO3\Kickstarter\Information\ModelInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\ModelCreatorService;
+use FriendsOfTYPO3\Kickstarter\Service\ExternalTcaTableResolver;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\TryToCorrectClassNameTrait;
@@ -34,9 +35,14 @@ class ModelCommand extends Command
     use ExtensionInformationTrait;
     use TryToCorrectClassNameTrait;
 
+    private const CHOICE_USE_EXTERNAL = 'Use an existing table from TYPO3 Core or another extension...';
+
+    private const CHOICE_CANCEL       = 'Cancel (create table first)';
+
     public function __construct(
         private readonly ModelCreatorService $modelCreatorService,
         private readonly QuestionCollection $questionCollection,
+        private readonly ExternalTcaTableResolver $externalTcaTableResolver,
     ) {
         parent::__construct();
     }
@@ -111,27 +117,71 @@ class ModelCommand extends Command
     private function askForMappedTableName(
         CommandContext $commandContext,
         ExtensionInformation $extensionInformation
-    ): string {
+    ): ?string {
         $io = $commandContext->getIo();
+
         $configuredTcaTables = $extensionInformation->getConfiguredTcaTables();
+        $externalTcaTables   = $this->externalTcaTableResolver->getExternalTcaTables($extensionInformation);
 
         if ($configuredTcaTables === []) {
-            $io->error([
+            $io->warning([
                 'There are no TCA tables configured within your extension.',
-                'Please create a TCA table with command "make:table" first.',
+                'You might want to create a TCA table with "make:table" first.',
+                'Alternatively, you may map your model to an existing table from TYPO3 Core or another extension.',
             ]);
-            die();
+
+            $choices = $externalTcaTables;
+            $choices[] = self::CHOICE_CANCEL;
+
+            $choice = $io->choice(
+                'Choose an existing table (TYPO3 Core or other extension), or cancel',
+                $choices
+            );
+
+            if ($choice === self::CHOICE_CANCEL) {
+                return null; // signal: user wants to create a table first
+            }
+
+            // User selected an external table name directly
+            return $choice;
         }
 
+        // === Case 2: Extension has its own tables =========================================
         $io->info([
-            'Your domain model has to be mapped to a TCA table.',
-            'In following list you see the configured TCA tables within your extension.',
+            'Your domain model must be mapped to a TCA table.',
+            'You can either use a table from this extension or an existing table from TYPO3 Core or another extension.',
         ]);
 
-        return $io->choice(
-            'Chose the TCA table you want to map your model to',
-            $configuredTcaTables,
+        $choices = $configuredTcaTables;
+
+        // Only offer the external option if we actually have external tables
+        if ($externalTcaTables !== []) {
+            $choices[] = self::CHOICE_USE_EXTERNAL;
+        }
+
+        $choices[] = self::CHOICE_CANCEL;
+
+        $choice = $io->choice(
+            'Choose the TCA table for your model',
+            $choices
         );
+
+        if ($choice === self::CHOICE_CANCEL) {
+            return null;
+        }
+
+        if ($choice === self::CHOICE_USE_EXTERNAL) {
+            // Second step: choose the concrete external table
+            $externalChoice = $io->choice(
+                'Choose the existing table (TYPO3 Core or other extension)',
+                $externalTcaTables
+            );
+
+            return $externalChoice;
+        }
+
+        // User selected one of this extension’s own tables
+        return $choice;
     }
 
     private function askForProperties(
