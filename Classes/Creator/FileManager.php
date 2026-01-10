@@ -23,9 +23,10 @@ class FileManager
         $result = file_put_contents($targetFile, $content);
         if ($result === false) {
             $creatorInformation->writingFileFailed($targetFile);
-        } else {
-            $creatorInformation->fileAdded($targetFile);
+            return 0;
         }
+        $creatorInformation->fileAdded($targetFile);
+
         return $result;
     }
 

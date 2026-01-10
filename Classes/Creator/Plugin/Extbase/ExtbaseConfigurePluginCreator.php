@@ -26,7 +26,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
@@ -145,10 +144,6 @@ class ExtbaseConfigurePluginCreator implements ExtbasePluginCreatorInterface
                 $pluginInformation->getPluginName(),
                 new Array_($this->getReferencedControllerActions($pluginInformation, true)),
                 new Array_($this->getReferencedControllerActions($pluginInformation, false)),
-                new ClassConstFetch(
-                    new Name('ExtensionUtility'),
-                    'PLUGIN_TYPE_CONTENT_ELEMENT'
-                ),
             ]
         ));
     }

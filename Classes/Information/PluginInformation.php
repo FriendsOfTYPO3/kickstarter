@@ -26,7 +26,43 @@ readonly class PluginInformation
         private bool $typoScriptCreation = false,
         private ?string $set = '',
         private string $templatePath = '',
+        private array $templates = [],
     ) {}
+
+    /**
+     * Convenience factory for tests
+     * Unknown keys are ignored.
+     */
+    public static function fromArray(
+        array $info,
+        ExtensionInformation $extensionInformation
+    ): self {
+        $extbasePlugin = array_key_exists('extbasePlugin', $info) && (bool)$info['extbasePlugin'];
+        $pluginLabel = $info['pluginLabel'] ?? '';
+        $pluginName = $info['pluginName'] ?? '';
+        $pluginDescription = $info['pluginDescription'] ?? '';
+        $referencedControllerActions = $info['referencedControllerActions'] ?? [];
+
+        $creatorInformation = $info['creatorInformation'] ?? new CreatorInformation();
+        $typoScriptCreation = array_key_exists('typoScriptCreation', $info) && (bool)$info['typoScriptCreation'];
+        $set = array_key_exists('set', $info) ? (string)$info['set'] : '';
+        $templatePath = $info['templatePath'] ?? '';
+        $templates = $info['templates'] ?? [];
+
+        return new self(
+            extensionInformation: $extensionInformation,
+            extbasePlugin: $extbasePlugin,
+            pluginLabel: $pluginLabel,
+            pluginName: $pluginName,
+            pluginDescription: $pluginDescription,
+            referencedControllerActions: $referencedControllerActions,
+            creatorInformation: $creatorInformation,
+            typoScriptCreation: $typoScriptCreation,
+            set: $set,
+            templatePath: $templatePath,
+            templates: $templates,
+        );
+    }
 
     public function getExtensionInformation(): ExtensionInformation
     {
@@ -138,5 +174,10 @@ readonly class PluginInformation
     public function getTemplatePath(): string
     {
         return $this->templatePath;
+    }
+
+    public function getTemplates(): array
+    {
+        return $this->templates;
     }
 }
