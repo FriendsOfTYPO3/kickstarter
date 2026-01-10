@@ -67,14 +67,7 @@ class ExtensionCommand extends Command
 
         $io->title('Questions to build a new TYPO3 Extension');
 
-        $extensionKey = (string)$this->questionCollection->askQuestion(
-            ExtensionKeyQuestion::ARGUMENT_NAME,
-            $commandContext
-        );
-
-        $this->registry->set(ExtConf::EXT_KEY, ExtConf::LAST_EXTENSION_REGISTRY_KEY, $extensionKey);
-
-        $extensionInformation = $this->askForExtensionInformation($commandContext, $extensionKey);
+        $extensionInformation = $this->askForExtensionInformation($commandContext);
 
         $this->extensionCreatorService->create($extensionInformation, new ServicesConfigInformation($extensionInformation));
 
@@ -86,6 +79,7 @@ class ExtensionCommand extends Command
 
         $this->printInstallationInstructions($commandContext, $path, $extensionInformation);
 
+        $this->registry->set(ExtConf::EXT_KEY, ExtConf::LAST_EXTENSION_REGISTRY_KEY, $extensionInformation->getExtensionKey());
         return Command::SUCCESS;
     }
 
@@ -136,9 +130,20 @@ class ExtensionCommand extends Command
         ]);
     }
 
-    private function askForExtensionInformation(CommandContext $commandContext, string $extensionKey): ExtensionInformation
+    private function askForExtensionInformation(CommandContext $commandContext): ExtensionInformation
     {
         $io = $commandContext->getIo();
+
+        $composerPackageName = (string)$this->questionCollection->askQuestion(
+            ComposerNameQuestion::ARGUMENT_NAME,
+            $commandContext,
+        );
+
+        $extensionKey = (string)$this->questionCollection->askQuestion(
+            ExtensionKeyQuestion::ARGUMENT_NAME,
+            $commandContext,
+            $this->getExtensionNameSuggestion($composerPackageName)
+        );
         $io->info([
             'The extension will be exported to directory: ' . $this->getExtensionPath($extensionKey),
             'You can configure the export directory in extension settings (available in InstallTool)',
@@ -158,11 +163,6 @@ class ExtensionCommand extends Command
                 die();
             }
         }
-
-        $composerPackageName = (string)$this->questionCollection->askQuestion(
-            ComposerNameQuestion::ARGUMENT_NAME,
-            $commandContext,
-        );
 
         $io->text([
             'The title of the extension will be used to identify the extension much easier',
@@ -260,5 +260,23 @@ class ExtensionCommand extends Command
             $namespacePrefix,
             $this->createExtensionPath($extensionKey, true),
         );
+    }
+
+    private function getExtensionNameSuggestion(string $composerPackageName): string
+    {
+        // 1. Strip the vendor (everything before the first "/")
+        $parts = explode('/', $composerPackageName, 2);
+        $extensionKey = $parts[1] ?? $parts[0];
+
+        // 2. Normalize to snake_case:
+        //    - lowercase
+        //    - replace any non-alphanumeric sequence with a single underscore
+        $extensionKey = strtolower($extensionKey);
+        $extensionKey = preg_replace('/[^a-z0-9]+/', '_', $extensionKey);
+
+        // 3. Trim leading/trailing underscores, just in case
+        $extensionKey = trim($extensionKey, '_');
+
+        return $extensionKey;
     }
 }
