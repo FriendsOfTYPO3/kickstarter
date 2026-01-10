@@ -23,12 +23,16 @@ use FriendsOfTYPO3\Kickstarter\Service\ExternalTcaTableResolver;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\TryToCorrectClassNameTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+#[AsCommand('make:model', 'Add an Extbase model to your TYPO3 extension.')]
+#[AsNonSchedulableCommand]
 class ModelCommand extends Command
 {
     use CreatorInformationTrait;
