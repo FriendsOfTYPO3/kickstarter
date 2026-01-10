@@ -244,7 +244,7 @@ class TcaTableCreator implements TcaTableCreatorInterface
     {
         return $this->factory->val([
             'access' => [
-                'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel',
+                'showitem' => 'starttime;core.db.general:starttime,endtime;core.db.general:endtime',
             ],
             'language' => [
                 'showitem' => 'sys_language_uid, l10n_parent',
