@@ -22,6 +22,7 @@ use FriendsOfTYPO3\Kickstarter\Traits\AskForExtensionKeyTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\TryToCorrectClassNameTrait;
+use FriendsOfTYPO3\Kickstarter\Validator\PhpClassNameValidator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,6 +39,7 @@ class ValidatorCommand extends Command
     public function __construct(
         private readonly ValidatorCreatorService $validatorCreatorService,
         private readonly QuestionCollection $questionCollection,
+        private readonly PhpClassNameValidator $classNameValidator,
     ) {
         parent::__construct();
     }
@@ -122,13 +124,11 @@ class ValidatorCommand extends Command
                 $defaultName,
             );
 
-            if (preg_match('/^\d/', $name)) {
-                $io->error('Validator name should not start with a number.');
-                $defaultName = $this->tryToCorrectClassName($name, 'Validator');
+            if ($name === '') {
+                $io->error('Class name can not be empty.');
                 $validValidatorName = false;
-            } elseif (preg_match('/[^a-zA-Z0-9]/', $name)) {
-                $io->error('Validator name contains invalid chars. Please provide just letters and numbers.');
-                $defaultName = $this->tryToCorrectClassName($name, 'Validator');
+            } elseif (!$this->classNameValidator->validate($name)) {
+                $io->error('Class name is not a valid php class name.');
                 $validValidatorName = false;
             } elseif (preg_match('/^[a-z0-9]+$/', $name)) {
                 $io->error('Validator must be written in UpperCamelCase like BlogExampleValidator.');
