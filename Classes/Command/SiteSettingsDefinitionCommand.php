@@ -14,6 +14,7 @@ namespace FriendsOfTYPO3\Kickstarter\Command;
 use FriendsOfTYPO3\Kickstarter\Command\Input\Question\ChooseExtensionKeyQuestion;
 use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
+use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
 use FriendsOfTYPO3\Kickstarter\Information\SiteSetInformation;
 use FriendsOfTYPO3\Kickstarter\Information\SiteSettingsDefinitionInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\SiteSettingsDefinitionCreatorService;
@@ -79,17 +80,6 @@ class SiteSettingsDefinitionCommand extends Command
             'Now, we will ask you a few questions to customize the siteSet according to your needs.',
             'Please take your time to answer them.',
         ]);
-
-        $siteSettingsDefinitionInformation = $this->askForSiteSettingsDefinitionInformation($commandContext);
-        $this->siteSettingsDefinitionCreatorService->create($siteSettingsDefinitionInformation);
-        $this->printCreatorInformation($siteSettingsDefinitionInformation->getCreatorInformation(), $commandContext);
-
-        return Command::SUCCESS;
-    }
-
-    private function askForSiteSettingsDefinitionInformation(CommandContext $commandContext): SiteSettingsDefinitionInformation
-    {
-        $io = $commandContext->getIo();
         $extensionInformation = $this->getExtensionInformation(
             (string)$this->questionCollection->askQuestion(
                 ChooseExtensionKeyQuestion::ARGUMENT_NAME,
@@ -97,39 +87,44 @@ class SiteSettingsDefinitionCommand extends Command
             ),
             $commandContext
         );
+        if (count($extensionInformation->getSets()) < 1) {
+            $io->warning('Extension ' . $extensionInformation->getExtensionKey() . ' contains no site set yet. Use command typo3 make:site-set to create a site set first.');
+            return Command::FAILURE;
+        }
+        $siteSettingsDefinitionInformation = $this->askForSiteSettingsDefinitionInformation($commandContext, $extensionInformation);
+        $this->siteSettingsDefinitionCreatorService->create($siteSettingsDefinitionInformation);
+        $this->printCreatorInformation($siteSettingsDefinitionInformation->getCreatorInformation(), $commandContext);
+
+        return Command::SUCCESS;
+    }
+
+    private function askForSiteSettingsDefinitionInformation(
+        CommandContext $commandContext,
+        ExtensionInformation $extensionInformation
+    ): SiteSettingsDefinitionInformation {
+        $io = $commandContext->getIo();
+
+        $siteSet = new SiteSetInformation(
+            $extensionInformation,
+            '',
+            $this->askForSiteSetPath($commandContext, $extensionInformation),
+        );
 
         return new SiteSettingsDefinitionInformation(
             $extensionInformation,
-            new SiteSetInformation(
-                $extensionInformation,
-                '',
-                $this->askForSiteSetPath($io),
-            ),
+            $siteSet,
             $categories = $this->askForCategories($io),
             $this->askForSettings($io, $categories),
         );
     }
 
-    private function askForSiteSetPath(SymfonyStyle $io): string
-    {
-        $default = '';
-        do {
-            $siteSetPath = $io->ask('Please enter the site set directory name (must exist)', $default);
-
-            if ($siteSetPath === null) {
-                $io->error('The site set path cannot be empty.');
-                continue;
-            }
-
-            if (preg_match('~[\\\\/]~', $siteSetPath)) {
-                $io->error('The site set path must not contain slashes.');
-                continue;
-            }
-
-            // Valid input
-            return $siteSetPath;
-
-        } while (true);
+    private function askForSiteSetPath(
+        CommandContext $commandContext,
+        ExtensionInformation $extensionInformation
+    ): string {
+        $io = $commandContext->getIo();
+        $sets = $extensionInformation->getSets();
+        return $io->choice('Choose the site set', $sets, $sets[0]);
     }
 
     private function askForCategories(SymfonyStyle $io): array
@@ -140,8 +135,6 @@ class SiteSettingsDefinitionCommand extends Command
         $io->writeln('You must enter at least one category.');
 
         do {
-
-            // --- Key ---
             $key = $io->ask(
                 'Enter category key (alphanumeric and dots allowed, e.g., BlogExample.pages)',
                 null,
