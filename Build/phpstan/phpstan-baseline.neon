@@ -1,3 +1,7 @@
 parameters:
-  # Ignore specific errors:
-  ignoreErrors:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property PhpParser\\Node\\Expr\:\:\$value\.$#'
+			identifier: property.notFound
+			count: 2
+			path: ../../Classes/Creator/Middleware/RequestMiddlewaresCreator.php
