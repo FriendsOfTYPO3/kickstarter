@@ -124,8 +124,7 @@ class SiteSettingsDefinitionCommand extends Command
     ): string {
         $io = $commandContext->getIo();
         $sets = $extensionInformation->getSets();
-        $siteSetPath = $io->choice('Choose the site set', $sets, $sets[0]);
-        return $siteSetPath;
+        return $io->choice('Choose the site set', $sets, $sets[0]);
     }
 
     private function askForCategories(SymfonyStyle $io): array
