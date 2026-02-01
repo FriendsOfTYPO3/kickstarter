@@ -33,7 +33,7 @@ use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 use TYPO3\CMS\Core\Settings\CategoryDefinition;
 use TYPO3\CMS\Core\Settings\SettingDefinition;
 
-#[AsCommand('site-settings-definition', 'Adds a site settings definition to your TYPO3 extension.')]
+#[AsCommand('make:site-settings-definition', 'Adds a site settings definition to your TYPO3 extension.')]
 #[AsNonSchedulableCommand]
 class SiteSettingsDefinitionCommand extends Command
 {
