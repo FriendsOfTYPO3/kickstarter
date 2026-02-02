@@ -13,8 +13,6 @@ namespace FriendsOfTYPO3\Kickstarter\Information;
 
 readonly class LocallangInformation
 {
-    private const LANGUAGE_PATH = 'Resources/Private/Language/';
-
     /**
      * @param TransUnitInformation[] $transUnits
      */
@@ -37,12 +35,12 @@ readonly class LocallangInformation
 
     public function getLanguageRessourcePath(): string
     {
-        return $this->extensionInformation->getExtensionPath() . self::LANGUAGE_PATH;
+        return $this->extensionInformation->getLanguageRessourcePath();
     }
 
     public function getExtFilePath(): string
     {
-        return sprintf('EXT:%s/%s%s', $this->extensionInformation->getExtensionKey(), self::LANGUAGE_PATH, $this->fileName);
+        return sprintf('EXT:%s/%s%s', $this->extensionInformation->getExtensionKey(), ExtensionInformation::LANGUAGE_PATH, $this->fileName);
     }
 
     public function getExtensionInformation(): ExtensionInformation
