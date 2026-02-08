@@ -13,7 +13,7 @@ namespace FriendsOfTYPO3\Kickstarter\Command;
 
 use FriendsOfTYPO3\Kickstarter\Command\Input\Question\ChooseExtensionKeyQuestion;
 use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Locallang\LocallangFileNameQuestion;
-use FriendsOfTYPO3\Kickstarter\Command\Input\Question\LocalLang\LocallangTransUnitIdQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Locallang\LocallangTransUnitIdQuestion;
 use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use FriendsOfTYPO3\Kickstarter\Information\LocallangInformation;

@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace FriendsOfTYPO3\Kickstarter\Command\Input\Validator;
 
-use FriendsOfTYPO3\Kickstarter\Command\Input\Question\EmailQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension\EmailQuestion;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
