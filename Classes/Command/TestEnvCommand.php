@@ -25,7 +25,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 
-#[AsCommand('make:make:testenv', 'Adds a test environment to your TYPO3 extension.')]
+#[AsCommand('make:testenv', 'Adds a test environment to your TYPO3 extension.')]
 #[AsNonSchedulableCommand]
 class TestEnvCommand extends Command
 {

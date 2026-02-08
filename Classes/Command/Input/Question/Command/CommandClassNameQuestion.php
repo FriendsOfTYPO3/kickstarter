@@ -9,34 +9,26 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question;
+namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question\Command;
 
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('ext-kickstarter.command.extension.question')]
-readonly class NamespaceQuestion extends AbstractQuestion
+#[AutoconfigureTag('ext-kickstarter.command.question.command')]
+readonly class CommandClassNameQuestion extends AbstractQuestion
 {
-    public const ARGUMENT_NAME = 'namespace';
+    public const ARGUMENT_NAME = 'command-class-name';
 
     private const QUESTION = [
-        'PSR-4 AutoLoading Namespace',
+        'Please provide the class name of your new Command',
     ];
 
-    private const DESCRIPTION = [
-        'To find PHP classes much faster in your extension TYPO3 uses the auto-loading',
-        'mechanism of composer (https://getcomposer.org/doc/01-basic-usage.md#autoloading)',
-        'Please enter the PSR-4 autoload namespace for your extension',
-    ];
+    private const DESCRIPTION = [];
 
     public function __construct(
         private iterable $inputHandlers,
     ) {}
-
-    public function getArgumentName(): string
-    {
-        return self::ARGUMENT_NAME;
-    }
 
     protected function getDescription(): array
     {

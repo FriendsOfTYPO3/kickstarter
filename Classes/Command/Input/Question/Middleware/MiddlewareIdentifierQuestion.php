@@ -9,18 +9,19 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question;
+namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question\Middleware;
 
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('ext-kickstarter.command.extension.question')]
-readonly class CommandAliasQuestion extends AbstractQuestion
+#[AutoconfigureTag('ext-kickstarter.command.question.middleware')]
+readonly class MiddlewareIdentifierQuestion extends AbstractQuestion
 {
-    public const ARGUMENT_NAME = 'command-alias';
+    public const ARGUMENT_NAME = 'middleware-identifier';
 
     private const QUESTION = [
-        'Provide an alias name for your command',
+        'Please provide the identifier of your new Middleware',
     ];
 
     private const DESCRIPTION = [];

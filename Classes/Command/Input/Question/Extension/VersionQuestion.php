@@ -9,28 +9,37 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question;
+namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension;
 
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('ext-kickstarter.command.extension.question')]
-readonly class ExtensionKeyQuestion extends AbstractQuestion
+#[AutoconfigureTag('ext-kickstarter.command.question.extension')]
+readonly class VersionQuestion extends AbstractQuestion
 {
-    public const ARGUMENT_NAME = 'extension_key';
+    public const ARGUMENT_NAME = 'version';
 
     private const QUESTION = [
-        'Please provide the key for your extension',
+        'Version',
     ];
 
     private const DESCRIPTION = [
-        'Building a new TYPO3 extension needs a unique identifier, the so called extension key. See:',
-        'https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/BestPractises/ExtensionKey.html',
+        'The version is needed to differ between the releases of your extension.',
+        'Please use semantic version (https://semver.org/)',
+        'Use 0.0.* versions for bugfix releases.',
+        'Use 0.*.0 versions, if there are any new features.',
+        'Use *.0.0 versions, if something huge has changed like supported TYPO3 version or contained API.',
     ];
 
     public function __construct(
         private iterable $inputHandlers,
     ) {}
+
+    public function getArgumentName(): string
+    {
+        return self::ARGUMENT_NAME;
+    }
 
     protected function getDescription(): array
     {
@@ -40,6 +49,11 @@ readonly class ExtensionKeyQuestion extends AbstractQuestion
     protected function getQuestion(): array
     {
         return self::QUESTION;
+    }
+
+    protected function getDefault(): ?string
+    {
+        return '0.0.1';
     }
 
     public function ask(CommandContext $commandContext, ?string $default = null): mixed
