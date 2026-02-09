@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace FriendsOfTYPO3\Kickstarter\Command\Input\Validator;
 
-use FriendsOfTYPO3\Kickstarter\Command\Input\Question\ComposerNameQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension\ComposerNameQuestion;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('ext-kickstarter.inputHandler.composer_name')]

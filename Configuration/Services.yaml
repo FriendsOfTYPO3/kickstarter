@@ -16,21 +16,25 @@ services:
   ## COMMANDS ##
   ##############
 
+  FriendsOfTYPO3\Kickstarter\Command\ApplyTypo3CglCommand:
+    arguments:
+      $questionCollection: '@questions.apply-typo3-cgl'
+
   FriendsOfTYPO3\Kickstarter\Command\CommandCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.command'
 
   FriendsOfTYPO3\Kickstarter\Command\ControllerCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.controller'
 
   FriendsOfTYPO3\Kickstarter\Command\EventCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.event'
 
   FriendsOfTYPO3\Kickstarter\Command\EventListenerCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.event-listener'
 
   FriendsOfTYPO3\Kickstarter\Command\ExtensionCommand:
     arguments:
@@ -38,67 +42,63 @@ services:
 
   FriendsOfTYPO3\Kickstarter\Command\LocallangCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.locallang'
 
   FriendsOfTYPO3\Kickstarter\Command\MiddlewareCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.middleware'
 
   FriendsOfTYPO3\Kickstarter\Command\ModelCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.model'
 
   FriendsOfTYPO3\Kickstarter\Command\ModuleCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.module'
 
   FriendsOfTYPO3\Kickstarter\Command\PluginCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.plugin'
 
   FriendsOfTYPO3\Kickstarter\Command\RepositoryCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.repository'
 
   FriendsOfTYPO3\Kickstarter\Command\ServicesYamlCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.services-yaml'
 
   FriendsOfTYPO3\Kickstarter\Command\SitePackageCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.site-package'
 
   FriendsOfTYPO3\Kickstarter\Command\SiteSetCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.site-set'
 
   FriendsOfTYPO3\Kickstarter\Command\SiteSettingsDefinitionCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.site-settings-definition'
 
   FriendsOfTYPO3\Kickstarter\Command\TableCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.table'
 
   FriendsOfTYPO3\Kickstarter\Command\TestEnvCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.test-env'
 
   FriendsOfTYPO3\Kickstarter\Command\TypeConverterCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.type-converter'
 
   FriendsOfTYPO3\Kickstarter\Command\UpgradeWizardCommand:
     arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.upgrade-wizard'
 
   FriendsOfTYPO3\Kickstarter\Command\ValidatorCommand:
     arguments:
-      $questionCollection: '@questions.extension'
-
-  FriendsOfTYPO3\Kickstarter\Command\ApplyTypo3CglCommand:
-    arguments:
-      $questionCollection: '@questions.extension'
+      $questionCollection: '@questions.validator'
 
   ######################
   ## CREATOR SERVICES ##
@@ -176,65 +176,183 @@ services:
   factory.question:
     class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionFactory
 
+  questions.apply-typo3-cgl:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.apply-typo3-cgl' }
+
+  questions.command:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.command' }
+
+  questions.controller:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.controller' }
+
+  questions.event:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.event' }
+
+  questions.event-listener:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.event-listener' }
+
   questions.extension:
     class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
     arguments:
-      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.extension.question' }
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.extension' }
 
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\ActionMethodNameQuestion:
+  questions.locallang:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
     arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.controller-action' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\CommandClassNameQuestion:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.locallang' }
+
+  questions.middleware:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.middleware' }
+
+  questions.model:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.model' }
+
+  questions.module:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.module' }
+
+  questions.plugin:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.plugin' }
+
+  questions.repository:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.repository' }
+
+  questions.services-yaml:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.services-yaml' }
+
+  questions.site-package:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.site-package' }
+
+  questions.site-set:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.site-set' }
+
+  questions.site-settings-definition:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.site-settings-definition' }
+
+  questions.table:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.table' }
+
+  questions.test-env:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.test-env' }
+
+  questions.type-converter:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.type-converter' }
+
+  questions.upgrade-wizard:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.upgrade-wizard' }
+
+  questions.validator:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.validator' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Command\CommandAliasQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.command-name' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Command\CommandClassNameQuestion:
     arguments:
       $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.command-class' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\CommandAliasQuestion:
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Command\CommandNameQuestion:
     arguments:
       $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.command-name' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\CommandNameQuestion:
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Controller\ActionMethodNameQuestion:
     arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.command-name' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\ComposerNameQuestion:
-    arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.composer_name' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\ControllerClassNameQuestion:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.controller-action' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Controller\ControllerClassNameQuestion:
     arguments:
       $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.controller-class' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\EmailQuestion:
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension\ComposerNameQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.composer_name' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension\EmailQuestion:
     arguments:
       $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.email' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\EventClassNameQuestion:
-    arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.event-class' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\EventListenerClassNameQuestion:
-    arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.event-listener-class-name' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\ExtensionKeyQuestion:
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension\ExtensionKeyQuestion:
     arguments:
       $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.extension_key' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\LocallangFileNameQuestion:
-    arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.locallang_file_name' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\LocallangTransUnitIdQuestion:
-    arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.locallang_trans_unit_id' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\MiddlewareClassNameQuestion:
-    arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.middleware-class' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\MiddlewareIdentifierQuestion:
-    arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.middleware-identifier' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\ModelClassNameQuestion:
-    arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.model-class' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\ModuleIdentifierQuestion:
-    arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.module-identifier' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\NamespaceQuestion:
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension\NamespaceQuestion:
     arguments:
       $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.namespace' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\PluginNameQuestion:
-    arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.plugin-name' }
-  FriendsOfTYPO3\Kickstarter\Command\Input\Question\VersionQuestion:
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension\VersionQuestion:
     arguments:
       $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.version' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Event\EventClassNameQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.event-class' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\EventListener\EventListenerClassNameQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.event-listener-class-name' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Locallang\LocallangFileNameQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.locallang_file_name' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Locallang\LocallangTransUnitIdQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.locallang_trans_unit_id' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Middleware\MiddlewareClassNameQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.middleware-class' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Middleware\MiddlewareIdentifierQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.middleware-identifier' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Model\ModelClassNameQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.model-class' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Module\ModuleIdentifierQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.module-identifier' }
+
+  FriendsOfTYPO3\Kickstarter\Command\Input\Question\Plugin\PluginNameQuestion:
+    arguments:
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.plugin-name' }

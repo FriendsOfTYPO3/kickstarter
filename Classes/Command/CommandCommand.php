@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Command;
 
 use FriendsOfTYPO3\Kickstarter\Command\Input\Question\ChooseExtensionKeyQuestion;
-use FriendsOfTYPO3\Kickstarter\Command\Input\Question\CommandAliasQuestion;
-use FriendsOfTYPO3\Kickstarter\Command\Input\Question\CommandClassNameQuestion;
-use FriendsOfTYPO3\Kickstarter\Command\Input\Question\CommandNameQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Command\CommandAliasQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Command\CommandClassNameQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Command\CommandNameQuestion;
 use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use FriendsOfTYPO3\Kickstarter\Information\CommandInformation;

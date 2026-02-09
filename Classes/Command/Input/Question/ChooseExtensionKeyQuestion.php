@@ -17,7 +17,25 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Registry;
 
-#[AutoconfigureTag('ext-kickstarter.command.extension.question')]
+#[AutoconfigureTag('ext-kickstarter.command.question.apply-typo3-cgl')]
+#[AutoconfigureTag('ext-kickstarter.command.question.command')]
+#[AutoconfigureTag('ext-kickstarter.command.question.controller')]
+#[AutoconfigureTag('ext-kickstarter.command.question.event')]
+#[AutoconfigureTag('ext-kickstarter.command.question.event-listener')]
+#[AutoconfigureTag('ext-kickstarter.command.question.locallang')]
+#[AutoconfigureTag('ext-kickstarter.command.question.middleware')]
+#[AutoconfigureTag('ext-kickstarter.command.question.model')]
+#[AutoconfigureTag('ext-kickstarter.command.question.module')]
+#[AutoconfigureTag('ext-kickstarter.command.question.plugin')]
+#[AutoconfigureTag('ext-kickstarter.command.question.repository')]
+#[AutoconfigureTag('ext-kickstarter.command.question.services-yaml')]
+#[AutoconfigureTag('ext-kickstarter.command.question.site-set')]
+#[AutoconfigureTag('ext-kickstarter.command.question.site-settings-definition')]
+#[AutoconfigureTag('ext-kickstarter.command.question.table')]
+#[AutoconfigureTag('ext-kickstarter.command.question.test-env')]
+#[AutoconfigureTag('ext-kickstarter.command.question.type-converter')]
+#[AutoconfigureTag('ext-kickstarter.command.question.upgrade-wizard')]
+#[AutoconfigureTag('ext-kickstarter.command.question.validator')]
 readonly class ChooseExtensionKeyQuestion extends AbstractQuestion
 {
     public const ARGUMENT_NAME = 'choose_extension';

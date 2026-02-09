@@ -11,11 +11,11 @@ declare(strict_types=1);
 
 namespace FriendsOfTYPO3\Kickstarter\Command;
 
-use FriendsOfTYPO3\Kickstarter\Command\Input\Question\ComposerNameQuestion;
-use FriendsOfTYPO3\Kickstarter\Command\Input\Question\EmailQuestion;
-use FriendsOfTYPO3\Kickstarter\Command\Input\Question\ExtensionKeyQuestion;
-use FriendsOfTYPO3\Kickstarter\Command\Input\Question\NamespaceQuestion;
-use FriendsOfTYPO3\Kickstarter\Command\Input\Question\VersionQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension\ComposerNameQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension\EmailQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension\ExtensionKeyQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension\NamespaceQuestion;
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension\VersionQuestion;
 use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
 use FriendsOfTYPO3\Kickstarter\Configuration\ExtConf;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;

@@ -9,18 +9,19 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question;
+namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question\Controller;
 
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('ext-kickstarter.command.extension.question')]
-readonly class MiddlewareIdentifierQuestion extends AbstractQuestion
+#[AutoconfigureTag('ext-kickstarter.command.question.controller')]
+readonly class ControllerClassNameQuestion extends AbstractQuestion
 {
-    public const ARGUMENT_NAME = 'middleware-identifier';
+    public const ARGUMENT_NAME = 'controller-class-name';
 
     private const QUESTION = [
-        'Please provide the identifier of your new Middleware',
+        'Please provide the name of your controller',
     ];
 
     private const DESCRIPTION = [];

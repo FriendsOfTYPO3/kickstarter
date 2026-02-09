@@ -9,18 +9,19 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question;
+namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question\Locallang;
 
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('ext-kickstarter.command.extension.question')]
-readonly class MiddlewareClassNameQuestion extends AbstractQuestion
+#[AutoconfigureTag('ext-kickstarter.command.question.locallang')]
+readonly class LocallangFileNameQuestion extends AbstractQuestion
 {
-    public const ARGUMENT_NAME = 'middleware-class-name';
+    public const ARGUMENT_NAME = 'locallang-file-name';
 
     private const QUESTION = [
-        'Please provide the class name of your new Middleware',
+        'Please choose a custom file name. Must start with "locallang" and have the extension ".xlf"',
     ];
 
     private const DESCRIPTION = [];

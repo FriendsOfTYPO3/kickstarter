@@ -9,26 +9,25 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question;
+namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension;
 
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('ext-kickstarter.command.extension.question')]
-readonly class VersionQuestion extends AbstractQuestion
+#[AutoconfigureTag('ext-kickstarter.command.question.extension')]
+readonly class NamespaceQuestion extends AbstractQuestion
 {
-    public const ARGUMENT_NAME = 'version';
+    public const ARGUMENT_NAME = 'namespace';
 
     private const QUESTION = [
-        'Version',
+        'PSR-4 AutoLoading Namespace',
     ];
 
     private const DESCRIPTION = [
-        'The version is needed to differ between the releases of your extension.',
-        'Please use semantic version (https://semver.org/)',
-        'Use 0.0.* versions for bugfix releases.',
-        'Use 0.*.0 versions, if there are any new features.',
-        'Use *.0.0 versions, if something huge has changed like supported TYPO3 version or contained API.',
+        'To find PHP classes much faster in your extension TYPO3 uses the auto-loading',
+        'mechanism of composer (https://getcomposer.org/doc/01-basic-usage.md#autoloading)',
+        'Please enter the PSR-4 autoload namespace for your extension',
     ];
 
     public function __construct(
@@ -48,11 +47,6 @@ readonly class VersionQuestion extends AbstractQuestion
     protected function getQuestion(): array
     {
         return self::QUESTION;
-    }
-
-    protected function getDefault(): ?string
-    {
-        return '0.0.1';
     }
 
     public function ask(CommandContext $commandContext, ?string $default = null): mixed

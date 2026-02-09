@@ -9,18 +9,19 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question;
+namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question\Command;
 
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('ext-kickstarter.command.extension.question')]
-readonly class ModuleIdentifierQuestion extends AbstractQuestion
+#[AutoconfigureTag('ext-kickstarter.command.question.command')]
+readonly class CommandNameQuestion extends AbstractQuestion
 {
-    public const ARGUMENT_NAME = 'module-identifier';
+    public const ARGUMENT_NAME = 'command-name';
 
     private const QUESTION = [
-        'Define a module identifier',
+        'Please provide the command name',
     ];
 
     private const DESCRIPTION = [];

@@ -9,18 +9,19 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question;
+namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question\Event;
 
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('ext-kickstarter.command.extension.question')]
-readonly class CommandNameQuestion extends AbstractQuestion
+#[AutoconfigureTag('ext-kickstarter.command.question.event')]
+readonly class EventClassNameQuestion extends AbstractQuestion
 {
-    public const ARGUMENT_NAME = 'command-name';
+    public const ARGUMENT_NAME = 'event-class-name';
 
     private const QUESTION = [
-        'Please provide the command name',
+        'Please provide the class name of your new Event',
     ];
 
     private const DESCRIPTION = [];

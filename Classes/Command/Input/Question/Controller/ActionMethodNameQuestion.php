@@ -9,33 +9,26 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question;
+namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question\Controller;
 
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('ext-kickstarter.command.extension.question')]
-readonly class EmailQuestion extends AbstractQuestion
+#[AutoconfigureTag('ext-kickstarter.command.question.controller')]
+readonly class ActionMethodNameQuestion extends AbstractQuestion
 {
-    public const ARGUMENT_NAME = 'email';
+    public const ARGUMENT_NAME = 'controller-action';
 
     private const QUESTION = [
-        'Email address',
+        'Please provide the name of your action method',
     ];
 
-    private const DESCRIPTION = [
-        'Please enter the email of the author (see above)',
-        'It must be a valid email address.',
-    ];
+    private const DESCRIPTION = [];
 
     public function __construct(
         private iterable $inputHandlers,
     ) {}
-
-    public function getArgumentName(): string
-    {
-        return self::ARGUMENT_NAME;
-    }
 
     protected function getDescription(): array
     {

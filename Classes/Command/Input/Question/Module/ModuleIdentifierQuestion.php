@@ -9,18 +9,19 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question;
+namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question\Module;
 
+use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('ext-kickstarter.command.extension.question')]
-readonly class LocallangFileNameQuestion extends AbstractQuestion
+#[AutoconfigureTag('ext-kickstarter.command.question.module')]
+readonly class ModuleIdentifierQuestion extends AbstractQuestion
 {
-    public const ARGUMENT_NAME = 'locallang-file-name';
+    public const ARGUMENT_NAME = 'module-identifier';
 
     private const QUESTION = [
-        'Please choose a custom file name. Must start with "locallang" and have the extension ".xlf"',
+        'Define a module identifier',
     ];
 
     private const DESCRIPTION = [];
