@@ -20,7 +20,7 @@ readonly class MiddlewareClassNameDecorator implements DecoratorInterface
     {
         $className = $defaultValue ?? '';
         if (str_contains($className, '/')) {
-            $className = substr($className, strpos($className, '/') + 1);
+            return substr($className, strpos($className, '/') + 1);
         }
 
         return $className;
