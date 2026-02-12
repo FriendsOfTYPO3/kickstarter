@@ -30,21 +30,37 @@ class ExtensionInformation
         'l10n_diffsource',
     ];
 
-    private const CLASSES_PATH = 'Classes/';
+    public const CLASSES_PATH = 'Classes/';
 
-    private const CONTROLLER_PATH = 'Classes/Controller/';
+    public const CONTROLLER_PATH = 'Classes/Controller/';
 
-    private const MODEL_PATH = 'Classes/Domain/Model/';
+    public const MODEL_PATH = 'Classes/Domain/Model/';
 
-    private const CONFIGURATION_PATH = 'Configuration/';
+    public const REPOSITORY_PATH = 'Classes/Domain/Repository/';
 
-    private const SITE_SET_PATH = 'Configuration/Sets/';
+    public const SERVICES_PATH = 'Classes/Services/';
 
-    private const TCA_PATH = 'Configuration/TCA/';
+    public const VIEWHELPERS_PATH = 'Classes/ViewHelpers/';
 
-    private const TCA_OVERRIDES_PATH = 'Configuration/TCA/Overrides/';
+    public const CONFIGURATION_PATH = 'Configuration/';
 
-    private const TYPOSCRIPT_DEFAULT_PATH = 'Configuration/TypoScript/';
+    public const SITE_SET_PATH = 'Configuration/Sets/';
+
+    public const TCA_PATH = 'Configuration/TCA/';
+
+    public const TCA_OVERRIDES_PATH = 'Configuration/TCA/Overrides/';
+
+    public const TYPOSCRIPT_DEFAULT_PATH = 'Configuration/TypoScript/';
+
+    public const LANGUAGE_PATH = 'Resources/Private/Language/';
+
+    public const RESOURCES_PUBLIC_PATH = 'Resources/Public/';
+
+    public const RESOURCES_PRIVATE_PATH = 'Resources/Private/';
+
+    public const TEST_UNIT_PATH = 'Tests/Unit/';
+
+    public const TEST_FUNCTIONAL_PATH = 'Tests/Functional/';
 
     public function __construct(
         private string $extensionKey,
@@ -59,7 +75,11 @@ class ExtensionInformation
         private readonly string $authorCompany,
         private readonly string $namespaceForAutoload,
         private string $extensionPath,
-        private readonly CreatorInformation $creatorInformation = new CreatorInformation()
+        private readonly bool $createFolders = false,
+        private readonly bool $createExtbaseFolders = false,
+        private readonly bool $createSitePackageFolders = false,
+        private readonly bool $createTestFolders = false,
+        private readonly CreatorInformation $creatorInformation = new CreatorInformation(),
     ) {}
 
     public function getExtensionKey(): string
@@ -174,6 +194,21 @@ class ExtensionInformation
     public function getDefaultTypoScriptPath(): string
     {
         return $this->getExtensionPath() . self::TYPOSCRIPT_DEFAULT_PATH;
+    }
+
+    public function getResourcesPublicPath(): string
+    {
+        return $this->getExtensionPath() . self::RESOURCES_PUBLIC_PATH;
+    }
+
+    public function getResourcesPrivatePath(): string
+    {
+        return $this->getExtensionPath() . self::RESOURCES_PRIVATE_PATH;
+    }
+
+    public function getLanguageRessourcePath(): string
+    {
+        return $this->getExtensionPath() . self::LANGUAGE_PATH;
     }
 
     public function getTcaPath(): string
@@ -454,5 +489,25 @@ class ExtensionInformation
     public function setExtensionPath(string $extensionPath): void
     {
         $this->extensionPath = $extensionPath;
+    }
+
+    public function isCreateFolders(): bool
+    {
+        return $this->createFolders;
+    }
+
+    public function isCreateExtbaseFolders(): bool
+    {
+        return $this->createExtbaseFolders;
+    }
+
+    public function isCreateSitePackageFolders(): bool
+    {
+        return $this->createSitePackageFolders;
+    }
+
+    public function isCreateTestFolders(): bool
+    {
+        return $this->createTestFolders;
     }
 }

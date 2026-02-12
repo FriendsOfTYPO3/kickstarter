@@ -250,19 +250,33 @@ class ExtensionCommand extends Command
             $composerPackageName,
         );
 
+        $createFolders = $io->confirm('Create additional empty folders (Configuration, Resources etc)?', false);
+        $createExtbaseFolders = false;
+        $createSitePackageFolders = false;
+        $createTestFolders = false;
+        if ($createFolders) {
+            $createExtbaseFolders = $io->confirm('Create Extbase folders (Classes/Domain/Model, Resources/Private/Templates etc)?', false);
+            $createSitePackageFolders = $io->confirm('Create Site Package folders (Resources/Private/PageView)?', false);
+            $createTestFolders = $io->confirm('Create test folders (Tests/Unit, Tests/Functional)?', false);
+        }
+
         return new ExtensionInformation(
-            $extensionKey,
-            $composerPackageName,
-            $title,
-            $description,
-            $version,
-            $category,
-            $state,
-            $author,
-            $authorEmail,
-            $authorCompany,
-            $namespacePrefix,
-            $this->createExtensionPath($extensionKey, true),
+            extensionKey: $extensionKey,
+            composerPackageName: $composerPackageName,
+            title: $title,
+            description: $description,
+            version: $version,
+            category: $category,
+            state: $state,
+            author: $author,
+            authorEmail: $authorEmail,
+            authorCompany: $authorCompany,
+            namespaceForAutoload: $namespacePrefix,
+            extensionPath: $this->createExtensionPath($extensionKey, true),
+            createFolders: $createFolders,
+            createExtbaseFolders: $createExtbaseFolders,
+            createSitePackageFolders: $createSitePackageFolders,
+            createTestFolders: $createTestFolders,
         );
     }
 
