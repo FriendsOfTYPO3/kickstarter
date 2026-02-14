@@ -11,22 +11,18 @@ declare(strict_types=1);
 
 namespace FriendsOfTYPO3\Kickstarter\Command\Input\Decorator;
 
-use FriendsOfTYPO3\Kickstarter\Command\Input\Normalizer\MiddlewareClassNameNormalizer;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('ext-kickstarter.inputHandler.middleware-class')]
 readonly class MiddlewareClassNameDecorator implements DecoratorInterface
 {
-    public function __construct(
-        private MiddlewareClassNameNormalizer $middlewareClassNameNormalizer
-    ) {}
-
     public function __invoke(?string $defaultValue = null): string
     {
         $className = $defaultValue ?? '';
         if (str_contains($className, '/')) {
-            $className = substr($className, strpos($className, '/') + 1);
+            return substr($className, strpos($className, '/') + 1);
         }
-        return $this->middlewareClassNameNormalizer->__invoke($className);
+
+        return $className;
     }
 }

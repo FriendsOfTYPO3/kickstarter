@@ -279,6 +279,10 @@ services:
     arguments:
       $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.validator' }
 
+  ###########################
+  ## ASSIGN INPUT HANDLERS ##
+  ###########################
+
   FriendsOfTYPO3\Kickstarter\Command\Input\Question\Command\CommandAliasQuestion:
     arguments:
       $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.command-name' }
@@ -325,7 +329,7 @@ services:
 
   FriendsOfTYPO3\Kickstarter\Command\Input\Question\EventListener\EventListenerClassNameQuestion:
     arguments:
-      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.event-listener-class-name' }
+      $inputHandlers: !tagged_iterator { tag: 'ext-kickstarter.inputHandler.event-listener-class' }
 
   FriendsOfTYPO3\Kickstarter\Command\Input\Question\Locallang\LocallangFileNameQuestion:
     arguments:

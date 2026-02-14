@@ -14,7 +14,7 @@ namespace FriendsOfTYPO3\Kickstarter\Command\Input\Normalizer;
 use FriendsOfTYPO3\Kickstarter\Traits\TryToCorrectClassNameTrait;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('ext-kickstarter.inputHandler.event-listener-class-name')]
+#[AutoconfigureTag('ext-kickstarter.inputHandler.event-listener-class')]
 class EventListenerClassNameNormalizer implements NormalizerInterface
 {
     use TryToCorrectClassNameTrait;
