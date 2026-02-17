@@ -1,0 +1,16 @@
+categories:
+  MyExample:
+    label: 'My Example'
+settings:
+  MyExampleString:
+    label: 'My Example String'
+    type: string
+    default: ''
+  MyExampleInt:
+    label: 'My Example Int'
+    type: int
+    default: 0
+  MyExampleBool:
+    label: 'My Example Bool'
+    type: bool
+    default: false

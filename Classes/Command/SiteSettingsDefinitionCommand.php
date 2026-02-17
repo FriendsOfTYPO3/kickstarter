@@ -256,7 +256,7 @@ class SiteSettingsDefinitionCommand extends Command
             $type = $io->choice('Select setting type', $this->getSettingTypes(), 'string');
 
             // --- Default ---
-            $defaultInput = $io->ask('Enter default value (leave empty for null)');
+            $defaultInput = $io->ask('Enter default value (leave empty for false, 0 or empty string)');
             $default = $this->castDefaultValue($defaultInput, $type);
 
             // --- Description ---
