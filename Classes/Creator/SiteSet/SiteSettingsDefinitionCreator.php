@@ -14,6 +14,8 @@ namespace FriendsOfTYPO3\Kickstarter\Creator\SiteSet;
 use FriendsOfTYPO3\Kickstarter\Creator\FileManager;
 use FriendsOfTYPO3\Kickstarter\Information\SiteSettingsDefinitionInformation;
 use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
+use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -23,6 +25,8 @@ class SiteSettingsDefinitionCreator implements SiteSettingsDefinitionCreatorInte
 
     public function __construct(
         private readonly FileManager $fileManager,
+        #[AutowireLocator('settings.type')]
+        private ServiceLocator $types,
     ) {}
 
     public function create(SiteSettingsDefinitionInformation $siteSettingsDefinitionInformation): void
@@ -58,6 +62,7 @@ class SiteSettingsDefinitionCreator implements SiteSettingsDefinitionCreatorInte
                 $siteSettingsDefinitionConfig['categories'][$category->key] = $array;
             }
         }
+        $this->types->getProvidedServices();
         foreach ($siteSettingsDefinitionInformation->getSettings() as $setting) {
             $array = $setting->toArray();
 
@@ -78,6 +83,25 @@ class SiteSettingsDefinitionCreator implements SiteSettingsDefinitionCreatorInte
             foreach ($array as $k => $v) {
                 $ordered[$k] = $v;
             }
+
+            $typeKey = $ordered['type'];
+            if (!$this->types->has($typeKey)) {
+                throw new \InvalidArgumentException(
+                    'Type ' . $typeKey . ' is not allowed in this project. Choose one of ' .
+                    implode(', ', array_keys($this->types->getProvidedServices())),
+                    7818166231
+                );
+            }
+
+            $type = $this->types->get($typeKey);
+            $phpType = (new \ReflectionMethod($type, 'transformValue'))->getReturnType()?->getName();
+
+            $ordered['default'] = match ($phpType) {
+                'bool' => (bool)($ordered['default'] ?? false),
+                'int' => (int)($ordered['default'] ?? 0),
+                'array' => (array)($ordered['default'] ?? []),
+                default => (string)($ordered['default'] ?? ''),
+            };
 
             $siteSettingsDefinitionConfig['settings'][$setting->key] = $ordered;
         }

@@ -104,6 +104,40 @@ class SiteSettingsDefinitionCreatorServiceTest extends AbstractServiceCreatorTes
                 'expectedDir' => __DIR__ . '/Fixtures/make_site_settings_definition',
                 'inputPath' => __DIR__ . '/Fixtures/input/my_extension_with_set',
             ],
+            'make_site_settings_definition_without_default' => [
+                'identifier' => 'my-vendor/my-set',
+                'path' => 'my_set',
+                'categoryDataArray' => [
+                    [
+                        'key' => 'MyExample',
+                        'label' => 'My Example',
+                    ],
+                ],
+                'settingDataArray' => [
+                    [
+                        'key' => 'MyExampleString',
+                        'type' => 'string',
+                        'default' => null,
+                        'label' => 'My Example String',
+                    ],
+                    [
+                        'key' => 'MyExampleInt',
+                        'type' => 'int',
+                        'default' => null,
+                        'label' => 'My Example Int',
+                    ],
+                    [
+                        'key' => 'MyExampleBool',
+                        'type' => 'bool',
+                        'default' => null,
+                        'label' => 'My Example Bool',
+                    ],
+                ],
+                'extensionKey' => 'my_extension',
+                'composerPackageName' => 'my-vendor/my-extension',
+                'expectedDir' => __DIR__ . '/Fixtures/make_site_settings_definition_without_default',
+                'inputPath' => __DIR__ . '/Fixtures/input/my_extension_with_set',
+            ],
             'make_site_settings_definition_with_enum' => [
                 'identifier' => 'my-vendor/my-set',
                 'path' => 'my_set',

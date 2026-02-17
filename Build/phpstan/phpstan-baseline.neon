@@ -5,3 +5,9 @@ parameters:
 			identifier: property.notFound
 			count: 2
 			path: ../../Classes/Creator/Middleware/RequestMiddlewaresCreator.php
+
+		-
+			message: '#^Call to an undefined method ReflectionType\:\:getName\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: ../../Classes/Creator/SiteSet/SiteSettingsDefinitionCreator.php
