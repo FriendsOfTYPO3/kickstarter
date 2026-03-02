@@ -421,11 +421,11 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         ;;
     composerNormalize)
-        if [ "${DRY_RUN_OPTIONS}" -eq 1 ]; then
-            COMMAND=(composer normalize -n)
-        else
-            COMMAND=(composer normalize)
+        DRY_RUN_OPTIONS=''
+        if [ "${DRY_RUN}" -eq 1 ]; then
+            DRY_RUN_OPTIONS='-n'
         fi
+        COMMAND=(composer normalize ${DRY_RUN_OPTIONS})
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-command-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} "${COMMAND[@]}"
         SUITE_EXIT_CODE=$?
         ;;
