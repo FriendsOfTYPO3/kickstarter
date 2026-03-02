@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace FriendsOfTYPO3\Kickstarter\Creator\Middleware;
 
-use FriendsOfTYPO3\Kickstarter\Information\MiddleWareInformation;
+use FriendsOfTYPO3\Kickstarter\Information\MiddlewareInformation;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('ext-kickstarter.creator.middleware')]

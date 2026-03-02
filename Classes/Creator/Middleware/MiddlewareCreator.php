@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Middleware;
 
 use FriendsOfTYPO3\Kickstarter\Creator\FileManager;
-use FriendsOfTYPO3\Kickstarter\Information\MiddleWareInformation;
+use FriendsOfTYPO3\Kickstarter\Information\MiddlewareInformation;
 use FriendsOfTYPO3\Kickstarter\PhpParser\NodeFactory;
 use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\ClassStructure;
 use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\DeclareStructure;

@@ -16,7 +16,7 @@ use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Middleware\MiddlewareClass
 use FriendsOfTYPO3\Kickstarter\Command\Input\Question\Middleware\MiddlewareIdentifierQuestion;
 use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
-use FriendsOfTYPO3\Kickstarter\Information\MiddleWareInformation;
+use FriendsOfTYPO3\Kickstarter\Information\MiddlewareInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\MiddlewareCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\AskForExtensionKeyTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
