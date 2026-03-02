@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator\Middleware;
 
 use FriendsOfTYPO3\Kickstarter\Creator\FileManager;
-use FriendsOfTYPO3\Kickstarter\Information\MiddleWareInformation;
+use FriendsOfTYPO3\Kickstarter\Information\MiddlewareInformation;
 use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\FileStructure;
 use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\ReturnStructure;
 use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
@@ -67,7 +67,7 @@ class RequestMiddlewaresCreator implements MiddlewareCreatorInterface
         );
     }
 
-    private function addStackEntry(string $filePath, FileStructure $fileStructure, MiddleWareInformation $middlewareInformation): bool
+    private function addStackEntry(string $filePath, FileStructure $fileStructure, MiddlewareInformation $middlewareInformation): bool
     {
         /** @var ReturnStructure $returnStructure */
         $returnStructure = $fileStructure->getReturnStructures()->current();
@@ -126,7 +126,7 @@ class RequestMiddlewaresCreator implements MiddlewareCreatorInterface
         return null;
     }
 
-    private function createMiddlewareEntry(MiddleWareInformation $middlewareInformation): ArrayItem
+    private function createMiddlewareEntry(MiddlewareInformation $middlewareInformation): ArrayItem
     {
         $beforeArray = $this->getBeforeAfterArray($middlewareInformation->getBefore());
         $afterArray = $this->getBeforeAfterArray($middlewareInformation->getAfter());

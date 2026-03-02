@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Creator\Middleware\MiddlewareCreatorInterface;
-use FriendsOfTYPO3\Kickstarter\Information\MiddleWareInformation;
+use FriendsOfTYPO3\Kickstarter\Information\MiddlewareInformation;
 
 readonly class MiddlewareCreatorService
 {
