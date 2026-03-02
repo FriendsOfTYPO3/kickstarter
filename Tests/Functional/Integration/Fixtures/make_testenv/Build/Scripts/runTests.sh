@@ -423,7 +423,7 @@ case ${TEST_SUITE} in
     composerNormalize)
         DRY_RUN_OPTIONS=''
         if [ "${DRY_RUN}" -eq 1 ]; then
-            DRY_RUN_OPTIONS='-n'
+            DRY_RUN_OPTIONS='--dry-run --diff'
         fi
         COMMAND=(composer normalize ${DRY_RUN_OPTIONS})
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-command-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} "${COMMAND[@]}"
