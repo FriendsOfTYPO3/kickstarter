@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace FriendsOfTYPO3\Kickstarter\Information;
 
-readonly class MiddleWareInformation
+readonly class MiddlewareInformation
 {
     private const NAMESPACE_PART = 'Middleware';
 
