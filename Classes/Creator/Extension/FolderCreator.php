@@ -87,7 +87,7 @@ class FolderCreator implements ExtensionCreatorInterface
     public function createFolder(ExtensionInformation $extensionInformation, string $path): void
     {
         GeneralUtility::mkdir_deep($extensionInformation->getExtensionPath() . $path);
-        if ($extensionInformation->isCreateGitIgnoreFiles()) {
+        if ($extensionInformation->isCreateGitKeepFiles()) {
             $this->fileManager->createOrModifyFile(
                 $extensionInformation->getExtensionPath() . $path . '.gitkeep',
                 '',

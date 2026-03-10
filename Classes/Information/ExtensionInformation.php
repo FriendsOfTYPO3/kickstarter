@@ -79,7 +79,7 @@ class ExtensionInformation
         private readonly bool $createExtbaseFolders = false,
         private readonly bool $createSitePackageFolders = false,
         private readonly bool $createTestFolders = false,
-        private readonly bool $createGitIgnoreFiles = true,
+        private readonly bool $createGitKeepFiles = true,
         private readonly CreatorInformation $creatorInformation = new CreatorInformation(),
     ) {}
 
@@ -512,8 +512,8 @@ class ExtensionInformation
         return $this->createTestFolders;
     }
 
-    public function isCreateGitIgnoreFiles(): bool
+    public function isCreateGitKeepFiles(): bool
     {
-        return $this->createGitIgnoreFiles;
+        return $this->createGitKeepFiles;
     }
 }

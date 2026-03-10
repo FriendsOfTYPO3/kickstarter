@@ -254,12 +254,12 @@ class ExtensionCommand extends Command
         $createExtbaseFolders = false;
         $createSitePackageFolders = false;
         $createTestFolders = false;
-        $createGitIgnoreFiles = true;
+        $createGitKeepFiles = true;
         if ($createFolders) {
             $createExtbaseFolders = $io->confirm('Create Extbase folders (Classes/Domain/Model, Resources/Private/Templates etc)?', false);
             $createSitePackageFolders = $io->confirm('Create Site Package folders (Resources/Private/PageView)?', false);
             $createTestFolders = $io->confirm('Create test folders (Tests/Unit, Tests/Functional)?', false);
-            $createGitIgnoreFiles = $io->confirm('Do you want to create .gitignore files in the folders?');
+            $createGitKeepFiles = $io->confirm('Do you want to create .gitkeep files in the folders?');
         }
 
         return new ExtensionInformation(
@@ -279,7 +279,7 @@ class ExtensionCommand extends Command
             createExtbaseFolders: $createExtbaseFolders,
             createSitePackageFolders: $createSitePackageFolders,
             createTestFolders: $createTestFolders,
-            createGitIgnoreFiles: $createGitIgnoreFiles,
+            createGitKeepFiles: $createGitKeepFiles,
         );
     }
 
