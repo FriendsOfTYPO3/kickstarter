@@ -1,6 +1,6 @@
 {
 	"name": "friendsoftypo3/kickstarter",
-	"description": "Kickstart TYPO3 Extension",
+	"description": "Extension Kickstarter - Kickstart TYPO3 Extension",
 	"license": "GPL-2.0-or-later",
 	"type": "typo3-cms-extension",
 	"keywords": [
