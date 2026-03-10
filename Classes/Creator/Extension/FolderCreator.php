@@ -13,6 +13,7 @@ namespace FriendsOfTYPO3\Kickstarter\Creator\Extension;
 
 use FriendsOfTYPO3\Kickstarter\Creator\FileManager;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class FolderCreator implements ExtensionCreatorInterface
 {
@@ -64,38 +65,34 @@ class FolderCreator implements ExtensionCreatorInterface
             return;
         }
         foreach ($this->generalPaths as $path) {
+            $this->createFolder($extensionInformation, $path);
+        }
+        if ($extensionInformation->isCreateExtbaseFolders()) {
+            foreach ($this->extbasePaths as $path) {
+                $this->createFolder($extensionInformation, $path);
+            }
+        }
+        if ($extensionInformation->isCreateSitePackageFolders()) {
+            foreach ($this->sitePackagePaths as $path) {
+                $this->createFolder($extensionInformation, $path);
+            }
+        }
+        if ($extensionInformation->isCreateTestFolders()) {
+            foreach ($this->testPaths as $path) {
+                $this->createFolder($extensionInformation, $path);
+            }
+        }
+    }
+
+    public function createFolder(ExtensionInformation $extensionInformation, string $path): void
+    {
+        GeneralUtility::mkdir_deep($extensionInformation->getExtensionPath() . $path);
+        if ($extensionInformation->isCreateGitIgnoreFiles()) {
             $this->fileManager->createOrModifyFile(
                 $extensionInformation->getExtensionPath() . $path . '.gitkeep',
                 '',
                 $extensionInformation->getCreatorInformation()
             );
-        }
-        if ($extensionInformation->isCreateExtbaseFolders()) {
-            foreach ($this->extbasePaths as $path) {
-                $this->fileManager->createOrModifyFile(
-                    $extensionInformation->getExtensionPath() . $path . '.gitkeep',
-                    '',
-                    $extensionInformation->getCreatorInformation()
-                );
-            }
-        }
-        if ($extensionInformation->isCreateSitePackageFolders()) {
-            foreach ($this->sitePackagePaths as $path) {
-                $this->fileManager->createOrModifyFile(
-                    $extensionInformation->getExtensionPath() . $path . '.gitkeep',
-                    '',
-                    $extensionInformation->getCreatorInformation()
-                );
-            }
-        }
-        if ($extensionInformation->isCreateTestFolders()) {
-            foreach ($this->testPaths as $path) {
-                $this->fileManager->createOrModifyFile(
-                    $extensionInformation->getExtensionPath() . $path . '.gitkeep',
-                    '',
-                    $extensionInformation->getCreatorInformation()
-                );
-            }
         }
     }
 }
