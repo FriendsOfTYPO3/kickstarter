@@ -97,7 +97,9 @@ services:
   FriendsOfTYPO3\Kickstarter\Command\ValidatorCommand:
     arguments:
       $questionCollection: '@questions.validator'
-
+  FriendsOfTYPO3\Kickstarter\Command\ViewHelperCommand:
+    arguments:
+      $questionCollection: '@questions.view-helper'
   ###############
   ## QUESTIONS ##
   ###############
@@ -209,3 +211,7 @@ services:
     class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
     arguments:
       $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.validator' }
+  questions.view-helper:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.view-helper' }
