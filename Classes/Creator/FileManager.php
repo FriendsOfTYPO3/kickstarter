@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Information\CreatorInformation;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class FileManager
 {
@@ -20,6 +21,8 @@ class FileManager
         if (is_file($targetFile)) {
             throw new \Exception('File ' . $targetFile . ' cannot be created, it already exists', 8835975026);
         }
+
+        GeneralUtility::mkdir_deep(dirname($targetFile));
         $result = file_put_contents($targetFile, $content);
         if ($result === false) {
             $creatorInformation->writingFileFailed($targetFile);

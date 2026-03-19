@@ -16,6 +16,7 @@ use FriendsOfTYPO3\Kickstarter\Information\ServicesConfigInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\ExtensionCreatorService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ExtensionCreatorServiceTest extends AbstractServiceCreatorTestCase
 {
@@ -35,6 +36,10 @@ class ExtensionCreatorServiceTest extends AbstractServiceCreatorTestCase
         string $namespaceForAutoload,
         string $expectedDir,
         array $expectedFiles,
+        bool $createFolders = false,
+        bool $createExtbaseFolders = false,
+        bool $createSitePackageFolders = false,
+        bool $createTestFolders = false,
     ): void {
         // Build paths based on $this->instancePath
         $extensionPath = $this->instancePath . '/' . $extensionKey . '/';
@@ -42,21 +47,25 @@ class ExtensionCreatorServiceTest extends AbstractServiceCreatorTestCase
 
         // Build the ExtensionInformation object here
         $extensionInfo = new ExtensionInformation(
-            $extensionKey,
-            $composerPackageName,
-            $title,
-            $description,
-            $version,
-            $category,
-            $state,
-            $author,
-            $authorEmail,
-            $authorCompany,
-            $namespaceForAutoload,
-            $extensionPath
+            extensionKey: $extensionKey,
+            composerPackageName: $composerPackageName,
+            title: $title,
+            description: $description,
+            version: $version,
+            category: $category,
+            state: $state,
+            author: $author,
+            authorEmail: $authorEmail,
+            authorCompany: $authorCompany,
+            namespaceForAutoload: $namespaceForAutoload,
+            extensionPath: $extensionPath,
+            createFolders: $createFolders,
+            createExtbaseFolders: $createExtbaseFolders,
+            createSitePackageFolders: $createSitePackageFolders,
+            createTestFolders: $createTestFolders
         );
 
-        mkdir($extensionInfo->getExtensionPath(), 0777, true);
+        GeneralUtility::mkdir_deep($extensionInfo->getExtensionPath());
 
         $creatorService = $this->get(ExtensionCreatorService::class);
         $creatorService->create($extensionInfo, new ServicesConfigInformation($extensionInfo));
@@ -88,7 +97,32 @@ class ExtensionCreatorServiceTest extends AbstractServiceCreatorTestCase
                 'authorCompany' => 'MyCompany',
                 'namespaceForAutoload' => 'Vendor\\MyExtension\\',
                 'expectedDir' => __DIR__ . '/Fixtures/expected_extension',
-                'expectedFiles' => ['ext_emconf.php', 'README.md'],
+                'expectedFiles' => [
+                    'ext_emconf.php',
+                    'README.md',
+                ],
+            ],
+            'extension_with_folders' => [
+                'extensionKey' => 'my_extension',
+                'composerPackageName' => 'my-vendor/my-extension',
+                'title' => 'My Extension',
+                'description' => 'This is a test extension',
+                'version' => '1.0.0',
+                'category' => 'plugin',
+                'state' => 'stable',
+                'author' => 'John Doe',
+                'authorEmail' => 'john@example.com',
+                'authorCompany' => 'MyCompany',
+                'namespaceForAutoload' => 'Vendor\\MyExtension\\',
+                'expectedDir' => __DIR__ . '/Fixtures/extension_with_folders',
+                'expectedFiles' => [
+                    'ext_emconf.php',
+                    'README.md',
+                ],
+                'createFolders' => true,
+                'createExtbaseFolders' => true,
+                'createSitePackageFolders' => true,
+                'createTestFolders' => true,
             ],
         ];
     }
