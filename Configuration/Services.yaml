@@ -6,8 +6,6 @@ services:
 
   FriendsOfTYPO3\Kickstarter\:
     resource: '../Classes/*'
-    exclude:
-      - '../Classes/Domain/Model/*'
 
   FriendsOfTYPO3\Kickstarter\Configuration\ExtConf:
     public: true
