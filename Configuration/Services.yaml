@@ -98,6 +98,10 @@ services:
     arguments:
       $questionCollection: '@questions.validator'
 
+  FriendsOfTYPO3\Kickstarter\Command\ViewHelperCommand:
+    arguments:
+      $questionCollection: '@questions.view-helper'
+
   ######################
   ## CREATOR SERVICES ##
   ######################
@@ -166,6 +170,9 @@ services:
   FriendsOfTYPO3\Kickstarter\Service\Creator\UpgradeWizardCreatorService:
     arguments:
       $upgradeCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.upgrade-wizard' }
+  FriendsOfTYPO3\Kickstarter\Service\Creator\ViewHelperCreatorService:
+    arguments:
+      $validatorCreators: !tagged_iterator { tag: 'ext-kickstarter.creator.view-helper' }
 
   ###############
   ## QUESTIONS ##
@@ -278,6 +285,11 @@ services:
     class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
     arguments:
       $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.validator' }
+
+  questions.view-helper:
+    class: FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection
+    arguments:
+      $questions: !tagged_iterator { tag: 'ext-kickstarter.command.question.view-helper' }
 
   ###########################
   ## ASSIGN INPUT HANDLERS ##
