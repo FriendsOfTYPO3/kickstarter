@@ -36,6 +36,7 @@ use TYPO3\CMS\Core\Registry;
 #[AutoconfigureTag('ext-kickstarter.command.question.type-converter')]
 #[AutoconfigureTag('ext-kickstarter.command.question.upgrade-wizard')]
 #[AutoconfigureTag('ext-kickstarter.command.question.validator')]
+#[AutoconfigureTag('ext-kickstarter.command.question.view-helper')]
 readonly class ChooseExtensionKeyQuestion extends AbstractQuestion
 {
     public const ARGUMENT_NAME = 'choose_extension';
