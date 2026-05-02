@@ -13,6 +13,7 @@ use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
+use Rector\TypeDeclaration\Rector\StmtsAwareInterface\SafeDeclareStrictTypesRector;
 use Rector\ValueObject\PhpVersion;
 use Ssch\TYPO3Rector\CodeQuality\General\ExtEmConfRector;
 use Ssch\TYPO3Rector\Configuration\Typo3Option;
@@ -53,8 +54,14 @@ return RectorConfig::configure()
     ->withImportNames(importShortClasses: false, removeUnusedImports: true)
     ->withSkip([
         NullToStrictStringFuncCallArgRector::class,
+        SafeDeclareStrictTypesRector::class => [
+            '*ext_emconf.php',
+            '*/Tests/Functional/Integration/Fixtures/*/Configuration/TCA/*.php',
+            '*/Tests/Functional/Integration/Fixtures/*/Configuration/TCA/Overrides/*.php',
+            '*/Tests/Functional/Integration/Fixtures/*/Configuration/Backend/*.php',
+        ],
         FlipTypeControlToUseExclusiveTypeRector::class => [
-            __DIR__ . '/../../Classes/PhpParser/Printer/PrettyTypo3Printer.php',
+            '*/Classes/PhpParser/Printer/PrettyTypo3Printer.php',
         ],
         '*Build/*',
         '*Resources/*',
