@@ -54,7 +54,6 @@ nbproject
 .tscache
 #
 # Ignore composer stuff
-/bin/*
 /var
 /vendor/*
 /index.php
