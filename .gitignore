@@ -55,7 +55,6 @@ nbproject
 #
 # Ignore composer stuff
 /var
-/typo3/install.php
 #
 # Ignore common TYPO3 CMS files/directories
 /typo3temp/*
