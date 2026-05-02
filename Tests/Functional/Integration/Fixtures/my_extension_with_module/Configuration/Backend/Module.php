@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use MyVendor\MyExtension\Controller\TestController;
 return [
     'web_MyExtension' => [
