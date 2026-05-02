@@ -59,7 +59,11 @@ class ComposerJsonCreator implements ExtensionCreatorInterface
             ],
             'extra' => [
                 'typo3/cms' => [
+                    'Package' => [
+                        'providesPackages' => (object)[],
+                    ],
                     'extension-key' => $extensionInformation->getExtensionKey(),
+                    'version' => $extensionInformation->getVersion(),
                 ],
             ],
         ];
