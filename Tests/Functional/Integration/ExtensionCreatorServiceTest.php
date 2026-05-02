@@ -98,7 +98,6 @@ class ExtensionCreatorServiceTest extends AbstractServiceCreatorTestCase
                 'namespaceForAutoload' => 'Vendor\\MyExtension\\',
                 'expectedDir' => __DIR__ . '/Fixtures/expected_extension',
                 'expectedFiles' => [
-                    'ext_emconf.php',
                     'README.md',
                 ],
             ],
@@ -116,7 +115,6 @@ class ExtensionCreatorServiceTest extends AbstractServiceCreatorTestCase
                 'namespaceForAutoload' => 'Vendor\\MyExtension\\',
                 'expectedDir' => __DIR__ . '/Fixtures/extension_with_folders',
                 'expectedFiles' => [
-                    'ext_emconf.php',
                     'README.md',
                 ],
                 'createFolders' => true,
