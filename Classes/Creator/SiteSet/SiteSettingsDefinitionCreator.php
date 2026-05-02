@@ -64,7 +64,7 @@ class SiteSettingsDefinitionCreator implements SiteSettingsDefinitionCreatorInte
         }
         $this->types->getProvidedServices();
         foreach ($siteSettingsDefinitionInformation->getSettings() as $setting) {
-            $array = $setting->toArray();
+            $array = array_filter(get_object_vars($setting), fn(mixed $value): bool => $value !== null && $value !== []);
 
             unset($array['key']);
             if ($array['readonly'] === false) {
