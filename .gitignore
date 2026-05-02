@@ -55,7 +55,7 @@ nbproject
 #
 # Ignore composer stuff
 /bin/*
-/var/*
+/var
 /vendor/*
 /index.php
 /typo3/install.php
