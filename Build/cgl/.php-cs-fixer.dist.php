@@ -22,7 +22,7 @@ return (new \PhpCsFixer\Config())
     ->setFinder(
         (new PhpCsFixer\Finder())
             ->ignoreVCSIgnored(true)
-            ->in(__DIR__.'/../'.'../')
+            ->in(__DIR__ . '/../../')
             ->exclude('.Build')
             ->exclude('Fixtures')
     )
