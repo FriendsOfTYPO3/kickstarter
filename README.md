@@ -1,6 +1,6 @@
 # TYPO3 Extension Kickstarter
 
-`kickstarter` is a TYPO3 extension that simplifies and accelerates the creation of new TYPO3 extensions by automating file generation, controller setup, and plugin registration through easy-to-use CLI commands. With a few CLI commands, it generates essential files like `LICENSE`, `ext_emconf.php`,`composer.json`, and more. Whether starting from scratch or extending existing functionality, `kickstarter` helps streamline development.
+`kickstarter` is a TYPO3 extension that simplifies and accelerates the creation of new TYPO3 extensions by automating file generation, controller setup, and plugin registration through easy-to-use CLI commands. With a few CLI commands, it generates essential files like `LICENSE`, `composer.json`, and more. Whether starting from scratch or extending existing functionality, `kickstarter` helps streamline development.
 
 ---
 

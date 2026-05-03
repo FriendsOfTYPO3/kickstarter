@@ -22,9 +22,14 @@ return (new \PhpCsFixer\Config())
     ->setFinder(
         (new PhpCsFixer\Finder())
             ->ignoreVCSIgnored(true)
-            ->in(__DIR__.'/../'.'../')
-            ->exclude('.Build')
-            ->exclude('Fixtures')
+            ->in(__DIR__ . '/../../')
+            ->exclude([
+                '.Build',
+                '.github',
+                'Build',
+                'var',
+                'Tests/Functional/Integration/Fixtures',
+            ])
     )
     ->setRiskyAllowed(true)
     ->setRules([

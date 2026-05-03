@@ -70,6 +70,12 @@ class ComposerJsonCreator implements TestEnvCreatorInterface
 
         ksort($composerConfig['config']['allow-plugins']);
 
+        if (isset($composerConfig['extra']['typo3/cms']['Package']['providesPackages'])
+            && $composerConfig['extra']['typo3/cms']['Package']['providesPackages'] === []
+        ) {
+            $composerConfig['extra']['typo3/cms']['Package']['providesPackages'] = (object)[];
+        }
+
         if (!isset($composerConfig['config']['bin-dir'])) {
             $composerConfig['config']['bin-dir'] = '.Build/bin';
         }

@@ -54,10 +54,7 @@ nbproject
 .tscache
 #
 # Ignore composer stuff
-/bin/*
-/vendor/*
-/index.php
-/typo3/install.php
+/var
 #
 # Ignore common TYPO3 CMS files/directories
 /typo3temp/*
