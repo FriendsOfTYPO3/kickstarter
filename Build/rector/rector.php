@@ -13,6 +13,7 @@ use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
+use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 use Rector\TypeDeclaration\Rector\StmtsAwareInterface\SafeDeclareStrictTypesRector;
 use Rector\ValueObject\PhpVersion;
 use Ssch\TYPO3Rector\CodeQuality\General\ExtEmConfRector;
@@ -61,6 +62,10 @@ return RectorConfig::configure()
         ],
         FlipTypeControlToUseExclusiveTypeRector::class => [
             '*/Classes/PhpParser/Printer/PrettyTypo3Printer.php',
+        ],
+        // Avoid stripping class types from mock properties to keep IDE autocomplete working in functional tests
+        TypedPropertyFromCreateMockAssignRector::class => [
+            '*/Tests/Functional/*',
         ],
         '*Build/*',
         '*Resources/*',

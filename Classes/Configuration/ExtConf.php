@@ -64,16 +64,16 @@ final readonly class ExtConf
         $exportDirectory = trim($this->exportDirectory);
 
         if ($exportDirectory === '' || $exportDirectory === '0') {
-            // Fall back to typo3temp/kickstarter
-            return sprintf(
-                '/%s/%s/',
-                trim(Environment::getPublicPath(), '/'),
-                'typo3temp/kickstarter',
-            );
+            $base = Environment::getPublicPath();
+            $suffix = 'typo3temp/kickstarter';
+        } else {
+            $base = Environment::getProjectPath();
+            $suffix = ltrim($exportDirectory, '/');
         }
 
-        // sprintf() in ExtensionInformation will add trailing slash
-        return Environment::getProjectPath() . '/' . rtrim($exportDirectory, '/');
+        $path = rtrim($base, '/') . '/' . rtrim($suffix, '/');
+
+        return $path === '' ? '/' : $path;
     }
 
     public function isActivateModule(): bool
