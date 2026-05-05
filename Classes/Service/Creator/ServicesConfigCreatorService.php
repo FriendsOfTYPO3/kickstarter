@@ -12,10 +12,12 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Information\ServicesConfigInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-class ServicesConfigCreatorService
+readonly class ServicesConfigCreatorService
 {
     public function __construct(
+        #[AutowireIterator('ext-kickstarter.creator.servicesConfig')]
         private readonly iterable $servicesConfigCreators,
     ) {}
 

@@ -13,6 +13,7 @@ namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Creator\SitePackage\SitePackageCreatorInterface;
 use FriendsOfTYPO3\Kickstarter\Information\SitePackageInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 readonly class SitePackageCreatorService
 {
@@ -20,6 +21,7 @@ readonly class SitePackageCreatorService
      * @param iterable<SitePackageCreatorInterface> $sitePackageCreators
      */
     public function __construct(
+        #[AutowireIterator('ext-kickstarter.creator.property.site-package')]
         private iterable $sitePackageCreators,
     ) {}
 

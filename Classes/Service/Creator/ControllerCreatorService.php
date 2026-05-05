@@ -12,11 +12,14 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Information\ControllerInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 readonly class ControllerCreatorService
 {
     public function __construct(
+        #[AutowireIterator('ext-kickstarter.creator.controller.extbase')]
         private iterable $extbaseControllerCreators,
+        #[AutowireIterator('ext-kickstarter.creator.controller.native')]
         private iterable $nativeControllerCreators,
     ) {}
 

@@ -12,11 +12,14 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Information\PluginInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 readonly class PluginCreatorService
 {
     public function __construct(
+        #[AutowireIterator('ext-kickstarter.creator.plugin.extbase')]
         private iterable $extbasePluginCreators,
+        #[AutowireIterator('ext-kickstarter.creator.plugin.native')]
         private iterable $nativePluginCreators,
     ) {}
 
