@@ -18,7 +18,7 @@ readonly class ServicesConfigCreatorService
 {
     public function __construct(
         #[AutowireIterator('ext-kickstarter.creator.servicesConfig')]
-        private readonly iterable $servicesConfigCreators,
+        private iterable $servicesConfigCreators,
     ) {}
 
     public function create(ServicesConfigInformation $servicesConfigInformation): void
