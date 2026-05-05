@@ -13,6 +13,7 @@ namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Creator\Middleware\MiddlewareCreatorInterface;
 use FriendsOfTYPO3\Kickstarter\Information\MiddlewareInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 readonly class MiddlewareCreatorService
 {
@@ -20,6 +21,7 @@ readonly class MiddlewareCreatorService
      * @param iterable<MiddlewareCreatorInterface> $middlewareCreators
      */
     public function __construct(
+        #[AutowireIterator('ext-kickstarter.creator.middleware')]
         private iterable $middlewareCreators,
     ) {}
 

@@ -14,6 +14,7 @@ namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 use FriendsOfTYPO3\Kickstarter\Creator\Extension\ExtensionCreatorInterface;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
 use FriendsOfTYPO3\Kickstarter\Information\ServicesConfigInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 readonly class ExtensionCreatorService
 {
@@ -21,7 +22,9 @@ readonly class ExtensionCreatorService
      * @param iterable<ExtensionCreatorInterface> $extensionCreators
      */
     public function __construct(
+        #[AutowireIterator('ext-kickstarter.creator.extension')]
         private iterable $extensionCreators,
+        #[AutowireIterator('ext-kickstarter.creator.servicesConfig')]
         private iterable $servicesConfigCreators,
     ) {}
 

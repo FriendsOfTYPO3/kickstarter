@@ -12,10 +12,12 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Information\EventListenerInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 readonly class EventListenerCreatorService
 {
     public function __construct(
+        #[AutowireIterator('ext-kickstarter.creator.event-listener')]
         private iterable $eventListenerCreators,
     ) {}
 

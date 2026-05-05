@@ -13,6 +13,7 @@ namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Creator\Locallang\LocallangCreatorInterface;
 use FriendsOfTYPO3\Kickstarter\Information\LocallangInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 readonly class LocallangCreatorService
 {
@@ -20,6 +21,7 @@ readonly class LocallangCreatorService
      * @param iterable<LocallangCreatorInterface> $locallangCreators
      */
     public function __construct(
+        #[AutowireIterator('ext-kickstarter.creator.locallang')]
         private iterable $locallangCreators,
     ) {}
 

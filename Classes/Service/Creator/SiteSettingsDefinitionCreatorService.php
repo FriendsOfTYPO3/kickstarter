@@ -13,6 +13,7 @@ namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Creator\SiteSet\SiteSettingsDefinitionCreatorInterface;
 use FriendsOfTYPO3\Kickstarter\Information\SiteSettingsDefinitionInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 readonly class SiteSettingsDefinitionCreatorService
 {
@@ -20,6 +21,7 @@ readonly class SiteSettingsDefinitionCreatorService
      * @param iterable<SiteSettingsDefinitionCreatorInterface> $siteSettingDefinitionCreators
      */
     public function __construct(
+        #[AutowireIterator('ext-kickstarter.creator.site-settings-definition')]
         private iterable $siteSettingDefinitionCreators,
     ) {}
 

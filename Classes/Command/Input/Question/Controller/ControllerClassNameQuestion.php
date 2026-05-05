@@ -14,6 +14,7 @@ namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question\Controller;
 use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 #[AutoconfigureTag('ext-kickstarter.command.question.controller')]
 readonly class ControllerClassNameQuestion extends AbstractQuestion
@@ -27,6 +28,7 @@ readonly class ControllerClassNameQuestion extends AbstractQuestion
     private const DESCRIPTION = [];
 
     public function __construct(
+        #[AutowireIterator('ext-kickstarter.inputHandler.controller-class')]
         private iterable $inputHandlers,
     ) {}
 

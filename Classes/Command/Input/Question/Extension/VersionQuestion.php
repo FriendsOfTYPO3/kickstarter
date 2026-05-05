@@ -14,6 +14,7 @@ namespace FriendsOfTYPO3\Kickstarter\Command\Input\Question\Extension;
 use FriendsOfTYPO3\Kickstarter\Command\Input\Question\AbstractQuestion;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 #[AutoconfigureTag('ext-kickstarter.command.question.extension')]
 readonly class VersionQuestion extends AbstractQuestion
@@ -33,6 +34,7 @@ readonly class VersionQuestion extends AbstractQuestion
     ];
 
     public function __construct(
+        #[AutowireIterator('ext-kickstarter.inputHandler.version')]
         private iterable $inputHandlers,
     ) {}
 

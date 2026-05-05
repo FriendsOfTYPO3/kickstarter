@@ -12,10 +12,12 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Information\TypeConverterInformation;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 readonly class TypeConverterCreatorService
 {
     public function __construct(
+        #[AutowireIterator('ext-kickstarter.creator.property.type-converter')]
         private iterable $typeConverterCreators,
     ) {}
 
