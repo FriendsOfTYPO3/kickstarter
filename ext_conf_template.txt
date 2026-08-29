@@ -1,4 +1,4 @@
 # cat=basic; type=string; label=Export Directory: If not set "typo3temp/kickstarter/" will be used. For composer environment we prefer "packages/"
-exportDirectory =
+exportDirectory = packages/
 # cat=basic; type=boolean; label=Activate Backend Module: The extension kickstarter contains a visual backend module to create new extension, but it's in a very unstable state. Activate if you are really sure to see or use it
 activateModule = 0
