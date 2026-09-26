@@ -41,7 +41,7 @@ class Graph
 
     public function addNode(AbstractNode $node): void
     {
-        $this->nodes->attach($node);
+        $this->nodes->offsetSet($node);
     }
 
     /**
@@ -54,7 +54,7 @@ class Graph
 
     public function addLink(Link $link): void
     {
-        $this->links->attach($link);
+        $this->links->offsetSet($link);
     }
 
     public function getExtensionNode(): ?ExtensionNode
@@ -83,7 +83,7 @@ class Graph
                 $targetNode = $this->getTargetNodeByLinkId($linkId);
                 if ($targetNode instanceof AbstractNode) {
                     if ($outputTargetType === '' || $outputTargetType === $targetNode->getType()) {
-                        $nodes->attach($targetNode);
+                        $nodes->offsetSet($targetNode);
                     }
                 }
             }
@@ -130,7 +130,7 @@ class Graph
 
         foreach ($this->getNodes() as $node) {
             if ($node->getType() === $nodeType) {
-                $nodes->attach($node);
+                $nodes->offsetSet($node);
             }
         }
 

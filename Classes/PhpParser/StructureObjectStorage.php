@@ -13,6 +13,11 @@ namespace FriendsOfTYPO3\Kickstarter\PhpParser;
 
 class StructureObjectStorage extends \SplObjectStorage
 {
+    public function attach(object $object, mixed $info = null): void
+    {
+        $this->offsetSet($object, $info);
+    }
+
     /**
      * Param "sorted" is interesting for "traits" and "use" imports which should be inserted sorted
      */

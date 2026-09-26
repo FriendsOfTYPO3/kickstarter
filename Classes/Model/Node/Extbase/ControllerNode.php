@@ -74,7 +74,7 @@ class ControllerNode extends AbstractNode
 
         foreach ($this->getControllerActionNodes() as $controllerAction) {
             if ($controllerAction->isUncached()) {
-                $cachedControllerActions->attach($controllerAction);
+                $cachedControllerActions->offsetSet($controllerAction);
             }
         }
 

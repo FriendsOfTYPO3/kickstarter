@@ -20,4 +20,8 @@ parameters:
       - ../../**/.Build
       - ../../**/Fixtures/**
 
+  ignoreErrors:
+    - identifier: unset.possiblyHookedProperty
+      reportUnmatched: false
+
   tmpDir: ../../.Build/.cache/phpstan/
