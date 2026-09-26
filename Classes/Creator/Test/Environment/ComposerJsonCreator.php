@@ -42,31 +42,19 @@ class ComposerJsonCreator implements TestEnvCreatorInterface
 
     private function updateComposerJson(array $composerConfig): string
     {
-        if (!isset($composerConfig['require-dev']['ergebnis/composer-normalize'])) {
-            $composerConfig['require-dev']['ergebnis/composer-normalize'] = '^2.44';
-        }
+        $composerConfig['require-dev']['ergebnis/composer-normalize'] ??= '^2.44';
 
-        if (!isset($composerConfig['require-dev']['phpstan/phpstan'])) {
-            $composerConfig['require-dev']['phpstan/phpstan'] = '^2.1.25';
-        }
+        $composerConfig['require-dev']['phpstan/phpstan'] ??= '^2.1.25';
 
-        if (!isset($composerConfig['require-dev']['phpunit/phpunit'])) {
-            $composerConfig['require-dev']['phpunit/phpunit'] = '^11.2.5';
-        }
+        $composerConfig['require-dev']['phpunit/phpunit'] ??= '^11.2.5';
 
-        if (!isset($composerConfig['require-dev']['typo3/coding-standards'])) {
-            $composerConfig['require-dev']['typo3/coding-standards'] = '^0.8';
-        }
+        $composerConfig['require-dev']['typo3/coding-standards'] ??= '^0.8';
 
-        if (!isset($composerConfig['require-dev']['typo3/testing-framework'])) {
-            $composerConfig['require-dev']['typo3/testing-framework'] = '^9.0.1';
-        }
+        $composerConfig['require-dev']['typo3/testing-framework'] ??= '^9.0.1';
 
         ksort($composerConfig['require-dev']);
 
-        if (!isset($composerConfig['config']['allow-plugins']['ergebnis/composer-normalize'])) {
-            $composerConfig['config']['allow-plugins']['ergebnis/composer-normalize'] = true;
-        }
+        $composerConfig['config']['allow-plugins']['ergebnis/composer-normalize'] ??= true;
 
         ksort($composerConfig['config']['allow-plugins']);
 
@@ -76,23 +64,15 @@ class ComposerJsonCreator implements TestEnvCreatorInterface
             $composerConfig['extra']['typo3/cms']['Package']['providesPackages'] = (object)[];
         }
 
-        if (!isset($composerConfig['config']['bin-dir'])) {
-            $composerConfig['config']['bin-dir'] = '.Build/bin';
-        }
+        $composerConfig['config']['bin-dir'] ??= '.Build/bin';
 
-        if (!isset($composerConfig['config']['vendor-dir'])) {
-            $composerConfig['config']['vendor-dir'] = '.Build/vendor';
-        }
+        $composerConfig['config']['vendor-dir'] ??= '.Build/vendor';
 
         ksort($composerConfig['config']);
 
-        if (!isset($composerConfig['extra']['typo3/cms']['app-dir'])) {
-            $composerConfig['extra']['typo3/cms']['app-dir'] = '.Build';
-        }
+        $composerConfig['extra']['typo3/cms']['app-dir'] ??= '.Build';
 
-        if (!isset($composerConfig['extra']['typo3/cms']['web-dir'])) {
-            $composerConfig['extra']['typo3/cms']['web-dir'] = '.Build/public';
-        }
+        $composerConfig['extra']['typo3/cms']['web-dir'] ??= '.Build/public';
 
         ksort($composerConfig['extra']['typo3/cms']);
 

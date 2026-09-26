@@ -43,7 +43,7 @@ class LocallangFileNameValidator implements ValidatorInterface
         }
 
         // No leading or trailing underscore and no consecutive underscores in the basename
-        if ($base !== '' && ($base[0] === '_' || $base[strlen($base) - 1] === '_' || str_contains($base, '__'))) {
+        if ($base[0] === '_' || $base[strlen($base) - 1] === '_' || str_contains($base, '__')) {
             throw new \RuntimeException(
                 'File name cannot start or end with an underscore and cannot contain consecutive underscores',
                 3696054208,
