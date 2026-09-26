@@ -96,7 +96,7 @@ class MiddlewareCommand extends Command
         $prefix = str_replace('_', '', $extensionInformation->getExtensionKey());
         $middlewareIdentifier = $this->askForMiddlewareIdentifier(
             $commandContext,
-            $prefix . '/' . strtolower(preg_replace('/Middleware$/i', '', $className)),
+            $prefix . '/' . strtolower((string)preg_replace('/Middleware$/i', '', $className)),
             $stack
         );
 
@@ -112,6 +112,8 @@ class MiddlewareCommand extends Command
 
     private function askForMiddlewareIdentifier(CommandContext $commandContext, string $default, string $stack): string
     {
+        $existingMiddlewares = $this->middlewareStackResolver->resolve($stack);
+
         do {
             $valid = false;
             $identifier = (string)$this->questionCollection->askQuestion(
@@ -120,7 +122,7 @@ class MiddlewareCommand extends Command
                 $default
             );
 
-            if (in_array($identifier, $this->middlewareStackResolver->resolve($stack), true)) {
+            if ($existingMiddlewares->offsetExists($identifier)) {
                 $commandContext->getIo()->warning(sprintf('The identifier "%s" already exists in the configuration!', $identifier));
                 $default = $identifier;
                 continue;
@@ -146,7 +148,7 @@ class MiddlewareCommand extends Command
      */
     private function askForBeforeAfter(SymfonyStyle $io, string $stack, string $location): array
     {
-        $entries = array_keys($this->middlewareStackResolver->resolve($stack) ?? []);
+        $entries = array_keys($this->middlewareStackResolver->resolve($stack)->getArrayCopy());
 
         array_unshift($entries, 'none');
 
