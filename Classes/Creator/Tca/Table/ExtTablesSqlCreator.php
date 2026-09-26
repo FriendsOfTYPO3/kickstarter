@@ -57,9 +57,7 @@ class ExtTablesSqlCreator implements TcaTableCreatorInterface
             }
 
             if ($inTable && trim($extTablesSqlLine) === ');') {
-                if ($insertIndex === null) {
-                    $insertIndex = $index;
-                }
+                $insertIndex ??= $index;
                 foreach ($columnDefinitionLines as $columnDefinitionLine) {
                     if (!$this->columnExists($columnDefinitionLine, $existingColumns)) {
                         $updatedLines[] = $this->formatColumnDefinition($columnDefinitionLine);
