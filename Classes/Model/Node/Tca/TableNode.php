@@ -72,7 +72,7 @@ class TableNode extends AbstractNode
 
         foreach ($this->getColumnNodes() as $columnNode) {
             if ($columnNode->isModelProperty()) {
-                $modelProperties->attach($columnNode);
+                $modelProperties->offsetSet($columnNode);
             }
         }
 

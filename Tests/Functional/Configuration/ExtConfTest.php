@@ -22,7 +22,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class ExtConfTest extends FunctionalTestCase
 {
-    public ExtensionConfiguration|MockObject $extensionConfigurationMock;
+    private ExtensionConfiguration|MockObject $extensionConfigurationMock;
 
     protected array $coreExtensionsToLoad = [
         'extensionmanager',

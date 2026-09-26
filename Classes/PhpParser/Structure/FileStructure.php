@@ -74,7 +74,7 @@ readonly class FileStructure
     public function addDeclareStructure(DeclareStructure $declareStructure): void
     {
         if (!$this->declareStructures->hasNodeWithName($declareStructure->getName())) {
-            $this->declareStructures->attach($declareStructure);
+            $this->declareStructures->offsetSet($declareStructure);
         }
     }
 
@@ -90,7 +90,7 @@ readonly class FileStructure
         // In TYPO3 each PHP file has exactly ONE class
         // If there are more, we skip further namespaces completely
         if ($this->namespaceStructures->count() === 0) {
-            $this->namespaceStructures->attach($namespaceStructure);
+            $this->namespaceStructures->offsetSet($namespaceStructure);
         }
     }
 
@@ -106,7 +106,7 @@ readonly class FileStructure
         // In TYPO3 each PHP file has exactly ONE class
         // If there are more, we skip further classes completely
         if ($this->classStructures->count() === 0) {
-            $this->classStructures->attach($classStructure);
+            $this->classStructures->offsetSet($classStructure);
         }
     }
 
@@ -121,7 +121,7 @@ readonly class FileStructure
     public function addTraitStructure(TraitStructure $traitStructure): void
     {
         if (!$this->traitStructures->hasNodeWithName($traitStructure->getName())) {
-            $this->traitStructures->attach($traitStructure);
+            $this->traitStructures->offsetSet($traitStructure);
         }
     }
 
@@ -136,7 +136,7 @@ readonly class FileStructure
     public function addUseStructure(UseStructure $useStructure): void
     {
         if (!$this->useStructures->hasNodeWithName($useStructure->getName())) {
-            $this->useStructures->attach($useStructure);
+            $this->useStructures->offsetSet($useStructure);
         }
     }
 
@@ -151,7 +151,7 @@ readonly class FileStructure
     public function addClassConstStructure(ClassConstStructure $classConstStructure): void
     {
         if (!$this->classConstStructures->hasNodeWithName($classConstStructure->getName())) {
-            $this->classConstStructures->attach($classConstStructure);
+            $this->classConstStructures->offsetSet($classConstStructure);
         }
     }
 
@@ -166,7 +166,7 @@ readonly class FileStructure
     public function addMethodStructure(MethodStructure $methodStructure): void
     {
         if (!$this->methodStructures->hasNodeWithName($methodStructure->getName())) {
-            $this->methodStructures->attach($methodStructure);
+            $this->methodStructures->offsetSet($methodStructure);
         }
     }
 
@@ -181,7 +181,7 @@ readonly class FileStructure
     public function addPropertyStructure(PropertyStructure $propertyStructure): void
     {
         if (!$this->propertyStructures->hasNodeWithName($propertyStructure->getName())) {
-            $this->propertyStructures->attach($propertyStructure);
+            $this->propertyStructures->offsetSet($propertyStructure);
         }
     }
 
@@ -196,7 +196,7 @@ readonly class FileStructure
     public function addFunctionStructure(FunctionStructure $functionStructure): void
     {
         if (!$this->functionStructures->hasNodeWithName($functionStructure->getName())) {
-            $this->functionStructures->attach($functionStructure);
+            $this->functionStructures->offsetSet($functionStructure);
         }
     }
 
@@ -210,7 +210,7 @@ readonly class FileStructure
 
     public function addExpressionStructure(ExpressionStructure $expressionStructure): void
     {
-        $this->expressionStructures->attach($expressionStructure);
+        $this->expressionStructures->offsetSet($expressionStructure);
     }
 
     /**
@@ -223,7 +223,7 @@ readonly class FileStructure
 
     public function addReturnStructure(ReturnStructure $returnStructure): void
     {
-        $this->returnStructures->attach($returnStructure);
+        $this->returnStructures->offsetSet($returnStructure);
     }
 
     /**

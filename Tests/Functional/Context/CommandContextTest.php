@@ -21,11 +21,11 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class CommandContextTest extends FunctionalTestCase
 {
-    protected CommandContext $subject;
+    private CommandContext $subject;
 
-    protected InputInterface|MockObject $inputMock;
+    private InputInterface|MockObject $inputMock;
 
-    protected OutputInterface|MockObject $outputMock;
+    private OutputInterface|MockObject $outputMock;
 
     protected array $coreExtensionsToLoad = [
         'extensionmanager',

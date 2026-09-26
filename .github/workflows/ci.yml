@@ -9,11 +9,14 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      fail-fast: true
+      fail-fast: false
 
       matrix:
         php:
           - '8.2'
+          - '8.3'
+          - '8.4'
+          - '8.5'
 
     steps:
       - name: 'Checkout'
@@ -31,11 +34,11 @@ jobs:
       - name: 'Composer normalize'
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerNormalize -n
 
+      - name: 'Run Rector'
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s rector -n
+
       - name: 'CGL'
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s cgl -n
-
-      - name: 'Run Rector'
-        run: Build/Scripts/runTests.sh -s rector -n
 
       - name: 'PHPStan'
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s phpstan

@@ -60,12 +60,12 @@ readonly class KickstartController implements ControllerInterface
         foreach ($graph['nodes'] as $nodeGraph) {
             $inputs = new \SplObjectStorage();
             foreach ($nodeGraph['inputs'] as $inputGraph) {
-                $inputs->attach(new Input($inputGraph['link'], $inputGraph['type'], $inputGraph['name']));
+                $inputs->offsetSet(new Input($inputGraph['link'], $inputGraph['type'], $inputGraph['name']));
             }
 
             $outputs = new \SplObjectStorage();
             foreach ($nodeGraph['outputs'] as $outputGraph) {
-                $outputs->attach(new Output($outputGraph['links'], $outputGraph['type'], $outputGraph['name']));
+                $outputs->offsetSet(new Output($outputGraph['links'], $outputGraph['type'], $outputGraph['name']));
             }
 
             $properties = $nodeGraph['properties'] ?? [];
