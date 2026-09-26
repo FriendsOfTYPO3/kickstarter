@@ -73,6 +73,7 @@ class TestEnvCommand extends Command
             (string)$this->questionCollection->askQuestion(
                 ChooseExtensionKeyQuestion::ARGUMENT_NAME,
                 $commandContext,
+                (string)($commandContext->getInput()->getArgument('extension_key') ?? ''),
             ),
             $commandContext
         );
