@@ -93,6 +93,136 @@ class TypeConverterCommandTest extends FunctionalTestCase
         self::assertStringContainsString('namespace Vendor\MyExtension\Property\TypeConverter;', $content);
         self::assertStringContainsString('final class ItemConverter extends AbstractTypeConverter', $content);
         self::assertStringContainsString('public function convertFrom(', $content);
-        self::assertStringContainsString('): int', $content);
+        self::assertStringContainsString('): ?int', $content);
+
+        $servicesFile = $this->testExtensionDir . 'Configuration/Services.yaml';
+        self::assertFileExists($servicesFile);
+
+        $servicesContent = (string)file_get_contents($servicesFile);
+        self::assertStringContainsString('sources: string', $servicesContent);
+    }
+
+    #[Test]
+    public function executeCreatesTypeConverterWithObjectTargetAndFqcnImport(): void
+    {
+        $command = $this->get(TypeConverterCommand::class);
+        $commandTester = new CommandTester($command);
+
+        $commandTester->setInputs([
+            'my_extension',
+            'ProductConverter',
+            '10',
+            'string',
+            '\Vendor\MyExtension\Domain\Model\Product',
+        ]);
+
+        $exitCode = $commandTester->execute([]);
+
+        self::assertSame(Command::SUCCESS, $exitCode);
+
+        $converterFile = $this->testExtensionDir . 'Classes/Property/TypeConverter/ProductConverter.php';
+        self::assertFileExists($converterFile);
+
+        $content = (string)file_get_contents($converterFile);
+        self::assertStringContainsString('use Vendor\MyExtension\Domain\Model\Product;', $content);
+        self::assertStringContainsString('): ?Product', $content);
+
+        $servicesFile = $this->testExtensionDir . 'Configuration/Services.yaml';
+        self::assertFileExists($servicesFile);
+
+        $servicesContent = (string)file_get_contents($servicesFile);
+        self::assertStringContainsString('target: \Vendor\MyExtension\Domain\Model\Product', $servicesContent);
+    }
+
+    #[Test]
+    public function executeCreatesTypeConverterWithAliasesAndNormalizesSources(): void
+    {
+        $command = $this->get(TypeConverterCommand::class);
+        $commandTester = new CommandTester($command);
+
+        $commandTester->setInputs([
+            'my_extension',
+            'NumberConverter',
+            '10',
+            'int, bool, string',
+            'int',
+        ]);
+
+        $exitCode = $commandTester->execute([]);
+
+        self::assertSame(Command::SUCCESS, $exitCode);
+
+        $converterFile = $this->testExtensionDir . 'Classes/Property/TypeConverter/NumberConverter.php';
+        self::assertFileExists($converterFile);
+
+        $servicesFile = $this->testExtensionDir . 'Configuration/Services.yaml';
+        self::assertFileExists($servicesFile);
+
+        $servicesContent = (string)file_get_contents($servicesFile);
+        self::assertStringContainsString("sources: 'integer, boolean, string'", $servicesContent);
+    }
+
+    #[Test]
+    public function executeRetriesWhenInvalidSourceTypeProvided(): void
+    {
+        $command = $this->get(TypeConverterCommand::class);
+        $commandTester = new CommandTester($command);
+
+        $commandTester->setInputs([
+            'my_extension',
+            'DateConverter',
+            '15',
+            'DateTime, object',
+            'string, int',
+            'string',
+        ]);
+
+        $exitCode = $commandTester->execute([]);
+
+        self::assertSame(Command::SUCCESS, $exitCode);
+
+        $output = $commandTester->getDisplay();
+        self::assertStringContainsString('Invalid source type(s): "datetime", "object"', $output);
+
+        $converterFile = $this->testExtensionDir . 'Classes/Property/TypeConverter/DateConverter.php';
+        self::assertFileExists($converterFile);
+
+        $servicesFile = $this->testExtensionDir . 'Configuration/Services.yaml';
+        self::assertFileExists($servicesFile);
+
+        $servicesContent = (string)file_get_contents($servicesFile);
+        self::assertStringContainsString("sources: 'string, integer'", $servicesContent);
+    }
+
+    #[Test]
+    public function executeRetriesWhenEmptySourceTypeProvided(): void
+    {
+        $command = $this->get(TypeConverterCommand::class);
+        $commandTester = new CommandTester($command);
+
+        $commandTester->setInputs([
+            'my_extension',
+            'TextConverter',
+            '10',
+            ',',
+            'string',
+            'string',
+        ]);
+
+        $exitCode = $commandTester->execute([]);
+
+        self::assertSame(Command::SUCCESS, $exitCode);
+
+        $output = $commandTester->getDisplay();
+        self::assertStringContainsString('Please provide at least one source data type.', $output);
+
+        $converterFile = $this->testExtensionDir . 'Classes/Property/TypeConverter/TextConverter.php';
+        self::assertFileExists($converterFile);
+
+        $servicesFile = $this->testExtensionDir . 'Configuration/Services.yaml';
+        self::assertFileExists($servicesFile);
+
+        $servicesContent = (string)file_get_contents($servicesFile);
+        self::assertStringContainsString('sources: string', $servicesContent);
     }
 }

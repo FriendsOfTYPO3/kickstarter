@@ -58,8 +58,8 @@ class TypeConverterCommand extends Command
         $io->title('Welcome to the TYPO3 Extension Builder');
 
         $io->text([
-            'We are here to assist you in creating a new TYPO3 Event Listener.',
-            'Now, we will ask you a few questions to customize the event listener according to your needs.',
+            'We are here to assist you in creating a new TYPO3 Type Converter.',
+            'Now, we will ask you a few questions to customize the type converter according to your needs.',
             'Please take your time to answer them.',
         ]);
 
@@ -86,42 +86,80 @@ class TypeConverterCommand extends Command
             $extensionInformation,
             $this->askForTypeConverterClassName($io),
             (int)$io->ask('Set priority', '10'),
-            (string)$io->ask('Set source data type(s)', 'int,string,array'),
+            $this->askForSourceTypes($io),
             (string)$io->ask('Set target data type. Can be any PHP data type or object/model (in that case FQCN: "\MyVendor\MyExt\Domain\Model\Car")'),
         );
     }
 
-    private function askForTypeConverterClassName(SymfonyStyle $io): string
+    private function askForSourceTypes(SymfonyStyle $io): string
     {
-        $defaultTypeConverterClassName = null;
+        $defaultSourceTypes = 'integer, string, array';
 
         do {
-            $typeConverterClassName = (string)$io->ask(
+            $input = (string)$io->ask('Set source data type(s)', $defaultSourceTypes);
+            $normalized = TypeConverterInformation::parseAndNormalizeSourceTypes($input);
+            $invalid = TypeConverterInformation::findInvalidSourceTypes($normalized);
+
+            if ($this->validateSourceTypesInput($io, $normalized, $invalid)) {
+                return implode(', ', $normalized);
+            }
+        } while (true);
+    }
+
+    /**
+     * @param list<string> $normalized
+     * @param list<string> $invalid
+     */
+    private function validateSourceTypesInput(SymfonyStyle $io, array $normalized, array $invalid): bool
+    {
+        if ($normalized === []) {
+            $io->error('Please provide at least one source data type.');
+            return false;
+        }
+
+        if ($invalid !== []) {
+            $io->error(sprintf(
+                'Invalid source type(s): "%s". Allowed source types are: %s.',
+                implode('", "', $invalid),
+                implode(', ', TypeConverterInformation::ALLOWED_SOURCE_TYPES),
+            ));
+            return false;
+        }
+
+        return true;
+    }
+
+    private function askForTypeConverterClassName(SymfonyStyle $io): string
+    {
+        $defaultClassName = null;
+
+        do {
+            $className = (string)$io->ask(
                 'Please provide the class name of your new Type Converter',
-                $defaultTypeConverterClassName,
+                $defaultClassName,
             );
 
-            if (preg_match('/^\d/', $typeConverterClassName)) {
-                $io->error('Class name should not start with a number.');
-                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'Converter');
-                $validTypeConverterClassName = false;
-            } elseif (preg_match('/[^a-zA-Z0-9]/', $typeConverterClassName)) {
-                $io->error('Class name contains invalid chars. Please provide just letters and numbers.');
-                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'Converter');
-                $validTypeConverterClassName = false;
-            } elseif (preg_match('/^[A-Z][a-zA-Z0-9]+$/', $typeConverterClassName) === 0) {
-                $io->error('Class name must be written in UpperCamelCase like "FileUploadConverter".');
-                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'Converter');
-                $validTypeConverterClassName = false;
-            } elseif (!str_ends_with($typeConverterClassName, 'Converter')) {
-                $io->error('Class name must end with "Converter".');
-                $defaultTypeConverterClassName = $this->tryToCorrectClassName($typeConverterClassName, 'Converter');
-                $validTypeConverterClassName = false;
-            } else {
-                $validTypeConverterClassName = true;
+            if ($this->isValidTypeConverterClassName($io, $className, $defaultClassName)) {
+                return $className;
             }
-        } while (!$validTypeConverterClassName);
+        } while (true);
+    }
 
-        return $typeConverterClassName;
+    private function isValidTypeConverterClassName(SymfonyStyle $io, string $className, ?string &$defaultClassName): bool
+    {
+        if (preg_match('/^\d/', $className)) {
+            $io->error('Class name should not start with a number.');
+        } elseif (preg_match('/[^a-zA-Z0-9]/', $className)) {
+            $io->error('Class name contains invalid chars. Please provide just letters and numbers.');
+        } elseif (preg_match('/^[A-Z][a-zA-Z0-9]+$/', $className) === 0) {
+            $io->error('Class name must be written in UpperCamelCase like "FileUploadConverter".');
+        } elseif (!str_ends_with($className, 'Converter')) {
+            $io->error('Class name must end with "Converter".');
+        } else {
+            return true;
+        }
+
+        $defaultClassName = $this->tryToCorrectClassName($className, 'Converter');
+        return false;
     }
 }

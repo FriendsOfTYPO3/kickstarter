@@ -23,6 +23,8 @@ use FriendsOfTYPO3\Kickstarter\PhpParser\Structure\UseStructure;
 use FriendsOfTYPO3\Kickstarter\Traits\FileStructureBuilderTrait;
 use PhpParser\BuilderFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface;
+use TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter;
 
 class TypeConverterCreator implements TypeConverterCreatorInterface
 {
@@ -54,27 +56,43 @@ class TypeConverterCreator implements TypeConverterCreatorInterface
             );
             return;
         }
-        $this->addClassNodes($fileStructure, $typeConverterInformation);
-        $this->fileManager->createFile($typeConverterFilePath, $fileStructure->getFileContents(), $typeConverterInformation->getCreatorInformation());
+        $this->addImports($fileStructure, $typeConverterInformation);
+        $this->addClassNode($fileStructure, $typeConverterInformation);
+        $this->addConvertFromMethod($fileStructure, $typeConverterInformation);
+        $this->fileManager->createFile(
+            $typeConverterFilePath,
+            $fileStructure->getFileContents(),
+            $typeConverterInformation->getCreatorInformation()
+        );
     }
 
-    private function addClassNodes(FileStructure $fileStructure, TypeConverterInformation $typeConverterInformation): void
+    private function addImports(FileStructure $fileStructure, TypeConverterInformation $typeConverterInformation): void
     {
         $fileStructure->addDeclareStructure(
             new DeclareStructure($this->nodeFactory->createDeclareStrictTypes())
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface;'))
+            new UseStructure($this->nodeFactory->createUseImport(PropertyMappingConfigurationInterface::class))
         );
         $fileStructure->addUseStructure(
-            new UseStructure($this->nodeFactory->createUseImport('TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter;'))
+            new UseStructure($this->nodeFactory->createUseImport(AbstractTypeConverter::class))
         );
+        if ($typeConverterInformation->isObjectTarget()) {
+            $fqcn = ltrim($typeConverterInformation->getTarget(), '\\');
+            $fileStructure->addUseStructure(
+                new UseStructure($this->nodeFactory->createUseImport($fqcn))
+            );
+        }
         $fileStructure->addNamespaceStructure(
             new NamespaceStructure($this->nodeFactory->createNamespace(
                 $typeConverterInformation->getNamespace(),
                 $typeConverterInformation->getExtensionInformation(),
             ))
         );
+    }
+
+    private function addClassNode(FileStructure $fileStructure, TypeConverterInformation $typeConverterInformation): void
+    {
         $fileStructure->addClassStructure(
             new ClassStructure(
                 $this->builderFactory
@@ -84,6 +102,14 @@ class TypeConverterCreator implements TypeConverterCreatorInterface
                     ->getNode(),
             )
         );
+    }
+
+    private function addConvertFromMethod(
+        FileStructure $fileStructure,
+        TypeConverterInformation $typeConverterInformation,
+    ): void {
+        $returnType = '?' . $typeConverterInformation->getTargetShortName();
+
         $fileStructure->addMethodStructure(
             new MethodStructure(
                 $this->builderFactory
@@ -93,7 +119,7 @@ class TypeConverterCreator implements TypeConverterCreatorInterface
                     ->addParam($this->builderFactory->param('convertedChildProperties')->setType('array')->setDefault([]))
                     ->addParam($this->builderFactory->param('configuration')->setType('?PropertyMappingConfigurationInterface')->setDefault(null))
                     ->makePublic()
-                    ->setReturnType($typeConverterInformation->getTarget())
+                    ->setReturnType($returnType)
                     ->getNode()
             )
         );
