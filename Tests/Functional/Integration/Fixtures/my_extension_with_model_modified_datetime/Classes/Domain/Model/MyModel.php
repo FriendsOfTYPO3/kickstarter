@@ -15,7 +15,7 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 final class MyModel extends AbstractEntity
 {
     protected string $yyy = '';
-    protected DateTime $xxx;
+    protected ?DateTime $xxx = null;
     public function getYyy(): string
     {
         return $this->yyy;
@@ -24,11 +24,11 @@ final class MyModel extends AbstractEntity
     {
         $this->yyy = $yyy;
     }
-    public function getXxx(): DateTime
+    public function getXxx(): ?DateTime
     {
         return $this->xxx;
     }
-    public function setXxx(DateTime $xxx): void
+    public function setXxx(?DateTime $xxx): void
     {
         $this->xxx = $xxx;
     }

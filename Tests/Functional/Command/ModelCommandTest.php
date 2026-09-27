@@ -100,6 +100,7 @@ PHP;
             'All',
             'None',
             'string',
+            '',
         ]);
 
         $exitCode = $commandTester->execute([]);
@@ -116,5 +117,95 @@ PHP;
         self::assertStringContainsString('protected string $title', $content);
         self::assertStringContainsString('public function getTitle(): string', $content);
         self::assertStringContainsString('public function setTitle(string $title): void', $content);
+    }
+
+    #[Test]
+    public function executeCreatesModelWithTcaAwareSuggestedTypesAndDefaults(): void
+    {
+        $tcaContent = <<<'PHP'
+<?php
+return [
+    'ctrl' => [
+        'title' => 'Product',
+        'label' => 'title',
+    ],
+    'columns' => [
+        'is_active' => [
+            'label' => 'Is active',
+            'config' => [
+                'type' => 'check',
+                'default' => 1,
+            ],
+        ],
+        'price' => [
+            'label' => 'Price',
+            'config' => [
+                'type' => 'number',
+                'format' => 'decimal',
+                'default' => 9.99,
+            ],
+        ],
+        'created_at' => [
+            'label' => 'Created at',
+            'config' => [
+                'type' => 'datetime',
+            ],
+        ],
+        'status' => [
+            'label' => 'Status',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['label' => 'Draft', 'value' => 0],
+                    ['label' => 'Published', 'value' => 1],
+                ],
+                'default' => 0,
+            ],
+        ],
+    ],
+];
+PHP;
+        file_put_contents($this->testExtensionDir . 'Configuration/TCA/tx_myextension_domain_model_product.php', $tcaContent);
+
+        $command = $this->get(ModelCommand::class);
+        $commandTester = new CommandTester($command);
+
+        $commandTester->setInputs([
+            'my_extension',
+            'tx_myextension_domain_model_product',
+            'Product',
+            'yes',
+            'All',
+            'None',
+            // created_at: datetime type (default in list), no default asked
+            \DateTime::class,
+            // is_active: bool type (default in list), confirm default (true from TCA 1)
+            'bool',
+            'yes',
+            // price: float type (default in list), ask default (9.99 from TCA)
+            'float',
+            '9.99',
+            // status: int type (default in list for numeric select), ask default (0 from TCA)
+            'int',
+            '0',
+        ]);
+
+        $exitCode = $commandTester->execute([]);
+
+        self::assertSame(Command::SUCCESS, $exitCode);
+
+        $modelFile = $this->testExtensionDir . 'Classes/Domain/Model/Product.php';
+        self::assertFileExists($modelFile);
+
+        $content = (string)file_get_contents($modelFile);
+        self::assertStringContainsString('use DateTime;', $content);
+        self::assertStringContainsString('protected ?DateTime $createdAt = null;', $content);
+        self::assertStringContainsString('public function getCreatedAt(): ?DateTime', $content);
+        self::assertStringContainsString('public function setCreatedAt(?DateTime $createdAt): void', $content);
+        self::assertStringContainsString('protected bool $isActive = true;', $content);
+        self::assertStringContainsString('protected float $price = 9.99;', $content);
+        self::assertStringContainsString('protected int $status = 0;', $content);
+        self::assertStringContainsString('public function initializeObject(): void', $content);
     }
 }
