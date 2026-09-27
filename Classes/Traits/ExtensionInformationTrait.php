@@ -119,12 +119,47 @@ trait ExtensionInformationTrait
         }
 
         $extConf = GeneralUtility::makeInstance(ExtConf::class);
+        $exportDirectory = trim($extConf->getExportDirectory(), '/');
+        $directPath = sprintf('/%s/%s/', $exportDirectory, $extensionKey);
 
-        return sprintf(
-            '/%s/%s/',
-            trim($extConf->getExportDirectory(), '/'),
-            $extensionKey
-        );
+        if (is_dir($directPath)) {
+            return $directPath;
+        }
+
+        $matchedPath = $this->findExtensionPathInExportDirectory('/' . $exportDirectory, $extensionKey);
+        if ($matchedPath !== null) {
+            return $matchedPath;
+        }
+
+        return $directPath;
+    }
+
+    private function findExtensionPathInExportDirectory(string $exportPath, string $extensionKey): ?string
+    {
+        if (!is_dir($exportPath)) {
+            return null;
+        }
+
+        $entries = scandir($exportPath) ?: [];
+        foreach ($entries as $entry) {
+            if ($entry === '.' || $entry === '..') {
+                continue;
+            }
+            $dir = $exportPath . DIRECTORY_SEPARATOR . $entry;
+            $composerJson = $dir . DIRECTORY_SEPARATOR . 'composer.json';
+            if (is_dir($dir) && file_exists($composerJson)) {
+                try {
+                    $manifest = json_decode((string)file_get_contents($composerJson), true, 512, JSON_THROW_ON_ERROR);
+                    if (($manifest['extra']['typo3/cms']['extension-key'] ?? null) === $extensionKey) {
+                        return rtrim($dir, '/') . '/';
+                    }
+                } catch (\Throwable) {
+                    continue;
+                }
+            }
+        }
+
+        return null;
     }
 
     private function createExtensionPath(

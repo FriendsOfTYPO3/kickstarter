@@ -15,6 +15,7 @@ use FriendsOfTYPO3\Kickstarter\Configuration\ExtConf;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Registry;
 
@@ -142,19 +143,48 @@ readonly class ChooseExtensionKeyQuestion extends AbstractQuestion
         }
 
         $extensions = [];
-        $directories = scandir($path) ?: [];
+        $entries = scandir($path) ?: [];
 
-        foreach ($directories as $dir) {
-            if ($dir === '.' || $dir === '..') {
+        foreach ($entries as $entry) {
+            if ($entry === '.' || $entry === '..') {
                 continue;
             }
-            $fullPath = $path . DIRECTORY_SEPARATOR . $dir;
+            $fullPath = $path . DIRECTORY_SEPARATOR . $entry;
             if (is_dir($fullPath) && file_exists($fullPath . DIRECTORY_SEPARATOR . 'composer.json')) {
-                $extensions[] = $dir;
+                $extensionKey = $this->extractExtensionKeyFromComposerJson($fullPath . DIRECTORY_SEPARATOR . 'composer.json', $entry);
+                if ($extensionKey !== null) {
+                    $extensions[] = $extensionKey;
+                }
             }
         }
 
         return $extensions;
+    }
+
+    private function extractExtensionKeyFromComposerJson(string $composerJsonPath, string $fallbackDirectoryName): ?string
+    {
+        try {
+            $content = (string)file_get_contents($composerJsonPath);
+            $manifest = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        } catch (\Throwable) {
+            return null;
+        }
+
+        $extensionKey = $manifest['extra']['typo3/cms']['extension-key'] ?? null;
+        if (!is_string($extensionKey) || $extensionKey === '') {
+            $extensionKey = $fallbackDirectoryName;
+        }
+
+        if (is_string($extensionKey) && $this->isValidExtensionKey($extensionKey)) {
+            return $extensionKey;
+        }
+
+        return null;
+    }
+
+    private function isValidExtensionKey(string $extensionKey): bool
+    {
+        return !str_contains($extensionKey, '-') && preg_match('/^[a-z0-9_]+$/', $extensionKey) === 1;
     }
 
     /**
@@ -169,10 +199,35 @@ readonly class ChooseExtensionKeyQuestion extends AbstractQuestion
                 ?? $package->getValueFromComposerManifest('type');
 
             if ($packageType === 'typo3-cms-extension') {
-                $extensions[] = $package->getPackageKey();
+                $extensionKey = $this->extractExtensionKeyFromPackage($package);
+                if ($extensionKey !== null) {
+                    $extensions[] = $extensionKey;
+                }
             }
         }
 
         return $extensions;
+    }
+
+    private function extractExtensionKeyFromPackage(PackageInterface $package): ?string
+    {
+        $manifest = $package->getValueFromComposerManifest();
+        $extensionKey = null;
+
+        if (is_object($manifest) && isset($manifest->extra->{'typo3/cms'}->{'extension-key'})) {
+            $extensionKey = (string)$manifest->extra->{'typo3/cms'}->{'extension-key'};
+        } elseif (is_array($manifest) && isset($manifest['extra']['typo3/cms']['extension-key'])) {
+            $extensionKey = (string)$manifest['extra']['typo3/cms']['extension-key'];
+        }
+
+        if ($extensionKey === null || $extensionKey === '') {
+            $extensionKey = $package->getPackageKey();
+        }
+
+        if (is_string($extensionKey) && $this->isValidExtensionKey($extensionKey)) {
+            return $extensionKey;
+        }
+
+        return null;
     }
 }

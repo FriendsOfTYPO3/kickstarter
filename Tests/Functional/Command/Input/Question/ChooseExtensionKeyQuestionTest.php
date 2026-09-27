@@ -117,6 +117,55 @@ class ChooseExtensionKeyQuestionTest extends FunctionalTestCase
         self::assertSame($expectedPath, $consumer->getExportExtensionPath('non_installed_extension'));
     }
 
+    #[Test]
+    public function askUsesExtensionKeyFromComposerJsonEvenWhenFolderHasHyphen(): void
+    {
+        $exportDir = GeneralUtility::makeInstance(ExtConf::class)->getExportDirectory();
+        $this->testExtensionDir = $exportDir . '/my-site-package/';
+        GeneralUtility::mkdir_deep($this->testExtensionDir);
+        file_put_contents($this->testExtensionDir . 'composer.json', json_encode([
+            'name' => 'vendor/my-site-package',
+            'extra' => [
+                'typo3/cms' => [
+                    'extension-key' => 'my_site_package',
+                ],
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $question = $this->get(ChooseExtensionKeyQuestion::class);
+        $commandContext = $this->createCommandContext("my_site_package\n");
+
+        $chosenExtension = $question->ask($commandContext);
+
+        self::assertSame('my_site_package', $chosenExtension);
+    }
+
+    #[Test]
+    public function getExtensionPathResolvesFolderWithHyphenWhenComposerJsonHasMatchingExtensionKey(): void
+    {
+        $exportDir = GeneralUtility::makeInstance(ExtConf::class)->getExportDirectory();
+        $this->testExtensionDir = $exportDir . '/custom-hyphen-dir/';
+        GeneralUtility::mkdir_deep($this->testExtensionDir);
+        file_put_contents($this->testExtensionDir . 'composer.json', json_encode([
+            'name' => 'vendor/custom-hyphen-dir',
+            'extra' => [
+                'typo3/cms' => [
+                    'extension-key' => 'custom_ext_key',
+                ],
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $consumer = new class () {
+            use ExtensionInformationTrait {
+                getExtensionPath as public;
+                getExportExtensionPath as public;
+            }
+        };
+
+        $resolvedPath = $consumer->getExtensionPath('custom_ext_key');
+        self::assertSame(rtrim($this->testExtensionDir, '/') . '/', $resolvedPath);
+    }
+
     private function createCommandContext(string $input): CommandContext
     {
         $stream = fopen('php://memory', 'r+', false);
