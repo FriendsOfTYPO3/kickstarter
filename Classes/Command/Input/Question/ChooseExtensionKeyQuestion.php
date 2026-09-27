@@ -175,7 +175,7 @@ readonly class ChooseExtensionKeyQuestion extends AbstractQuestion
             $extensionKey = $fallbackDirectoryName;
         }
 
-        if (is_string($extensionKey) && $this->isValidExtensionKey($extensionKey)) {
+        if ($this->isValidExtensionKey($extensionKey)) {
             return $extensionKey;
         }
 
@@ -224,7 +224,7 @@ readonly class ChooseExtensionKeyQuestion extends AbstractQuestion
             $extensionKey = $package->getPackageKey();
         }
 
-        if (is_string($extensionKey) && $this->isValidExtensionKey($extensionKey)) {
+        if ($this->isValidExtensionKey($extensionKey)) {
             return $extensionKey;
         }
 
