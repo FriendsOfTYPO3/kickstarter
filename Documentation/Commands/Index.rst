@@ -107,13 +107,14 @@ table column for you.
 make:command
 ============
 
-This command will create a new  Console Command (CLI) class.
+This command will create a new Console Command (CLI) class.
 
-See the official documentation for more information on  `Console commands (CLI) <https://docs.typo3.org/permalink/t3coreapi:symfony-console-commands>`_.
+See the official documentation for more information on `Console commands (CLI) <https://docs.typo3.org/permalink/t3coreapi:symfony-console-commands>`_.
 
 You will find the new file in directory ``Classes/Command/*``.
 
 ..  code-block:: bash
+
     vendor/bin/typo3 make:command
 
 make:event
@@ -121,9 +122,12 @@ make:event
 
 This command will create a new Event PHP class.
 
+See the official documentation for more information on `Events / PSR-14 <https://docs.typo3.org/permalink/t3coreapi:eventdispatcher>`_.
+
 You will find the new file in directory ``Classes/Event/*``.
 
 ..  code-block:: bash
+
     vendor/bin/typo3 make:event
 
 make:eventlistener
@@ -131,12 +135,149 @@ make:eventlistener
 
 This command will create a new EventListener PHP class.
 
+See the official documentation for more information on `Event listeners <https://docs.typo3.org/permalink/t3coreapi:eventdispatcherlisteners>`_.
+
 You will find the new file in directory ``Classes/EventListener/*``.
 
 Please update the used Event classname on your own.
 
 ..  code-block:: bash
+
     vendor/bin/typo3 make:eventlistener
+
+make:locallang
+==============
+
+This command creates a new or extends an existing XLIFF (`.xlf`) language file
+for translations. You can select between standard files like
+``locallang.xlf`` or ``locallang_db.xlf``, or provide a custom filename. You can
+then interactively add one or more translation terms with their label texts and
+trans-unit IDs in a loop.
+
+See the official documentation for more information on `XLIFF / Internationalization <https://docs.typo3.org/permalink/t3coreapi:xliff>`_.
+
+You will find the new or updated files in directory
+``Resources/Private/Language/*``.
+
+..  code-block:: bash
+
+    vendor/bin/typo3 make:locallang
+
+make:middleware
+===============
+
+This command creates a new PSR-15 Middleware PHP class and registers it in your
+extension. It prompts you for the middleware class name, whether to register
+it for the frontend or backend request stack, the middleware identifier, and
+optional execution ordering constraints (before/after existing middlewares).
+
+See the official documentation for more information on `Middlewares <https://docs.typo3.org/permalink/t3coreapi:request-handling>`_.
+
+You will find the new class in directory ``Classes/Middleware/*`` and the
+middleware registration in ``Configuration/RequestMiddlewares.php``.
+
+..  code-block:: bash
+
+    vendor/bin/typo3 make:middleware
+
+make:module
+===========
+
+This command registers a new backend module in your extension. It prompts you
+for the parent module (e.g., `web`, `site`, or `system`), module identifier,
+navigation position (`top` or `bottom`), access permissions (`user`, `admin`,
+or `systemMaintainer`), workspace support, route path, title, and description.
+You can select the referenced Extbase controller and its actions to execute.
+
+See the official documentation for more information on `Backend modules configuration <https://docs.typo3.org/permalink/t3coreapi:backend-modules-configuration>`_.
+
+You will find the module registration in ``Configuration/Backend/Modules.php``.
+Note that this command requires at least one existing Extbase controller
+created with ``make:controller``.
+
+..  code-block:: bash
+
+    vendor/bin/typo3 make:module
+
+make:services-yaml
+==================
+
+This command creates or updates the ``Configuration/Services.yaml`` file to
+configure Symfony Dependency Injection for your extension. It allows you to
+quickly create a recommended default configuration (enabling ``autowire`` and
+``autoconfigure``, while excluding Extbase models) or configure autowiring,
+autoconfiguration, and public service visibility individually.
+
+See the official documentation for more information on `Services.yaml / Dependency Injection <https://docs.typo3.org/permalink/t3coreapi:extension-configuration-services-yaml>`_.
+
+You will find the file in directory ``Configuration/Services.yaml``.
+
+..  code-block:: bash
+
+    vendor/bin/typo3 make:services-yaml
+
+make:site-package
+=================
+
+This command scaffolds a basic site package extension structure based on a
+provided title.
+
+See the official documentation for more information on `Sitepackages <https://docs.typo3.org/permalink/t3sitepackage:start>`_.
+
+..  note::
+    In TYPO3 v14, site handling is transitioning to Site Sets. Creating classic
+    site packages for TYPO3 v14 is currently not supported. Use
+    ``make:site-set`` instead.
+
+..  code-block:: bash
+
+    vendor/bin/typo3 make:site-package
+
+make:site-set
+=============
+
+This command creates a new Site Set definition for your TYPO3 extension. It
+asks for the site set identifier, configuration directory path, and a
+human-readable label. Once created, the site set can be referenced as a
+dependency in site configurations and enriched with site settings definitions.
+
+See the official documentation for more information on `Site Sets <https://docs.typo3.org/permalink/t3coreapi:site-sets>`_.
+
+You will find the new configuration in directory
+``Configuration/Sets/<SetName>/config.yaml``.
+
+..  code-block:: bash
+
+    vendor/bin/typo3 make:site-set
+
+make:site-settings-definition
+=============================
+
+This command adds typed site settings definitions to an existing Site Set in
+your extension. It interactively guides you through defining setting
+identifiers, data types (such as `string`, `int`, `bool`, or `color`),
+categories, labels, descriptions, and default values.
+
+See the official documentation for more information on `Site settings definitions <https://docs.typo3.org/permalink/t3coreapi:site-settings-definition>`_.
+
+You will find the new definitions in directory
+``Configuration/Sets/<SetName>/settings.definitions.yaml``. Note that this
+command requires an existing Site Set created with ``make:site-set``.
+
+..  code-block:: bash
+
+    vendor/bin/typo3 make:site-settings-definition
+
+make:testenv
+============
+
+This command will add TYPO3 testing environment to your extension.
+
+You will find the new files in directory ``Build/*``.
+
+..  code-block:: bash
+
+    vendor/bin/typo3 make:testenv
 
 make:typeconverter
 ==================
@@ -149,27 +290,54 @@ Currently you have to register this class in "Services.yaml" on your own. But
 I have that on my `list <https://github.com/FriendsOfTYPO3/kickstarter/issues/10>`.
 
 ..  code-block:: bash
+
     vendor/bin/typo3 make:typeconverter
-
-make:testenv
-============
-
-This command will add TYPO3 testing environment to your extension.
-
-You will find the new files in directory ``Build/*``.
-
-..  code-block:: bash
-    vendor/bin/typo3 make:testenv
 
 make:upgrade
 ============
 
 This command will create a new Upgrade Wizard PHP class.
 
+See the official documentation for more information on `Upgrade Wizards <https://docs.typo3.org/permalink/t3coreapi:upgrade-wizards>`_.
+
 You will find the new file in directory ``Classes/Upgrade/*``.
 
 ..  code-block:: bash
+
     vendor/bin/typo3 make:upgrade
+
+make:validator
+==============
+
+This command creates a new Extbase Validator PHP class for validating either a
+single property or an entire domain model. It asks for the validator name, the
+validator type (property or model), and lets you select from available domain
+models in your extension if validating a model.
+
+See the official documentation for more information on `Extbase domain validators <https://docs.typo3.org/permalink/t3coreapi:extbase-domain-validator>`_.
+
+You will find the new file in directory ``Classes/Validation/Validator/*``.
+
+..  code-block:: bash
+
+    vendor/bin/typo3 make:validator
+
+make:viewhelper
+===============
+
+This command creates a new Fluid ViewHelper PHP class. It asks for the
+ViewHelper class name, whether it renders children content, and allows adding
+arguments with specific data types (such as `string`, `int`, `bool`, `float`,
+`array`, `DateTimeInterface`, `FileReference`, `UploadedFile`, `ObjectStorage`,
+or custom classes), descriptions, and default values.
+
+See the official documentation for more information on `Fluid custom ViewHelpers <https://docs.typo3.org/permalink/t3coreapi:fluid-custom-viewhelper>`_.
+
+You will find the new file in directory ``Classes/ViewHelpers/*``.
+
+..  code-block:: bash
+
+    vendor/bin/typo3 make:viewhelper
 
 make:applycgl
 =============
@@ -177,7 +345,7 @@ make:applycgl
 This command enforces TYPO3 Coding Guidelines (CGL) on your extension code by applying PHP CS Fixer rules. Since it's not PhpParser's responsibility to generate source code in a specific format like PSR, this command provides an additional step to ensure your code follows TYPO3's coding standards.
 
 Requirements
------------
+------------
 
 *   TYPO3 must be running in Composer mode
 *   PHP function ``exec`` must be available
@@ -193,6 +361,7 @@ Usage
 -----
 
 ..  code-block:: bash
+
     vendor/bin/typo3 make:applycgl
 
 The command will:
@@ -203,3 +372,4 @@ The command will:
 #.  Display the results of the formatting process
 
 Note: The command uses a predefined configuration file located at ``EXT:kickstarter/Build/cgl/.php-cs-fixer.dist.php``
+
