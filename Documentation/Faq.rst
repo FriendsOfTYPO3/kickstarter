@@ -28,7 +28,7 @@ FAQ
         :header-level: 2
 
         See chapter :ref:`configuration`. By default a new extension will be
-        exported to ``[TYPO3 Temp. Dir]/ext-kickstarter/*``.
+        exported to ``[TYPO3 Temp. Dir]/kickstarter/*``.
 
     ..  accordion-item:: How to prevent overwriting existing methods?
         :name: prevent-overwrite-code

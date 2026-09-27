@@ -66,7 +66,7 @@ Plugin or a native TYPO3 plugin (useful for TypoScript usage).
 This command will update `ext_localconf.php` and also `tt_content.php`.
 
 Currently, you have to add extbase controller and its actions manually. This
-feature is already on my `list <https://github.com/froemken/ext-kickstarter/issues/14>`.
+feature is already on my `list <https://github.com/FriendsOfTYPO3/kickstarter/issues/14>`.
 
 ..  code-block:: bash
     vendor/bin/typo3 make:plugin
@@ -146,7 +146,7 @@ This command will create a new Extbase TypeConverter PHP class.
 You will find the new file in directory ``Classes/Property/TypeConverter/*``.
 
 Currently you have to register this class in "Services.yaml" on your own. But
-I have that on my `list <https://github.com/froemken/ext-kickstarter/issues/10>`.
+I have that on my `list <https://github.com/FriendsOfTYPO3/kickstarter/issues/10>`.
 
 ..  code-block:: bash
     vendor/bin/typo3 make:typeconverter

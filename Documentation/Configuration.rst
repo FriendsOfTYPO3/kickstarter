@@ -12,7 +12,7 @@ exportDirectory
 ===============
 
 If empty, your created extensions will be exported to
-`[TYPO3 temp. dir]/ext-kickstarter/*` by default. I prefer to set this
+`[TYPO3 temp. dir]/kickstarter/*` by default. I prefer to set this
 directory to `packages/`. That's the default import directory for local
 available packages.
 

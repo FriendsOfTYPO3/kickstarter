@@ -6,7 +6,7 @@ Thank you for your interest in contributing to this project! We welcome issues, 
 
 ## 🐞 Reporting Issues
 
-If you find a bug or have a feature request, please create an issue on our [GitHub repository](https://github.com/froemken/ext-kickstarter/issues) with the following information:
+If you find a bug or have a feature request, please create an issue on our [GitHub repository](https://github.com/FriendsOfTYPO3/kickstarter/issues) with the following information:
 
 - A clear, descriptive title
 - A detailed description of the issue or feature request
@@ -25,7 +25,7 @@ If you find a bug or have a feature request, please create an issue on our [GitH
 
 ## 💬 Before You Start a Pull Request
 
-Before putting significant time into a pull request, **please [open an issue](https://github.com/froemken/ext-kickstarter/issues)** or reach out to the maintainer. This helps ensure that:
+Before putting significant time into a pull request, **please [open an issue](https://github.com/FriendsOfTYPO3/kickstarter/issues)** or reach out to the maintainer. This helps ensure that:
 
 - Your proposal aligns with the project’s goals
 - No one else is working on the same change
@@ -99,7 +99,7 @@ By contributing to this project, you agree that your contributions will be licen
 
 You can reach us in the TYPO3 Slack channel `#extension-builder`. If you're not yet on TYPO3 Slack, see the guide here: [How to use Slack in the TYPO3 community](https://typo3.org/community/meet/how-to-use-slack-in-the-typo3-community)
 
-Use the [issue tracker](https://github.com/froemken/ext-kickstarter/issues) for bug reports, feature requests, and coordination.
+Use the [issue tracker](https://github.com/FriendsOfTYPO3/kickstarter/issues) for bug reports, feature requests, and coordination.
 
 Thank you for your contributions!
 
