@@ -87,7 +87,7 @@ enum ModelPropertyType: string
         return match ($this) {
             self::INT   => (int)$value,
             self::FLOAT => (float)$value,
-            self::BOOL  => (bool)$value,
+            self::BOOL  => is_bool($value) ? $value : filter_var($value, FILTER_VALIDATE_BOOL),
             self::STRING => (string)$value,
             self::ARRAY => is_array($value) ? $value : self::decodeArrayJson((string)$value),
             default     => null,
