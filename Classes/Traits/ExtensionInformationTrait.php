@@ -14,6 +14,7 @@ namespace FriendsOfTYPO3\Kickstarter\Traits;
 use FriendsOfTYPO3\Kickstarter\Configuration\ExtConf;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
+use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 trait ExtensionInformationTrait
@@ -84,7 +85,9 @@ trait ExtensionInformationTrait
     }
 
     /**
-     * It returns the target directory (incl. ending slash) where the extension will be created or resides
+     * Returns the directory path (incl. trailing slash) where an existing extension resides.
+     * Prefers registered extensions from PackageManager of type 'typo3-cms-extension',
+     * then falls back to the configured export directory.
      */
     private function getExtensionPath(string $extensionKey): string
     {
@@ -92,22 +95,78 @@ trait ExtensionInformationTrait
             throw new \InvalidArgumentException('Extension key must not be empty', 1741623620);
         }
 
-        // We are in a trait. I would try to prevent moving it into "inject" or constructor
-        // You will never know, from where this trait will be called ;-)
-        $extConf = GeneralUtility::makeInstance(ExtConf::class);
+        $packageManager = GeneralUtility::makeInstance(PackageManager::class);
+        if ($packageManager->isPackageAvailable($extensionKey)) {
+            $package = $packageManager->getPackage($extensionKey);
+            $packageType = $package->getPackageMetaData()->getPackageType()
+                ?? $package->getValueFromComposerManifest('type');
 
-        return sprintf(
-            '/%s/%s/',
-            trim($extConf->getExportDirectory(), '/'),
-            $extensionKey
-        );
+            if ($packageType === 'typo3-cms-extension') {
+                return rtrim($package->getPackagePath(), '/') . '/';
+            }
+        }
+
+        return $this->getExportExtensionPath($extensionKey);
+    }
+
+    /**
+     * Returns the target directory (incl. trailing slash) in the configured export directory.
+     */
+    private function getExportExtensionPath(string $extensionKey): string
+    {
+        if ($extensionKey === '') {
+            throw new \InvalidArgumentException('Extension key must not be empty', 1741623620);
+        }
+
+        $extConf = GeneralUtility::makeInstance(ExtConf::class);
+        $exportDirectory = trim($extConf->getExportDirectory(), '/');
+        $directPath = sprintf('/%s/%s/', $exportDirectory, $extensionKey);
+
+        if (is_dir($directPath)) {
+            return $directPath;
+        }
+
+        $matchedPath = $this->findExtensionPathInExportDirectory('/' . $exportDirectory, $extensionKey);
+        if ($matchedPath !== null) {
+            return $matchedPath;
+        }
+
+        return $directPath;
+    }
+
+    private function findExtensionPathInExportDirectory(string $exportPath, string $extensionKey): ?string
+    {
+        if (!is_dir($exportPath)) {
+            return null;
+        }
+
+        $entries = scandir($exportPath) ?: [];
+        foreach ($entries as $entry) {
+            if ($entry === '.' || $entry === '..') {
+                continue;
+            }
+            $dir = $exportPath . DIRECTORY_SEPARATOR . $entry;
+            $composerJson = $dir . DIRECTORY_SEPARATOR . 'composer.json';
+            if (is_dir($dir) && file_exists($composerJson)) {
+                try {
+                    $manifest = json_decode((string)file_get_contents($composerJson), true, 512, JSON_THROW_ON_ERROR);
+                    if (($manifest['extra']['typo3/cms']['extension-key'] ?? null) === $extensionKey) {
+                        return rtrim($dir, '/') . '/';
+                    }
+                } catch (\Throwable) {
+                    continue;
+                }
+            }
+        }
+
+        return null;
     }
 
     private function createExtensionPath(
         string $extensionKey,
         bool $removePreviousExportDirectoryIfExists = false
     ): string {
-        $extensionPath = $this->getExtensionPath($extensionKey);
+        $extensionPath = $this->getExportExtensionPath($extensionKey);
 
         if ($removePreviousExportDirectoryIfExists && is_dir($extensionPath)) {
             GeneralUtility::rmdir($extensionPath, true);
