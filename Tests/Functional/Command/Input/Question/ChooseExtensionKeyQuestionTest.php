@@ -100,7 +100,6 @@ class ChooseExtensionKeyQuestionTest extends FunctionalTestCase
         $packageManager = $this->createMock(PackageManager::class);
         $packageManager->method('getAvailablePackages')->willReturn([$package]);
         $packageManager->method('getPackageKeyFromComposerName')
-            ->with('vendor/installed-ext')
             ->willReturn('installed_ext');
 
         $question = new ChooseExtensionKeyQuestion(
