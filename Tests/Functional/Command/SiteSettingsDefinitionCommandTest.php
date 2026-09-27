@@ -120,11 +120,63 @@ class SiteSettingsDefinitionCommandTest extends FunctionalTestCase
 
         self::assertSame(Command::SUCCESS, $exitCode);
 
+        $display = (string)preg_replace('/\s+/', ' ', $commandTester->getDisplay());
+        self::assertStringContainsString('Enter category key (alphanumeric and dots allowed, e.g., MyExtension.pages)', $display);
+        self::assertStringContainsString('Enter settings key (alphanumeric with dots allowed, e.g. myExtension.storagePid)', $display);
+
         $settingsFile = $setPath . 'settings.definitions.yaml';
         self::assertFileExists($settingsFile);
 
         $content = (string)file_get_contents($settingsFile);
         self::assertStringContainsString('general:', $content);
         self::assertStringContainsString('my.setting:', $content);
+    }
+
+    #[Test]
+    public function executeDisplaysFormattedExtensionKeysInPrompts(): void
+    {
+        $exportDir = GeneralUtility::makeInstance(ExtConf::class)->getExportDirectory();
+        $extDir = $exportDir . '/sr_feuser_register/';
+        GeneralUtility::mkdir_deep($extDir . 'Configuration/Sets/default/');
+        file_put_contents($extDir . 'composer.json', json_encode([
+            'name' => 'vendor/sr-feuser-register',
+            'autoload' => [
+                'psr-4' => [
+                    'Vendor\\SrFeuserRegister\\' => 'Classes',
+                ],
+            ],
+        ], JSON_THROW_ON_ERROR));
+        file_put_contents($extDir . 'Configuration/Sets/default/config.yaml', "name: vendor/sr-feuser-register\nlabel: 'Register'\n");
+
+        $command = $this->get(SiteSettingsDefinitionCommand::class);
+        $commandTester = new CommandTester($command);
+
+        $commandTester->setInputs([
+            'sr_feuser_register',
+            'default',
+            'general',
+            'General',
+            '',
+            '',
+            'no',
+            'srFeuserRegister.storagePid',
+            'Storage PID',
+            'int',
+            '0',
+            '',
+            'no',
+            'general',
+            '',
+            'no',
+        ]);
+
+        $exitCode = $commandTester->execute([]);
+        self::assertSame(Command::SUCCESS, $exitCode);
+
+        $display = (string)preg_replace('/\s+/', ' ', $commandTester->getDisplay());
+        self::assertStringContainsString('Enter category key (alphanumeric and dots allowed, e.g., SrFeuserRegister.pages)', $display);
+        self::assertStringContainsString('Enter settings key (alphanumeric with dots allowed, e.g. srFeuserRegister.storagePid)', $display);
+
+        GeneralUtility::rmdir($extDir, true);
     }
 }
