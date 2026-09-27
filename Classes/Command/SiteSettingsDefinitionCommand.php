@@ -115,7 +115,7 @@ class SiteSettingsDefinitionCommand extends Command
         return new SiteSettingsDefinitionInformation(
             $extensionInformation,
             $siteSet,
-            $categories = $this->askForCategories($io),
+            $categories = $this->askForCategories($io, $extensionInformation),
             $this->askForSettings($io, $extensionInformation, $categories),
         );
     }
@@ -129,75 +129,120 @@ class SiteSettingsDefinitionCommand extends Command
         return $io->choice('Choose the site set', $sets, $sets[0]);
     }
 
-    private function askForCategories(SymfonyStyle $io): array
-    {
+    /**
+     * @return list<CategoryDefinition>
+     */
+    private function askForCategories(
+        SymfonyStyle $io,
+        ExtensionInformation $extensionInformation
+    ): array {
         $categories = [];
 
         $io->title('Category Setup');
         $io->writeln('You must enter at least one category.');
 
         do {
-            $key = $io->ask(
-                'Enter category key (alphanumeric and dots allowed, e.g., BlogExample.pages)',
-                null,
-                function (?string $value) use ($categories): string {
-                    if (in_array($value, [null, '', '0'], true)) {
-                        throw new \RuntimeException('Key cannot be empty.', 4823022337);
-                    }
-                    if (in_array(preg_match('/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/', $value), [0, false], true)) {
-                        throw new \RuntimeException('Key must be alphanumeric and may include dots as separators.', 2134072936);
-                    }
-                    foreach ($categories as $c) {
-                        if ($c->key === $value) {
-                            throw new \RuntimeException(sprintf("The key '%s' is already used. Keys must be unique.", $value), 4017589124);
-                        }
-                    }
-                    return $value;
-                }
-            );
-
-            // --- Label ---
-            $label = $io->ask('Enter category label', null, function (?string $value): string {
-                if (in_array($value, [null, '', '0'], true)) {
-                    throw new \RuntimeException('Label cannot be empty.', 8647488631);
-                }
-                return $value;
-            });
-
-            // --- Optional fields ---
-            $description = $io->ask('Enter category description (optional)');
-            $icon = $io->ask('Enter category icon (optional)');
-
-            // --- Parent Selection ---
-            $parent = null;
-            if ($categories !== []) {
-                $parentChoices = array_merge(['none'], array_map(static fn($c): string => $c->key, $categories));
-                $parentKey = $io->choice('Select a parent category by key or choose "none"', $parentChoices, 'none');
-
-                if ($parentKey !== 'none') {
-                    // Ensure no circular references
-                    if ($this->wouldCreateCircularReference($categories, $parentKey, $key)) {
-                        $io->warning(sprintf("Using '%s' as a parent would create a circular reference. Parent not assigned.", $parentKey));
-                    } else {
-                        $parent = $parentKey;
-                    }
-                }
-            }
-
-            // --- Add Category ---
-            $categories[] = new CategoryDefinition(
-                key: $key,
-                label: $label,
-                description: $description ?: null,
-                icon: $icon ?: null,
-                parent: $parent
-            );
-
-            // --- Continue? ---
+            $categories[] = $this->buildSingleCategory($io, $extensionInformation, $categories);
             $addMore = $io->confirm('Do you want to add another category?', false);
         } while ($addMore || $categories === []);
 
         return $categories;
+    }
+
+    /**
+     * @param list<CategoryDefinition> $categories
+     */
+    private function buildSingleCategory(
+        SymfonyStyle $io,
+        ExtensionInformation $extensionInformation,
+        array $categories
+    ): CategoryDefinition {
+        $key = $this->askForCategoryKey($io, $extensionInformation, $categories);
+        $label = $this->askForCategoryLabel($io);
+        $description = $io->ask('Enter category description (optional)');
+        $icon = $io->ask('Enter category icon (optional)');
+        $parent = $this->askForParentCategory($io, $categories, $key);
+
+        return new CategoryDefinition(
+            key: $key,
+            label: $label,
+            description: $description ?: null,
+            icon: $icon ?: null,
+            parent: $parent
+        );
+    }
+
+    /**
+     * @param list<CategoryDefinition> $categories
+     */
+    private function askForCategoryKey(
+        SymfonyStyle $io,
+        ExtensionInformation $extensionInformation,
+        array $categories
+    ): string {
+        $question = sprintf(
+            'Enter category key (alphanumeric and dots allowed, e.g., %s.pages)',
+            GeneralUtility::underscoredToUpperCamelCase($extensionInformation->getExtensionKey())
+        );
+
+        return (string)$io->ask(
+            $question,
+            null,
+            fn(?string $value): string => $this->validateCategoryKey($value, $categories)
+        );
+    }
+
+    /**
+     * @param list<CategoryDefinition> $categories
+     */
+    private function validateCategoryKey(?string $value, array $categories): string
+    {
+        if (in_array($value, [null, '', '0'], true)) {
+            throw new \RuntimeException('Key cannot be empty.', 4823022337);
+        }
+        if (in_array(preg_match('/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/', $value), [0, false], true)) {
+            throw new \RuntimeException('Key must be alphanumeric and may include dots as separators.', 2134072936);
+        }
+        foreach ($categories as $c) {
+            if ($c->key === $value) {
+                throw new \RuntimeException(sprintf("The key '%s' is already used. Keys must be unique.", $value), 4017589124);
+            }
+        }
+        return $value;
+    }
+
+    private function askForCategoryLabel(SymfonyStyle $io): string
+    {
+        return (string)$io->ask('Enter category label', null, static function (?string $value): string {
+            if (in_array($value, [null, '', '0'], true)) {
+                throw new \RuntimeException('Label cannot be empty.', 8647488631);
+            }
+            return $value;
+        });
+    }
+
+    /**
+     * @param list<CategoryDefinition> $categories
+     */
+    private function askForParentCategory(SymfonyStyle $io, array $categories, string $key): ?string
+    {
+        if ($categories === []) {
+            return null;
+        }
+
+        $parentChoices = array_merge(['none'], array_map(static fn($c): string => $c->key, $categories));
+        $parentKey = $io->choice('Select a parent category by key or choose "none"', $parentChoices, 'none');
+
+        if ($parentKey === 'none') {
+            return null;
+        }
+
+        if ($this->wouldCreateCircularReference($categories, $parentKey, $key)) {
+            $io->warning(sprintf("Using '%s' as a parent would create a circular reference. Parent not assigned.", $parentKey));
+            return null;
+        }
+
+        return $parentKey;
     }
 
     /**

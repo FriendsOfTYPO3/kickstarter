@@ -121,6 +121,7 @@ class SiteSettingsDefinitionCommandTest extends FunctionalTestCase
         self::assertSame(Command::SUCCESS, $exitCode);
 
         $display = (string)preg_replace('/\s+/', ' ', $commandTester->getDisplay());
+        self::assertStringContainsString('Enter category key (alphanumeric and dots allowed, e.g., MyExtension.pages)', $display);
         self::assertStringContainsString('Enter settings key (alphanumeric with dots allowed, e.g. myExtension.storagePid)', $display);
 
         $settingsFile = $setPath . 'settings.definitions.yaml';
@@ -132,7 +133,7 @@ class SiteSettingsDefinitionCommandTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function executeDisplaysLowerCamelCaseExtensionKeyInSettingsKeyPrompt(): void
+    public function executeDisplaysFormattedExtensionKeysInPrompts(): void
     {
         $exportDir = GeneralUtility::makeInstance(ExtConf::class)->getExportDirectory();
         $extDir = $exportDir . '/sr_feuser_register/';
@@ -173,6 +174,7 @@ class SiteSettingsDefinitionCommandTest extends FunctionalTestCase
         self::assertSame(Command::SUCCESS, $exitCode);
 
         $display = (string)preg_replace('/\s+/', ' ', $commandTester->getDisplay());
+        self::assertStringContainsString('Enter category key (alphanumeric and dots allowed, e.g., SrFeuserRegister.pages)', $display);
         self::assertStringContainsString('Enter settings key (alphanumeric with dots allowed, e.g. srFeuserRegister.storagePid)', $display);
 
         GeneralUtility::rmdir($extDir, true);
