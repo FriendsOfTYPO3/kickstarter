@@ -149,14 +149,14 @@ class ExtensionCommand extends Command
             $this->getExtensionNameSuggestion($composerPackageName)
         );
         $io->info([
-            'The extension will be exported to directory: ' . $this->getExtensionPath($extensionKey),
+            'The extension will be exported to directory: ' . $this->getExportExtensionPath($extensionKey),
             'You can configure the export directory in extension settings (available in InstallTool)',
         ]);
 
         // We are creating a new extension, so remove previous exported extension after user confirmation
-        if (is_dir($this->getExtensionPath($extensionKey))) {
+        if (is_dir($this->getExportExtensionPath($extensionKey))) {
             $io->warning([
-                'There is already an extension at location: "' . $this->getExtensionPath($extensionKey) . '".',
+                'There is already an extension at location: "' . $this->getExportExtensionPath($extensionKey) . '".',
                 'While creating a new extension, we will remove the previous extension and create a new one.',
             ]);
             $confirmRemoval = $io->confirm(

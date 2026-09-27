@@ -14,6 +14,7 @@ namespace FriendsOfTYPO3\Kickstarter\Traits;
 use FriendsOfTYPO3\Kickstarter\Configuration\ExtConf;
 use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use FriendsOfTYPO3\Kickstarter\Information\ExtensionInformation;
+use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 trait ExtensionInformationTrait
@@ -84,7 +85,9 @@ trait ExtensionInformationTrait
     }
 
     /**
-     * It returns the target directory (incl. ending slash) where the extension will be created or resides
+     * Returns the directory path (incl. trailing slash) where an existing extension resides.
+     * Prefers registered extensions from PackageManager of type 'typo3-cms-extension',
+     * then falls back to the configured export directory.
      */
     private function getExtensionPath(string $extensionKey): string
     {
@@ -92,8 +95,29 @@ trait ExtensionInformationTrait
             throw new \InvalidArgumentException('Extension key must not be empty', 1741623620);
         }
 
-        // We are in a trait. I would try to prevent moving it into "inject" or constructor
-        // You will never know, from where this trait will be called ;-)
+        $packageManager = GeneralUtility::makeInstance(PackageManager::class);
+        if ($packageManager->isPackageAvailable($extensionKey)) {
+            $package = $packageManager->getPackage($extensionKey);
+            $packageType = $package->getPackageMetaData()->getPackageType()
+                ?? $package->getValueFromComposerManifest('type');
+
+            if ($packageType === 'typo3-cms-extension') {
+                return rtrim($package->getPackagePath(), '/') . '/';
+            }
+        }
+
+        return $this->getExportExtensionPath($extensionKey);
+    }
+
+    /**
+     * Returns the target directory (incl. trailing slash) in the configured export directory.
+     */
+    private function getExportExtensionPath(string $extensionKey): string
+    {
+        if ($extensionKey === '') {
+            throw new \InvalidArgumentException('Extension key must not be empty', 1741623620);
+        }
+
         $extConf = GeneralUtility::makeInstance(ExtConf::class);
 
         return sprintf(
@@ -107,7 +131,7 @@ trait ExtensionInformationTrait
         string $extensionKey,
         bool $removePreviousExportDirectoryIfExists = false
     ): string {
-        $extensionPath = $this->getExtensionPath($extensionKey);
+        $extensionPath = $this->getExportExtensionPath($extensionKey);
 
         if ($removePreviousExportDirectoryIfExists && is_dir($extensionPath)) {
             GeneralUtility::rmdir($extensionPath, true);
