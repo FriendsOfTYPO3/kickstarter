@@ -17,7 +17,6 @@ use FriendsOfTYPO3\Kickstarter\Context\CommandContext;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\StreamableInputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -125,9 +124,7 @@ class ChooseExtensionKeyQuestionTest extends FunctionalTestCase
         rewind($stream);
 
         $arrayInput = new ArrayInput([]);
-        if ($arrayInput instanceof StreamableInputInterface) {
-            $arrayInput->setStream($stream);
-        }
+        $arrayInput->setStream($stream);
 
         return new CommandContext($arrayInput, new BufferedOutput());
     }
