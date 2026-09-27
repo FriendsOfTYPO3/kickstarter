@@ -18,7 +18,11 @@ use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Package\MetaData;
+use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Package\PackageManager;
+use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -47,23 +51,88 @@ class ChooseExtensionKeyQuestionTest extends FunctionalTestCase
     #[Test]
     public function askOffersInstalledExtensionFromPackageManager(): void
     {
-        $question = $this->get(ChooseExtensionKeyQuestion::class);
-        $commandContext = $this->createCommandContext("kickstarter\n");
+        $package = $this->createMock(PackageInterface::class);
+        $package->method('getValueFromComposerManifest')->willReturn([
+            'type' => 'typo3-cms-extension',
+            'extra' => [
+                'typo3/cms' => [
+                    'extension-key' => 'installed_ext',
+                ],
+            ],
+        ]);
+        $metaData = $this->createMock(MetaData::class);
+        $metaData->method('getPackageType')->willReturn('typo3-cms-extension');
+        $package->method('getPackageMetaData')->willReturn($metaData);
+        $package->method('getPackageKey')->willReturn('installed_ext');
+
+        $packageManager = $this->createMock(PackageManager::class);
+        $packageManager->method('getAvailablePackages')->willReturn([$package]);
+
+        $question = new ChooseExtensionKeyQuestion(
+            $this->get(Registry::class),
+            $this->get(ExtensionConfiguration::class),
+            $packageManager
+        );
+        $commandContext = $this->createCommandContext("installed_ext\n");
 
         $chosenExtension = $question->ask($commandContext);
 
-        self::assertSame('kickstarter', $chosenExtension);
+        self::assertSame('installed_ext', $chosenExtension);
     }
 
     #[Test]
     public function askResolvesComposerNameDefaultToExtensionKey(): void
     {
-        $question = $this->get(ChooseExtensionKeyQuestion::class);
+        $package = $this->createMock(PackageInterface::class);
+        $package->method('getValueFromComposerManifest')->willReturn([
+            'type' => 'typo3-cms-extension',
+            'extra' => [
+                'typo3/cms' => [
+                    'extension-key' => 'installed_ext',
+                ],
+            ],
+        ]);
+        $metaData = $this->createMock(MetaData::class);
+        $metaData->method('getPackageType')->willReturn('typo3-cms-extension');
+        $package->method('getPackageMetaData')->willReturn($metaData);
+        $package->method('getPackageKey')->willReturn('installed_ext');
+
+        $packageManager = $this->createMock(PackageManager::class);
+        $packageManager->method('getAvailablePackages')->willReturn([$package]);
+        $packageManager->method('getPackageKeyFromComposerName')
+            ->with('vendor/installed-ext')
+            ->willReturn('installed_ext');
+
+        $question = new ChooseExtensionKeyQuestion(
+            $this->get(Registry::class),
+            $this->get(ExtensionConfiguration::class),
+            $packageManager
+        );
         $commandContext = $this->createCommandContext("\n");
 
-        $chosenExtension = $question->ask($commandContext, 'friendsoftypo3/kickstarter');
+        $chosenExtension = $question->ask($commandContext, 'vendor/installed-ext');
 
-        self::assertSame('kickstarter', $chosenExtension);
+        self::assertSame('installed_ext', $chosenExtension);
+    }
+
+    #[Test]
+    public function askExcludesKickstarterExtensionFromChoices(): void
+    {
+        $exportDir = GeneralUtility::makeInstance(ExtConf::class)->getExportDirectory();
+        $this->testExtensionDir = $exportDir . '/my_export_ext/';
+        GeneralUtility::mkdir_deep($this->testExtensionDir);
+        file_put_contents($this->testExtensionDir . 'composer.json', json_encode([
+            'name' => 'vendor/my-export-ext',
+        ], JSON_THROW_ON_ERROR));
+
+        $bufferedOutput = new BufferedOutput();
+        $question = $this->get(ChooseExtensionKeyQuestion::class);
+        $commandContext = $this->createCommandContext("my_export_ext\n", $bufferedOutput);
+
+        $chosenExtension = $question->ask($commandContext);
+
+        self::assertSame('my_export_ext', $chosenExtension);
+        self::assertStringNotContainsString('kickstarter', $bufferedOutput->fetch());
     }
 
     #[Test]
@@ -166,7 +235,7 @@ class ChooseExtensionKeyQuestionTest extends FunctionalTestCase
         self::assertSame(rtrim($this->testExtensionDir, '/') . '/', $resolvedPath);
     }
 
-    private function createCommandContext(string $input): CommandContext
+    private function createCommandContext(string $input, ?BufferedOutput $bufferedOutput = null): CommandContext
     {
         $stream = fopen('php://memory', 'r+', false);
         fwrite($stream, $input);
@@ -175,6 +244,6 @@ class ChooseExtensionKeyQuestionTest extends FunctionalTestCase
         $arrayInput = new ArrayInput([]);
         $arrayInput->setStream($stream);
 
-        return new CommandContext($arrayInput, new BufferedOutput());
+        return new CommandContext($arrayInput, $bufferedOutput ?? new BufferedOutput());
     }
 }

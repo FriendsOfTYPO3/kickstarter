@@ -127,6 +127,11 @@ readonly class ChooseExtensionKeyQuestion extends AbstractQuestion
             $this->getExtensionsFromPackageManager(),
         );
 
+        $extensions = array_filter(
+            $extensions,
+            static fn(string $extensionKey): bool => $extensionKey !== ExtConf::EXT_KEY
+        );
+
         $extensions = array_values(array_unique($extensions));
         sort($extensions, SORT_STRING | SORT_FLAG_CASE);
 
@@ -184,7 +189,9 @@ readonly class ChooseExtensionKeyQuestion extends AbstractQuestion
 
     private function isValidExtensionKey(string $extensionKey): bool
     {
-        return !str_contains($extensionKey, '-') && preg_match('/^[a-z0-9_]+$/', $extensionKey) === 1;
+        return $extensionKey !== ExtConf::EXT_KEY
+            && !str_contains($extensionKey, '-')
+            && preg_match('/^[a-z0-9_]+$/', $extensionKey) === 1;
     }
 
     /**
