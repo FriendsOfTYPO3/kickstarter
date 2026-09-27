@@ -33,6 +33,7 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 use TYPO3\CMS\Core\Attribute\AsNonSchedulableCommand;
 use TYPO3\CMS\Core\Settings\CategoryDefinition;
 use TYPO3\CMS\Core\Settings\SettingDefinition;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 #[AsCommand('make:site-settings-definition', 'Adds a site settings definition to your TYPO3 extension.')]
 #[AsNonSchedulableCommand]
@@ -115,7 +116,7 @@ class SiteSettingsDefinitionCommand extends Command
             $extensionInformation,
             $siteSet,
             $categories = $this->askForCategories($io),
-            $this->askForSettings($io, $categories),
+            $this->askForSettings($io, $extensionInformation, $categories),
         );
     }
 
@@ -224,8 +225,15 @@ class SiteSettingsDefinitionCommand extends Command
         return false;
     }
 
-    private function askForSettings(SymfonyStyle $io, array $categories = []): array
-    {
+    /**
+     * @param list<CategoryDefinition> $categories
+     * @return list<SettingDefinition>
+     */
+    private function askForSettings(
+        SymfonyStyle $io,
+        ExtensionInformation $extensionInformation,
+        array $categories = []
+    ): array {
         $settings = [];
 
         $io->title('Settings definition Setup');
@@ -233,8 +241,58 @@ class SiteSettingsDefinitionCommand extends Command
         $io->writeln('Each setting has: key, type, default value, label, optional description, readonly flag, optional enum, optional category, and optional tags.');
 
         do {
-            // --- Key ---
-            $key = $io->ask('Enter settings key (alphanumeric with dots allowed)', null, function (?string $value) use ($settings): string {
+            $settings[] = $this->buildSingleSetting($io, $extensionInformation, $settings, $categories);
+            $addMore = $io->confirm('Do you want to add another setting definition?', false);
+        } while ($addMore || $settings === []);
+
+        return $settings;
+    }
+
+    /**
+     * @param list<SettingDefinition> $settings
+     * @param list<CategoryDefinition> $categories
+     */
+    private function buildSingleSetting(
+        SymfonyStyle $io,
+        ExtensionInformation $extensionInformation,
+        array $settings,
+        array $categories
+    ): SettingDefinition {
+        $key = $this->askForSettingKey($io, $extensionInformation, $settings);
+        $label = (string)$io->ask('Enter setting label', null, function (?string $value): string {
+            if (in_array($value, [null, '', '0'], true)) {
+                throw new \RuntimeException('Label cannot be empty.', 8317461797);
+            }
+            return $value;
+        });
+        $type = (string)$io->choice('Select setting type', $this->getSettingTypes(), 'string');
+        $defaultInput = $io->ask('Enter default value (leave empty for false, 0 or empty string)');
+
+        return new SettingDefinition(
+            key: $key,
+            type: $type,
+            default: $this->castDefaultValue($defaultInput, $type),
+            label: $label,
+            description: (string)$io->ask('Enter setting description (optional)'),
+            readonly: $io->confirm('Is this setting readonly?', false),
+            enum: $this->askForEnumValues($io, $type),
+            category: $this->askForCategory($io, $categories),
+        );
+    }
+
+    /**
+     * @param list<SettingDefinition> $settings
+     */
+    private function askForSettingKey(
+        SymfonyStyle $io,
+        ExtensionInformation $extensionInformation,
+        array $settings
+    ): string {
+        $examplePrefix = GeneralUtility::underscoredToLowerCamelCase($extensionInformation->getExtensionKey());
+        return (string)$io->ask(
+            sprintf('Enter settings key (alphanumeric with dots allowed, e.g. %s.storagePid)', $examplePrefix),
+            null,
+            function (?string $value) use ($settings): string {
                 if (in_array($value, [null, '', '0'], true)) {
                     throw new \RuntimeException('Key cannot be empty.', 7392794136);
                 }
@@ -247,66 +305,45 @@ class SiteSettingsDefinitionCommand extends Command
                     }
                 }
                 return $value;
-            });
-
-            // --- Label ---
-            $label = $io->ask('Enter setting label', null, function (?string $value): string {
-                if (in_array($value, [null, '', '0'], true)) {
-                    throw new \RuntimeException('Label cannot be empty.', 8317461797);
-                }
-                return $value;
-            });
-
-            // --- Type ---
-            $type = $io->choice('Select setting type', $this->getSettingTypes(), 'string');
-
-            // --- Default ---
-            $defaultInput = $io->ask('Enter default value (leave empty for false, 0 or empty string)');
-            $default = $this->castDefaultValue($defaultInput, $type);
-
-            // --- Description ---
-            $description = $io->ask('Enter setting description (optional)');
-
-            // --- Readonly ---
-            $readonly = $io->confirm('Is this setting readonly?', false);
-
-            // --- Enum ---
-            $enum = [];
-            if ($type === 'string' && $io->confirm('Does this setting have a fixed set of allowed values (enum)?', false)) {
-                $io->writeln('Enter allowed values one by one. Leave empty to finish.');
-                while (true) {
-                    $val = $io->ask('Enum value (empty to stop)');
-                    if ($val === null || $val === '') {
-                        break;
-                    }
-                    $enum[] = $this->castDefaultValue($val, $type);
-                }
             }
+        );
+    }
 
-            // --- Category ---
-            $category = null;
-            if ($categories !== []) {
-                $categoryChoices = array_merge(['none'], array_map(fn($c) => $c->key, $categories));
-                $categoryKey = $io->choice('Assign to a category (or choose "none")', $categoryChoices, 'none');
-                $category = $categoryKey !== 'none' ? $categoryKey : null;
+    /**
+     * @return list<string|int|float|bool|array|null>
+     */
+    private function askForEnumValues(SymfonyStyle $io, string $type): array
+    {
+        if ($type !== 'string' || !$io->confirm('Does this setting have a fixed set of allowed values (enum)?', false)) {
+            return [];
+        }
+
+        $enum = [];
+        $io->writeln('Enter allowed values one by one. Leave empty to finish.');
+        while (true) {
+            $val = $io->ask('Enum value (empty to stop)');
+            if ($val === null || $val === '') {
+                break;
             }
+            $enum[] = $this->castDefaultValue($val, $type);
+        }
 
-            // --- Add Setting ---
-            $settings[] = new SettingDefinition(
-                key: $key,
-                type: $type,
-                default: $default,
-                label: $label,
-                description: $description,
-                readonly: $readonly,
-                enum: $enum,
-                category: $category,
-            );
+        return $enum;
+    }
 
-            $addMore = $io->confirm('Do you want to add another setting definition?', false);
-        } while ($addMore || $settings === []);
+    /**
+     * @param list<CategoryDefinition> $categories
+     */
+    private function askForCategory(SymfonyStyle $io, array $categories): ?string
+    {
+        if ($categories === []) {
+            return null;
+        }
 
-        return $settings;
+        $categoryChoices = array_merge(['none'], array_map(fn($c) => $c->key, $categories));
+        $categoryKey = $io->choice('Assign to a category (or choose "none")', $categoryChoices, 'none');
+
+        return $categoryKey !== 'none' ? $categoryKey : null;
     }
 
     /**
