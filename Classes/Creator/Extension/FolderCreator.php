@@ -48,9 +48,10 @@ class FolderCreator implements ExtensionCreatorInterface
             $this->sitePackagePaths[] = ExtensionInformation::RESOURCES_PUBLIC_PATH . 'JavaScript/';
             $this->sitePackagePaths[] = ExtensionInformation::RESOURCES_PUBLIC_PATH . 'Fonts/';
             $this->sitePackagePaths[] = ExtensionInformation::RESOURCES_PUBLIC_PATH . 'Images/';
-            $this->sitePackagePaths[] = ExtensionInformation::RESOURCES_PRIVATE_PATH . 'PageView/Pages';
-            $this->sitePackagePaths[] = ExtensionInformation::RESOURCES_PRIVATE_PATH . 'PageView/Partials';
-            $this->sitePackagePaths[] = ExtensionInformation::RESOURCES_PRIVATE_PATH . 'PageView/Layouts';
+            $this->sitePackagePaths[] = ExtensionInformation::RESOURCES_PRIVATE_PATH . 'Templates/Pages/';
+            $this->sitePackagePaths[] = ExtensionInformation::RESOURCES_PRIVATE_PATH . 'Templates/Content/';
+            $this->sitePackagePaths[] = ExtensionInformation::RESOURCES_PRIVATE_PATH . 'Templates/Layouts/';
+            $this->sitePackagePaths[] = ExtensionInformation::RESOURCES_PRIVATE_PATH . 'Templates/Partials/';
         }
         if ($this->testPaths === null) {
             $this->testPaths = [];

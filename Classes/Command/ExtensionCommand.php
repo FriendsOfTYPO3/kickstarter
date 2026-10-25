@@ -257,7 +257,7 @@ class ExtensionCommand extends Command
         $createGitKeepFiles = true;
         if ($createFolders) {
             $createExtbaseFolders = $io->confirm('Create Extbase folders (Classes/Domain/Model, Resources/Private/Templates etc)?', false);
-            $createSitePackageFolders = $io->confirm('Create Site Package folders (Resources/Private/PageView)?', false);
+            $createSitePackageFolders = $io->confirm('Create Site Package folders (Resources/Private/Templates, Resources/Public/Css etc.)?', false);
             $createTestFolders = $io->confirm('Create test folders (Tests/Unit, Tests/Functional)?', false);
             $createGitKeepFiles = $io->confirm('Do you want to create .gitkeep files in the folders?');
         }
