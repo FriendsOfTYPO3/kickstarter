@@ -79,6 +79,37 @@ class ExtensionCreatorServiceTest extends AbstractServiceCreatorTestCase
 
         // Compare generated files with fixtures
         $this->assertDirectoryEquals($expectedDir, $generatedPath);
+
+        self::assertSame(
+            [],
+            $this->findGitKeepFilesBesideADirectory($generatedPath),
+            'A folder path without a trailing slash writes its .gitkeep beside the directory '
+            . 'instead of into it, which leaves a directory Git does not keep.'
+        );
+    }
+
+    /**
+     * @return list<string> Paths of files named "<something>.gitkeep" rather than ".gitkeep"
+     */
+    private function findGitKeepFilesBesideADirectory(string $path): array
+    {
+        $found = [];
+        $entries = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::SKIP_DOTS)
+        );
+
+        /** @var \SplFileInfo $entry */
+        foreach ($entries as $entry) {
+            if (!$entry->isFile()) {
+                continue;
+            }
+            $filename = $entry->getFilename();
+            if ($filename !== '.gitkeep' && str_ends_with($filename, '.gitkeep')) {
+                $found[] = $entry->getPathname();
+            }
+        }
+
+        return $found;
     }
 
     public static function extensionCreationProvider(): array
