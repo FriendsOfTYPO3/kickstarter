@@ -1,0 +1,24 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:layout name="Content/Default"/>
+
+<f:comment>
+    Registering an Extbase plugin writes a rendering definition copying
+    lib.contentElement with this template name, so every plugin is rendered
+    here. It renders the content the plugin assigned, and otherwise calls back
+    onto the TypoScript path the plugin itself was registered at.
+</f:comment>
+
+<f:section name="Header"/>
+
+<f:section name="Main">
+    <f:if condition="{content}">
+        <f:then>{content -> f:format.raw()}</f:then>
+        <f:else><f:cObject typoscriptObjectPath="{record.fullType}.20" data="{record}" table="{record.mainType}"/></f:else>
+    </f:if>
+</f:section>
+
+</html>

@@ -1,0 +1,50 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:page.meta property="viewport">width=device-width, initial-scale=1.0</f:page.meta>
+<f:asset.css identifier="my-site-package-main" href="EXT:my_site_package/Resources/Public/Css/main.css" media="all"/>
+<f:asset.script identifier="my-site-package-main" src="EXT:my_site_package/Resources/Public/JavaScript/main.js" type="module"/>
+
+<header class="page-header">
+    <f:link.page pageUid="{site.rootPageId}" class="page-header__title">
+        {language.websiteTitle}
+    </f:link.page>
+
+    <f:if condition="{mainMenu}">
+        <nav class="page-navigation">
+            <ul class="page-navigation__list">
+                <f:for each="{mainMenu}" as="item">
+                    <li class="page-navigation__item">
+                        <f:link.typolink
+                            parameter="{item.link}"
+                            class="page-navigation__link {f:if(condition: item.active, then: 'page-navigation__link--active')}"
+                        >{item.title}</f:link.typolink>
+                    </li>
+                </f:for>
+            </ul>
+        </nav>
+    </f:if>
+</header>
+
+<main class="page-content">
+    <f:render section="Main" optional="true">
+        <f:comment>
+            The identifier of a content area is the one the page layout declares
+            for that column. An identifier no layout declares is an error on
+            every page rendered by this template, not an empty column.
+        </f:comment>
+        <!--TYPO3SEARCH_begin-->
+        <f:render.contentArea contentArea="{content.main}"/>
+        <!--TYPO3SEARCH_end-->
+    </f:render>
+</main>
+
+<footer class="page-footer">
+    <f:if condition="{site.configuration.settings.mySitePackage.copyright}">
+        <p class="page-footer__copyright">{site.configuration.settings.mySitePackage.copyright}</p>
+    </f:if>
+</footer>
+
+</html>

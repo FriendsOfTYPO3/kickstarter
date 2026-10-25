@@ -19,6 +19,7 @@ use FriendsOfTYPO3\Kickstarter\Service\Creator\SiteSetCreatorService;
 use FriendsOfTYPO3\Kickstarter\Traits\AskForExtensionKeyTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\CreatorInformationTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\ExtensionInformationTrait;
+use FriendsOfTYPO3\Kickstarter\Traits\SiteSetQuestionsTrait;
 use FriendsOfTYPO3\Kickstarter\Traits\TryToCorrectClassNameTrait;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -35,6 +36,7 @@ class SiteSetCommand extends Command
     use AskForExtensionKeyTrait;
     use CreatorInformationTrait;
     use ExtensionInformationTrait;
+    use SiteSetQuestionsTrait;
     use TryToCorrectClassNameTrait;
 
     public function __construct(
@@ -97,96 +99,10 @@ class SiteSetCommand extends Command
             $extensionInformation,
             $identifier = $this->askForSiteSetIdentifier($io, $extensionInformation->getComposerPackageName()),
             $siteSetPath = $this->askForSiteSetPath($io, $identifier),
-            $this->askForSiteLabel($io, $siteSetPath),
+            $this->askForSiteSetLabel($io, $siteSetPath),
             $this->askForDependencies($io),
             $io->confirm('Should the created site set be hidden?', false),
         );
-    }
-
-    private function askForSiteSetPath(SymfonyStyle $io, string $identifier): string
-    {
-        $default = '';
-        if (str_contains($identifier, '/')) {
-            [, $default] = explode('/', $identifier, 2);
-        }
-        do {
-            $siteSetPath = $io->ask('Please enter the site set directory name (no slashes)', $default);
-
-            if ($siteSetPath === null) {
-                $io->error('The site set path cannot be empty.');
-                continue;
-            }
-
-            if (preg_match('~[\\\\/]~', $siteSetPath)) {
-                $io->error('The site set path must not contain slashes.');
-                continue;
-            }
-
-            // Valid input
-            return $siteSetPath;
-
-        } while (true);
-    }
-
-    private function askForSiteSetIdentifier(SymfonyStyle $io, string $composerName): string
-    {
-        // Build regex to validate input
-        $pattern = '~^' . preg_quote($composerName, '~') . '(?:-[a-z0-9]+)?$~';
-
-        do {
-            $identifier = $io->ask(sprintf(
-                'Please enter the site set identifier (must be "%s" or "%s-<suffix>")',
-                $composerName,
-                $composerName
-            ), $composerName);
-
-            if ($identifier === null) {
-                $io->error('The identifier cannot be empty.');
-                continue;
-            }
-
-            if (in_array(preg_match($pattern, $identifier), [0, false], true)) {
-                $io->error(sprintf(
-                    'Invalid identifier. It must be "%s" or start with "%s-" followed by lowercase letters and numbers.',
-                    $composerName,
-                    $composerName
-                ));
-                continue;
-            }
-
-            // Valid identifier
-            return $identifier;
-
-        } while (true);
-    }
-
-    private function askForSiteLabel(
-        SymfonyStyle $io,
-        string $siteSetPath
-    ): string {
-        // Generate default label from site set path
-        $defaultLabel = $siteSetPath !== ''
-            ? ucwords(preg_replace('/[^a-z0-9]+/i', ' ', $siteSetPath))
-            : '';
-
-        do {
-            $label = $io->ask(
-                'Please enter the site label (max 255 chars)',
-                $defaultLabel
-            );
-
-            if ($label === null) {
-                $io->error('The site label cannot be empty.');
-                continue;
-            }
-
-            if (strlen($label) > 255) {
-                $io->error('The site label must not exceed 255 characters.');
-                continue;
-            }
-
-            return $label;
-        } while (true);
     }
 
     private function askForDependencies(

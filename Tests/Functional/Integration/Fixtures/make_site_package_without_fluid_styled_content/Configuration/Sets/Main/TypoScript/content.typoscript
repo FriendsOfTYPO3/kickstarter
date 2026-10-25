@@ -1,0 +1,31 @@
+# This site package does not depend on the site set of EXT:fluid_styled_content,
+# so it defines the rendering of a single content element itself. Every Extbase
+# plugin is rendered through lib.contentElement as well, with the template name
+# Generic, which is why Content/Generic.fluid.html ships with this site package.
+lib.contentElement = FLUIDTEMPLATE
+lib.contentElement {
+  templateRootPaths.10 = EXT:my_site_package/Resources/Private/Templates/Content/
+  partialRootPaths.10 = EXT:my_site_package/Resources/Private/Templates/Partials/
+  layoutRootPaths.10 = EXT:my_site_package/Resources/Private/Templates/Layouts/
+
+  # Derive the template name from the content type, so a CType "my_element" is
+  # rendered by Content/MyElement.fluid.html. Words the identifier does not
+  # separate the file name does not separate either.
+  templateName >
+  templateName.ifEmpty.cObject = TEXT
+  templateName.ifEmpty.cObject {
+    field = CType
+    required = 1
+    case = uppercamelcase
+  }
+
+  dataProcessing.10 = record-transformation
+}
+
+# Register the rendering of your own content elements like this, and add the
+# matching template to Content/:
+#
+# tt_content.my_element =< lib.contentElement
+#
+# The content elements TYPO3 ships are rendered by EXT:fluid_styled_content and
+# stay without a rendering definition here.

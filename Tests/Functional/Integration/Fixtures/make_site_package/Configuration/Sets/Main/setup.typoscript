@@ -1,0 +1,8 @@
+@import './TypoScript/*.typoscript'
+
+# The page object of this site. Every page of a site depending on this site set
+# is rendered by it, which is why a site needs no sys_template record anymore.
+page = PAGE
+page {
+  10 =< lib.fluidPage
+}

@@ -1,0 +1,10 @@
+categories:
+  mySitePackage:
+    label: 'My Site Package'
+settings:
+  mySitePackage.copyright:
+    label: Copyright
+    type: string
+    default: ''
+    description: 'Rendered into the footer of every page of this site.'
+    category: mySitePackage

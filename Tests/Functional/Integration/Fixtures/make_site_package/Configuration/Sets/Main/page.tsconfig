@@ -1,0 +1,4 @@
+# The page layouts of this site package, one layout per file. As this site
+# package ships a single site set and no page TSconfig of its own, nothing
+# reaches a backend without the set, so the layouts belong beside it.
+@import './BackendLayouts/*.tsconfig'

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+	<file source-language="en" datatype="plaintext" original="EXT:my_site_package/Configuration/Sets/Main/labels.xlf" product-name="my_site_package">
+		<header/>
+		<body>
+			<trans-unit id="label">
+				<source>My Site Package</source>
+			</trans-unit>
+			<trans-unit id="backend_layout.default.title">
+				<source>Default</source>
+			</trans-unit>
+			<trans-unit id="backend_layout.default.main.name">
+				<source>Main</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

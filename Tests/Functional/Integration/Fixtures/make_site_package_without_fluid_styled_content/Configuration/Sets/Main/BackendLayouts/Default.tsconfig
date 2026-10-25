@@ -1,0 +1,26 @@
+mod {
+  web_layout {
+    BackendLayouts {
+      Default {
+        title = LLL:my_site_package.sets.main:backend_layout.default.title
+        config {
+          backend_layout {
+            colCount = 1
+            rowCount = 1
+            rows {
+              1 {
+                columns {
+                  1 {
+                    name = LLL:my_site_package.sets.main:backend_layout.default.main.name
+                    colPos = 0
+                    identifier = main
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

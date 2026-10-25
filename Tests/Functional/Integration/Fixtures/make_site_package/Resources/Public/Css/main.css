@@ -1,0 +1,36 @@
+/*
+ * Stylesheet of this site package, loaded by
+ * Resources/Private/Templates/Layouts/Pages/Default.fluid.html.
+ */
+
+:root {
+    --page-width: 60rem;
+    --page-spacing: 1.5rem;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+}
+
+.page-header,
+.page-content,
+.page-footer {
+    margin-inline: auto;
+    max-width: var(--page-width);
+    padding: var(--page-spacing);
+}
+
+.page-navigation__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--page-spacing);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.page-navigation__link--active {
+    font-weight: 700;
+}

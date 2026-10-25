@@ -216,22 +216,103 @@ You will find the file in directory ``Configuration/Services.yaml``.
 
     vendor/bin/typo3 make:services-yaml
 
+..  _commands-make-site-package:
+
 make:site-package
 =================
 
-This command scaffolds a basic site package extension structure based on a
-provided title.
+This command creates a new site package. A site package is an extension
+that carries the site set of a site: its TypoScript, its page layout, and
+the Fluid templates that render the pages.
 
-See the official documentation for more information on `Sitepackages <https://docs.typo3.org/permalink/t3sitepackage:start>`_.
+The command derives the extension key, the Composer package name, and the
+identifier and the label of the site set from the title you enter. It then
+offers to adjust each of those values.
 
-..  note::
-    In TYPO3 v14, site handling is transitioning to Site Sets. Creating classic
-    site packages for TYPO3 v14 is currently not supported. Use
-    ``make:site-set`` instead.
+One question decides how TYPO3 renders the content elements. If the site
+package depends on the site set of
+:composer:`typo3/cms-fluid-styled-content`, every content element TYPO3
+ships keeps working. The templates of the site package are then added on
+top of the ones that extension provides, and the command adds the package
+to the `require` section of the generated :file:`composer.json`.
+
+Without that dependency the site package renders every content element
+itself. It then defines `lib.contentElement` on its own, because TYPO3
+renders every Extbase plugin through that object.
+
+See the official documentation for more information on
+`site packages <https://docs.typo3.org/permalink/t3sitepackage:start>`_,
+`site sets <https://docs.typo3.org/permalink/t3coreapi:site-sets>`_, and
+`page rendering with PAGEVIEW
+<https://docs.typo3.org/permalink/t3tsref:cobj-pageview>`_.
 
 ..  code-block:: bash
 
     vendor/bin/typo3 make:site-package
+
+In addition to the files every extension has, the command creates the site
+set and the templates:
+
+..  directory-tree::
+    :level: 3
+    :show-file-icons: true
+
+    *   :path:`Configuration/Sets/Main`
+
+        *   :path:`BackendLayouts`
+
+            *   :file:`Default.tsconfig`
+
+        *   :path:`TypoScript`
+
+            *   :file:`content.typoscript`
+            *   :file:`page.typoscript`
+
+        *   :file:`config.yaml`
+        *   :file:`labels.xlf`
+        *   :file:`page.tsconfig`
+        *   :file:`settings.definitions.yaml`
+        *   :file:`setup.typoscript`
+
+    *   :path:`Resources/Private/Templates`
+
+        *   :path:`Content`
+        *   :path:`Layouts/Pages`
+
+            *   :file:`Default.fluid.html`
+
+        *   :path:`Pages`
+
+            *   :file:`Default.fluid.html`
+
+        *   :path:`Partials`
+
+    *   :path:`Resources/Public`
+
+        *   :path:`Css`
+
+            *   :file:`main.css`
+
+        *   :path:`JavaScript`
+
+            *   :file:`main.js`
+
+The identifier of the page layout, the name of the file declaring it, and
+the name of the page template rendering it are one name. A page that has no
+layout selected is rendered by :file:`Pages/Default.fluid.html` as well.
+
+Install the site package, then let your site depend on its site set:
+
+..  code-block:: yaml
+    :caption: config/sites/<identifier>/config.yaml
+
+    dependencies:
+      - my-vendor/my-sitepackage
+
+A site that depends on a site set is a TypoScript root. Its root page needs
+no `sys_template` record.
+
+Add further site settings to the set with `make:site-settings-definition`.
 
 make:site-set
 =============

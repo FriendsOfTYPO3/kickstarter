@@ -1,0 +1,14 @@
+# This site package depends on the site set of EXT:fluid_styled_content, which
+# provides lib.contentElement and the rendering of the content elements TYPO3
+# ships. The roots below are added on top of them, so a file of this site
+# package overrides the one of EXT:fluid_styled_content.
+#
+# Keep addressing layouts and partials with their subdirectory. The page frame
+# and the content element frame are both called Default, and a layout or partial
+# placed directly into the shared root would be rendered inside every single
+# content element on the page.
+lib.contentElement {
+  templateRootPaths.20 = EXT:my_site_package/Resources/Private/Templates/Content/
+  partialRootPaths.20 = EXT:my_site_package/Resources/Private/Templates/Partials/
+  layoutRootPaths.20 = EXT:my_site_package/Resources/Private/Templates/Layouts/
+}
