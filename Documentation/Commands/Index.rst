@@ -225,9 +225,30 @@ This command creates a new site package. A site package is an extension
 that carries the site set of a site: its TypoScript, its page layout, and
 the Fluid templates that render the pages.
 
-The command derives the extension key, the Composer package name, and the
-identifier and the label of the site set from the title you enter. It then
-offers to adjust each of those values.
+See the official documentation for more information on
+`site packages <https://docs.typo3.org/permalink/t3sitepackage:start>`_,
+`site sets <https://docs.typo3.org/permalink/t3coreapi:site-sets>`_, and
+`page rendering with PAGEVIEW
+<https://docs.typo3.org/permalink/t3tsref:cobj-pageview>`_.
+
+..  code-block:: bash
+
+    vendor/bin/typo3 make:site-package
+
+The first question decides where the site package comes from. The command
+either generates it from the site set conventions of the TYPO3 version you
+are running, or downloads it from the site package builder at
+get.typo3.org.
+
+..  _commands-make-site-package-generate:
+
+Generating the site package
+---------------------------
+
+Generating the site package needs no network connection. The command
+derives the extension key, the Composer package name, and the identifier
+and the label of the site set from the title you enter. It then offers to
+adjust each of those values.
 
 One question decides how TYPO3 renders the content elements. If the site
 package depends on the site set of
@@ -239,16 +260,6 @@ to the `require` section of the generated :file:`composer.json`.
 Without that dependency the site package renders every content element
 itself. It then defines `lib.contentElement` on its own, because TYPO3
 renders every Extbase plugin through that object.
-
-See the official documentation for more information on
-`site packages <https://docs.typo3.org/permalink/t3sitepackage:start>`_,
-`site sets <https://docs.typo3.org/permalink/t3coreapi:site-sets>`_, and
-`page rendering with PAGEVIEW
-<https://docs.typo3.org/permalink/t3tsref:cobj-pageview>`_.
-
-..  code-block:: bash
-
-    vendor/bin/typo3 make:site-package
 
 In addition to the files every extension has, the command creates the site
 set and the templates:
@@ -313,6 +324,43 @@ A site that depends on a site set is a TypoScript root. Its root page needs
 no `sys_template` record.
 
 Add further site settings to the set with `make:site-settings-definition`.
+
+..  _commands-make-site-package-download:
+
+Downloading the site package from get.typo3.org
+-----------------------------------------------
+
+The command asks the `site package builder <https://get.typo3.org/sitepackage>`_
+for a skeleton and unpacks it into the export directory. The builder
+delivers the same archive as its web form. The result therefore follows the
+layout of the builder, not the one described above.
+
+The builder offers two base packages. `fluid_styled_content` ships a site
+set that depends on :composer:`typo3/cms-fluid-styled-content`, one page
+layout, and the Fluid files that render it. `bootstrap_package` ships a
+site set that depends on `bootstrap-package/full` instead, which requires
+:composer:`bk2k/bootstrap-package`.
+
+The builder names the extension itself. It derives the extension key from
+the title and the vendor part of the Composer package name from the company.
+The company is therefore required here, unlike in the other commands.
+
+..  note::
+    The builder builds for a fixed list of TYPO3 versions, and it rejects
+    every other version. The command therefore sends the newest version the
+    builder offers for the major release you are running, and reports which
+    version it asked for.
+
+A downloaded site package keeps its settings as values in a
+:file:`settings.yaml` without a :file:`settings.definitions.yaml`. Those
+settings stay out of the site settings editor in the backend. See
+`site settings definitions
+<https://docs.typo3.org/permalink/t3coreapi:site-settings-definition>`_ for
+what a definition adds.
+
+Install the downloaded site package the same way, then let your site depend
+on the site set identifier from its
+:file:`Configuration/Sets/<SetName>/config.yaml`.
 
 make:site-set
 =============

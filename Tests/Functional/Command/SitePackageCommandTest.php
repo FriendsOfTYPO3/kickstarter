@@ -15,6 +15,9 @@ use FriendsOfTYPO3\Kickstarter\Command\Input\Decorator\NamespaceDecorator;
 use FriendsOfTYPO3\Kickstarter\Command\Input\QuestionCollection;
 use FriendsOfTYPO3\Kickstarter\Command\SitePackageCommand;
 use FriendsOfTYPO3\Kickstarter\Configuration\ExtConf;
+use FriendsOfTYPO3\Kickstarter\Creator\SitePackage\SitePackageDownloader;
+use FriendsOfTYPO3\Kickstarter\Information\DownloadedSitePackageInformation;
+use FriendsOfTYPO3\Kickstarter\Information\SitePackageDownloadInformation;
 use FriendsOfTYPO3\Kickstarter\Information\SitePackageInformation;
 use FriendsOfTYPO3\Kickstarter\Service\Creator\SitePackageCreatorService;
 use PHPUnit\Framework\Attributes\Test;
@@ -71,6 +74,8 @@ class SitePackageCommandTest extends FunctionalTestCase
 
         $commandTester = new CommandTester($this->createCommand($creatorMock));
         $commandTester->setInputs([
+            // Generate the site package here instead of downloading it
+            'generate',
             'My Site Package',
             'vendor/my-site-package',
             'John Doe',
@@ -124,6 +129,8 @@ class SitePackageCommandTest extends FunctionalTestCase
 
         $commandTester = new CommandTester($this->createCommand($creatorMock));
         $commandTester->setInputs([
+            // Generate the site package here instead of downloading it
+            'generate',
             'My Site Package',
             'vendor/my-site-package',
             'John Doe',
@@ -173,6 +180,8 @@ class SitePackageCommandTest extends FunctionalTestCase
 
         $commandTester = new CommandTester($this->createCommand($creatorMock));
         $commandTester->setInputs([
+            // Generate the site package here instead of downloading it
+            'generate',
             'My Site Package',
             'vendor/my-site-package',
             'John Doe',
@@ -190,6 +199,128 @@ class SitePackageCommandTest extends FunctionalTestCase
 
         $display = (string)preg_replace('/\s+/', ' ', $commandTester->getDisplay());
         self::assertStringContainsString('No site package was created.', $display);
+    }
+
+    #[Test]
+    public function executeDownloadsFromTheBuilderWhenThatSourceIsChosen(): void
+    {
+        $downloadInformation = null;
+        $creatorMock = $this->createMock(SitePackageCreatorService::class);
+        $creatorMock->expects(self::never())->method('create');
+        $creatorMock->expects(self::once())
+            ->method('download')
+            ->with(self::callback(static function (SitePackageDownloadInformation $information) use (&$downloadInformation): bool {
+                $downloadInformation = $information;
+                return true;
+            }))
+            ->willReturn(new DownloadedSitePackageInformation(
+                'my_site_package',
+                'example-company/my-site-package',
+                '/some/path/my_site_package/',
+                'example-company/my-site-package',
+                'SitePackage',
+            ));
+
+        $commandTester = new CommandTester($this->createCommand($creatorMock));
+        $commandTester->setInputs([
+            // Download the site package from get.typo3.org
+            'download',
+            // Base package
+            'fluid_styled_content',
+            'My Site Package',
+            'Site package of My Site Package.',
+            'John Doe',
+            'john.doe@example.com',
+            'Example Company',
+            'https://example.org',
+        ]);
+
+        $exitCode = $commandTester->execute([]);
+
+        self::assertSame(Command::SUCCESS, $exitCode);
+        self::assertInstanceOf(SitePackageDownloadInformation::class, $downloadInformation);
+
+        self::assertSame('fluid_styled_content', $downloadInformation->getBasePackage());
+        self::assertSame('My Site Package', $downloadInformation->getTitle());
+        self::assertSame('John Doe', $downloadInformation->getAuthor());
+        self::assertSame('john.doe@example.com', $downloadInformation->getAuthorEmail());
+        self::assertSame('Example Company', $downloadInformation->getAuthorCompany());
+        self::assertSame('https://example.org', $downloadInformation->getHomepage());
+
+        // The builder only builds for versions it knows, so the command sends one of those rather
+        // than the running version as it is.
+        self::assertContains($downloadInformation->getTypo3Version(), SitePackageDownloader::TYPO3_VERSIONS);
+
+        $display = (string)preg_replace('/\s+/', ' ', $commandTester->getDisplay());
+        self::assertStringContainsString('The site package was saved to path', $display);
+        self::assertStringContainsString('- example-company/my-site-package', $display);
+        self::assertStringContainsString('comes from the builder at get.typo3.org', $display);
+
+        self::assertSame(
+            'my_site_package',
+            $this->get(Registry::class)->get(ExtConf::EXT_KEY, ExtConf::LAST_EXTENSION_REGISTRY_KEY)
+        );
+    }
+
+    #[Test]
+    public function executeFailsWhenTheBuilderDeliveredNothing(): void
+    {
+        $creatorMock = $this->createMock(SitePackageCreatorService::class);
+        $creatorMock->expects(self::once())->method('download')->willReturn(null);
+
+        $commandTester = new CommandTester($this->createCommand($creatorMock));
+        $commandTester->setInputs([
+            'download',
+            'fluid_styled_content',
+            'My Site Package',
+            'Site package of My Site Package.',
+            'John Doe',
+            'john.doe@example.com',
+            'Example Company',
+            '',
+        ]);
+
+        $exitCode = $commandTester->execute([]);
+
+        self::assertSame(Command::FAILURE, $exitCode);
+
+        $display = (string)preg_replace('/\s+/', ' ', $commandTester->getDisplay());
+        self::assertStringContainsString('No site package was downloaded.', $display);
+    }
+
+    #[Test]
+    public function executeInsistsOnACompanyTheBuilderAccepts(): void
+    {
+        $downloadInformation = null;
+        $creatorMock = $this->createMock(SitePackageCreatorService::class);
+        $creatorMock->method('download')
+            ->with(self::callback(static function (SitePackageDownloadInformation $information) use (&$downloadInformation): bool {
+                $downloadInformation = $information;
+                return true;
+            }))
+            ->willReturn(null);
+
+        $commandTester = new CommandTester($this->createCommand($creatorMock));
+        $commandTester->setInputs([
+            'download',
+            'fluid_styled_content',
+            'My Site Package',
+            'Site package of My Site Package.',
+            'John Doe',
+            'john.doe@example.com',
+            // The builder refuses a company shorter than three characters, so it is asked again
+            'Co',
+            'Example Company',
+            '',
+        ]);
+
+        $commandTester->execute([]);
+
+        self::assertInstanceOf(SitePackageDownloadInformation::class, $downloadInformation);
+        self::assertSame('Example Company', $downloadInformation->getAuthorCompany());
+
+        $display = (string)preg_replace('/\s+/', ' ', $commandTester->getDisplay());
+        self::assertStringContainsString('company name must be at least 3 characters long', $display);
     }
 
     private function createCommand(SitePackageCreatorService $creatorService): SitePackageCommand

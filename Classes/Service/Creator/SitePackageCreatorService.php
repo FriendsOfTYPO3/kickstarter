@@ -12,14 +12,18 @@ declare(strict_types=1);
 namespace FriendsOfTYPO3\Kickstarter\Service\Creator;
 
 use FriendsOfTYPO3\Kickstarter\Creator\SitePackage\SitePackageCreatorInterface;
+use FriendsOfTYPO3\Kickstarter\Creator\SitePackage\SitePackageDownloader;
+use FriendsOfTYPO3\Kickstarter\Information\DownloadedSitePackageInformation;
 use FriendsOfTYPO3\Kickstarter\Information\ServicesConfigInformation;
+use FriendsOfTYPO3\Kickstarter\Information\SitePackageDownloadInformation;
 use FriendsOfTYPO3\Kickstarter\Information\SitePackageInformation;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 /**
- * A site package is an extension carrying a site set, so it is created in three steps: the files
- * every extension has, the site set itself, and the TypoScript, page TSconfig, Fluid files and
- * assets which make that set render a site.
+ * A site package comes from one of two sources. Generating it locally builds an extension carrying
+ * a site set in three steps: the files every extension has, the site set itself, and the
+ * TypoScript, page TSconfig, Fluid files and assets which make that set render a site. Downloading
+ * it asks the builder at get.typo3.org for a skeleton instead.
  */
 readonly class SitePackageCreatorService
 {
@@ -31,6 +35,7 @@ readonly class SitePackageCreatorService
         private iterable $sitePackageCreators,
         private ExtensionCreatorService $extensionCreatorService,
         private SiteSetCreatorService $siteSetCreatorService,
+        private SitePackageDownloader $sitePackageDownloader,
     ) {}
 
     public function create(SitePackageInformation $sitePackageInformation): void
@@ -51,5 +56,15 @@ readonly class SitePackageCreatorService
         foreach ($this->sitePackageCreators as $creator) {
             $creator->create($sitePackageInformation);
         }
+    }
+
+    /**
+     * Fetches a site package from the builder at get.typo3.org instead of generating one. Returns
+     * null when the builder refused the request, which is recorded in the CreatorInformation of the
+     * given information object.
+     */
+    public function download(SitePackageDownloadInformation $downloadInformation): ?DownloadedSitePackageInformation
+    {
+        return $this->sitePackageDownloader->download($downloadInformation);
     }
 }
