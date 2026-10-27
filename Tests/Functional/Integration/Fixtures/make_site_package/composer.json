@@ -1,0 +1,37 @@
+{
+    "name": "my-vendor/my-site-package",
+    "description": "My Site Package - Site package of My Site Package.",
+    "type": "typo3-cms-extension",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "John Doe",
+            "email": "john@example.com"
+        }
+    ],
+    "require": {
+        "typo3/cms-core": "^14",
+        "typo3/cms-fluid-styled-content": "^14"
+    },
+    "autoload": {
+        "psr-4": {
+            "MyVendor\\MySitePackage\\": "Classes/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "typo3/class-alias-loader": true,
+            "typo3/cms-composer-installers": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "typo3/cms": {
+            "Package": {
+                "providesPackages": []
+            },
+            "extension-key": "my_site_package",
+            "version": "0.0.1"
+        }
+    }
+}

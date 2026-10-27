@@ -1,0 +1,22 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:comment>
+    The frame around a single content element. It is addressed as
+    "Content/Default", with its subdirectory, because the frame of the page is
+    called Default as well.
+</f:comment>
+
+<div class="content-element">
+    <f:render section="Header" optional="true">
+        <f:if condition="{record.header}">
+            <h2 class="content-element__header">{record.header}</h2>
+        </f:if>
+    </f:render>
+
+    <f:render section="Main" optional="true"/>
+</div>
+
+</html>

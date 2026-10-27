@@ -1,0 +1,23 @@
+# Render the pages of this site with Fluid.
+#
+# PAGEVIEW derives the template name from the page layout: the identifier of the
+# backend layout without its "pagets__" prefix, and "default" for a page which
+# has no layout selected. There is nothing to configure about that name.
+#
+# The single paths entry below becomes three roots: Pages/ for the templates,
+# Partials/ and Layouts/.
+lib.fluidPage = PAGEVIEW
+lib.fluidPage {
+  paths.10 = EXT:my_site_package/Resources/Private/Templates/
+
+  dataProcessing {
+    10 = menu
+    10 {
+      as = mainMenu
+      levels = 2
+    }
+
+    20 = site
+    20.as = site
+  }
+}

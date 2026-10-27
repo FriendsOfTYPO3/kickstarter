@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 #[AutoconfigureTag('ext-kickstarter.command.question.extension')]
+#[AutoconfigureTag('ext-kickstarter.command.question.site-package')]
 readonly class EmailQuestion extends AbstractQuestion
 {
     public const ARGUMENT_NAME = 'email';
