@@ -92,7 +92,7 @@ class PrettyTypo3Printer extends Standard
             . $this->pModifiers($node->flags)
             . 'function ' . ($node->byRef ? '&' : '') . $node->name
             . '(' . $this->pMaybeMultiline($node->params) . ')'
-            . ($node->returnType !== null ? ': ' . $this->p($node->returnType) : '') // Removed extra space
+            . ($node->returnType instanceof Node ? ': ' . $this->p($node->returnType) : '') // Removed extra space
             . ($node->stmts !== null
                 ? $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}'
                 : ';');
